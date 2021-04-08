@@ -1,0 +1,33 @@
+import React from 'react';
+import { Layout, Menu } from 'antd';
+import { Route, Switch, Link } from 'react-router-dom';
+import Projects from './projects/Projects';
+import { observer } from 'mobx-react';
+
+const { Header } = Layout;
+
+export default observer(function Main() {
+  return (
+    <Layout className="layout">
+      <Header>
+        <div className="logo" />
+        <Menu theme="dark" mode="horizontal">
+          <Menu.Item key="1">
+            <Link to="/hours">Hours</Link>
+          </Menu.Item>
+          <Menu.Item key="2">
+            <Link to="/projects">Projects</Link>
+          </Menu.Item>
+        </Menu>
+      </Header>
+      <Switch>
+        <Route path="/hours">
+          <h1>Test1</h1>
+        </Route>
+        <Route path="/projects">
+          <Projects />
+        </Route>
+      </Switch>
+    </Layout>
+  );
+});
