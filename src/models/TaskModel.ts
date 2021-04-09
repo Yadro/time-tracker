@@ -3,6 +3,7 @@ import { ITreeItem } from '../types/ITreeItem';
 
 interface ITaskModel extends ITreeItem<ITaskModel> {
   projectId: string;
+  checked: boolean;
 }
 
 export default class TaskModel extends AbstractModel implements ITaskModel {
@@ -10,6 +11,7 @@ export default class TaskModel extends AbstractModel implements ITaskModel {
   title: string = '';
   children: TaskModel[] = [];
   projectId: string = '';
+  checked: boolean = false;
 
   constructor(props: ITaskModel) {
     super();

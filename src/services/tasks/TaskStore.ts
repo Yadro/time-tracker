@@ -35,4 +35,39 @@ export default class TaskStore {
   restore() {
     this.tasks = this.tasksService.getAll();
   }
+
+  getCheckedKeys(projectId: string): string[] {
+    if (Array.isArray(this.tasks[projectId])) {
+      const checkedIds: string[] = [];
+      this.getCheckedKeysRecursive(this.tasks[projectId], checkedIds);
+      return checkedIds;
+    }
+    return [];
+  }
+
+  checkTasks(taskIds: string[]) {
+    Object.keys(this.tasks).forEach((projectId) => {
+      this.checkTasksRecursive(this.tasks[projectId], taskIds);
+    });
+  }
+
+  private getCheckedKeysRecursive(tasks: TaskModel[], checkedIds: string[]) {
+    tasks.forEach((task) => {
+      if (task.checked) {
+        checkedIds.push(task.key);
+      }
+      if (Array.isArray(task.children)) {
+        this.getCheckedKeysRecursive(task.children, checkedIds);
+      }
+    });
+  }
+
+  private checkTasksRecursive(tasks: TaskModel[], taskIds: string[]) {
+    tasks.forEach((task) => {
+      task.checked = taskIds.includes(task.key);
+      if (Array.isArray(task.children)) {
+        this.checkTasksRecursive(task.children, taskIds);
+      }
+    });
+  }
 }

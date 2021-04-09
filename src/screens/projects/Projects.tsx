@@ -19,6 +19,18 @@ const TaskList = TreeList(
   () => tasksStore.getTasks(projectStore.activeProject),
   (list: TaskModel[]) => {
     tasksStore.set(projectStore.activeProject, list);
+  },
+  {
+    checkable: true,
+    onCheck(keys) {
+      tasksStore.checkTasks(keys as string[]);
+      console.log('Check', keys);
+    },
+    getDefaultChecked() {
+      const taskKeys = tasksStore.getCheckedKeys(projectStore.activeProject);
+      console.log('Checked List', taskKeys);
+      return taskKeys;
+    },
   }
 );
 

@@ -12,7 +12,12 @@ interface TreeListProps {
 
 export default function TreeList<T extends ITreeItem>(
   getData: () => T[],
-  updateData: (items: T[]) => void
+  updateData: (items: T[]) => void,
+  options?: {
+    checkable?: boolean;
+    onCheck?: (checkedKeys: React.Key[]) => void;
+    getDefaultChecked?: () => React.Key[];
+  }
 ) {
   return observer(function TreeList({ onSelect }: TreeListProps) {
     const data = getData();
@@ -87,11 +92,14 @@ export default function TreeList<T extends ITreeItem>(
     return (
       <Tree
         className="draggable-tree"
+        defaultCheckedKeys={options?.getDefaultChecked?.()}
+        checkable={options?.checkable}
         draggable
         blockNode
         onDrop={onDrop}
         treeData={data}
         onSelect={onSelect}
+        onCheck={options?.checkable ? options?.onCheck : undefined}
       />
     );
   });
