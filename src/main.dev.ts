@@ -43,14 +43,12 @@ if (
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = ['REACT_DEVELOPER_TOOLS'];
+  const extensions = [
+    'fmkadmapgofadopljbjfkapdkoienihi', // 'REACT_DEVELOPER_TOOLS',
+    'pfgnfdagidkfgccljigdamigbcnndkod', // mobx-devtool
+  ];
 
-  return installer
-    .default(
-      extensions.map((name) => installer[name]),
-      forceDownload
-    )
-    .catch(console.log);
+  return installer.default(extensions, forceDownload).catch(console.log);
 };
 
 const createWindow = async () => {
@@ -58,7 +56,8 @@ const createWindow = async () => {
     process.env.NODE_ENV === 'development' ||
     process.env.DEBUG_PROD === 'true'
   ) {
-    await installExtensions();
+    // Doesnt work
+    // await installExtensions();
   }
 
   const RESOURCES_PATH = app.isPackaged
