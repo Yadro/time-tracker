@@ -44,11 +44,20 @@ const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
   const extensions = [
-    'fmkadmapgofadopljbjfkapdkoienihi', // 'REACT_DEVELOPER_TOOLS',
+    // 'REACT_DEVELOPER_TOOLS',
+    'fmkadmapgofadopljbjfkapdkoienihi',
     'pfgnfdagidkfgccljigdamigbcnndkod', // mobx-devtool
   ];
 
-  return installer.default(extensions, forceDownload).catch(console.log);
+  return installer
+    .default(
+      extensions.map((name) => installer[name]),
+      {
+        forceDownload,
+        loadExtensionOptions: { allowFileAccess: true },
+      }
+    )
+    .catch(console.log);
 };
 
 const createWindow = async () => {
