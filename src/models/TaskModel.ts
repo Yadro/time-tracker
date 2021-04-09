@@ -5,8 +5,8 @@ import { computed, makeObservable, observable } from 'mobx';
 interface ITaskModel extends ITreeItem<ITaskModel> {
   projectId: string;
   checked: boolean;
-  time: number[][];
   active: boolean;
+  time: number[][];
 }
 
 export default class TaskModel extends AbstractModel implements ITaskModel {
@@ -21,6 +21,8 @@ export default class TaskModel extends AbstractModel implements ITaskModel {
   constructor(props: ITaskModel) {
     super();
     this.load(props);
+    this.children = props.children?.map((json) => new TaskModel(json)) || [];
+
     makeObservable(this, {
       key: observable,
       title: observable,

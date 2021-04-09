@@ -58,6 +58,7 @@ export default class TaskStore {
 
   restore() {
     this.tasks = this.tasksService.getAll();
+    this.findActiveTask();
   }
 
   getCheckedKeys(projectId: string): string[] {
@@ -74,6 +75,32 @@ export default class TaskStore {
       this.checkTasksRecursive(this.tasks[projectId], taskIds);
     }
     this.tasksService.save(this.tasks);
+  }
+
+  private findActiveTask() {
+    Object.keys(this.tasks).find((projectId) => {
+      const found = this.findActiveTaskRecursive(this.tasks[projectId]);
+      if (found) {
+        this.activeTask = found;
+        return true;
+      }
+      return false;
+    });
+  }
+
+  private findActiveTaskRecursive(tasks: TaskModel[]): TaskModel | undefined {
+    return tasks.find((task) => {
+      if (task.active) {
+        return task;
+      }
+      if (Array.isArray(task.children)) {
+        const found = this.findActiveTaskRecursive(task.children);
+        if (found) {
+          return found;
+        }
+      }
+      return false;
+    });
   }
 
   private getCheckedKeysRecursive(tasks: TaskModel[], checkedIds: string[]) {
