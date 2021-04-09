@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Layout, Space } from 'antd';
 import { observer } from 'mobx-react';
+import { useHistory } from 'react-router-dom';
 
 import TaskInput from './components/TaskInput';
 import rootStore from '../../services/RootStore';
@@ -24,12 +25,9 @@ const TaskList = TreeList(
     checkable: true,
     onCheck(keys) {
       tasksStore.checkTasks(keys as string[]);
-      console.log('Check', keys);
     },
-    getDefaultChecked() {
-      const taskKeys = tasksStore.getCheckedKeys(projectStore.activeProject);
-      console.log('Checked List', taskKeys);
-      return taskKeys;
+    getCheckedKeys() {
+      return tasksStore.getCheckedKeys(projectStore.activeProject);
     },
   }
 );

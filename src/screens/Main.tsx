@@ -1,8 +1,8 @@
 import React from 'react';
-import { Layout, Menu } from 'antd';
 import { Route, Switch, Link } from 'react-router-dom';
-import Projects from './projects/Projects';
+import { Layout, Menu } from 'antd';
 import { observer } from 'mobx-react';
+import Projects from './projects/Projects';
 
 const { Header } = Layout;
 

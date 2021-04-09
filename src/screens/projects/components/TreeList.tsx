@@ -16,7 +16,7 @@ export default function TreeList<T extends ITreeItem>(
   options?: {
     checkable?: boolean;
     onCheck?: (checkedKeys: React.Key[]) => void;
-    getDefaultChecked?: () => React.Key[];
+    getCheckedKeys?: () => React.Key[];
   }
 ) {
   return observer(function TreeList({ onSelect }: TreeListProps) {
@@ -92,7 +92,7 @@ export default function TreeList<T extends ITreeItem>(
     return (
       <Tree
         className="draggable-tree"
-        defaultCheckedKeys={options?.getDefaultChecked?.()}
+        checkedKeys={options?.getCheckedKeys?.()}
         checkable={options?.checkable}
         draggable
         blockNode
