@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 
 import TaskInput from './components/TaskInput';
 import rootStore from '../../services/RootStore';
-import DraggableList from './components/DraggableList';
+import TreeList from './components/TreeList';
 import TaskModel from '../../models/TaskModel';
 import ProjectModel from '../../models/ProjectModel';
 import ProjectModal from './components/ProjectModal';
@@ -15,14 +15,14 @@ const { Sider } = Layout;
 
 const { tasksStore, projectStore } = rootStore;
 
-const TaskList = DraggableList(
+const TaskList = TreeList(
   () => tasksStore.getTasks(projectStore.activeProject),
   (list: TaskModel[]) => {
     tasksStore.set(projectStore.activeProject, list);
   }
 );
 
-const ProjectList = DraggableList(
+const ProjectList = TreeList(
   () => projectStore.projects,
   (list: ProjectModel[]) => {
     projectStore.set(list);

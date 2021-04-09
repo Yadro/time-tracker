@@ -1,7 +1,7 @@
 import AbstractModel from '../base/AbstractModel';
-import { IDraggableItem } from '../types/IDraggableItem';
+import { ITreeItem } from '../types/ITreeItem';
 
-interface IProjectItem extends IDraggableItem<IProjectItem> {}
+interface IProjectItem extends ITreeItem<IProjectItem> {}
 
 export default class ProjectModel extends AbstractModel
   implements IProjectItem {

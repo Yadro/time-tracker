@@ -4,17 +4,17 @@ import { observer } from 'mobx-react';
 import { Key } from 'rc-tree/lib/interface';
 
 import { IDragInfo } from '../../../types/IDragInfo';
-import { IDraggableItem } from '../../../types/IDraggableItem';
+import { ITreeItem } from '../../../types/ITreeItem';
 
-interface DraggableListProps {
+interface TreeListProps {
   onSelect?: (selectedKeys: Key[]) => void;
 }
 
-export default function DraggableList<T extends IDraggableItem>(
+export default function TreeList<T extends ITreeItem>(
   getData: () => T[],
   updateData: (items: T[]) => void
 ) {
-  return observer(function DraggableList({ onSelect }: DraggableListProps) {
+  return observer(function TreeList({ onSelect }: TreeListProps) {
     const data = getData();
 
     function onDrop(info: IDragInfo) {
@@ -25,20 +25,16 @@ export default function DraggableList<T extends IDraggableItem>(
         info.dropPosition - Number(dropPos[dropPos.length - 1]);
 
       const loop = (
-        draggableItems: IDraggableItem[],
+        items: ITreeItem[],
         key: string | number,
-        callback: (
-          item: IDraggableItem,
-          key: number,
-          items: IDraggableItem[]
-        ) => void
+        callback: (item: ITreeItem, key: number, items: ITreeItem[]) => void
       ) => {
-        for (let i = 0; i < draggableItems.length; i++) {
-          if (draggableItems[i].key === key) {
-            return callback(draggableItems[i], i, draggableItems);
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].key === key) {
+            return callback(items[i], i, items);
           }
-          if (draggableItems[i].children) {
-            loop(draggableItems[i].children as IDraggableItem[], key, callback);
+          if (items[i].children) {
+            loop(items[i].children as ITreeItem[], key, callback);
           }
         }
         return undefined;
@@ -46,7 +42,7 @@ export default function DraggableList<T extends IDraggableItem>(
       const dataCopy = [...data];
 
       // Find dragObject
-      let dragObj: IDraggableItem;
+      let dragObj: ITreeItem;
       loop(dataCopy, dragKey, (item, index, arr) => {
         arr.splice(index, 1);
         dragObj = item;
@@ -72,7 +68,7 @@ export default function DraggableList<T extends IDraggableItem>(
           // item to the tail of the children
         });
       } else {
-        let ar: IDraggableItem[];
+        let ar: ITreeItem[];
         let i;
         loop(dataCopy, dropKey, (item, index, arr) => {
           ar = arr;

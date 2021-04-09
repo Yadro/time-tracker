@@ -1,7 +1,7 @@
 import AbstractModel from '../base/AbstractModel';
-import { IDraggableItem } from '../types/IDraggableItem';
+import { ITreeItem } from '../types/ITreeItem';
 
-interface ITaskModel extends IDraggableItem<ITaskModel> {
+interface ITaskModel extends ITreeItem<ITaskModel> {
   projectId: string;
 }
 
