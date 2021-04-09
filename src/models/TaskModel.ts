@@ -36,7 +36,8 @@ export default class TaskModel extends AbstractModel implements ITaskModel {
   get duration() {
     return this.time.reduce((prev: number, range: number[]) => {
       if (range.length > 0) {
-        const duration = (range[1] ? range[1] : Date.now()) - range[0];
+        const duration =
+          (range.length === 2 ? range[1] : Date.now()) - range[0];
         return prev + duration;
       }
       return 0;

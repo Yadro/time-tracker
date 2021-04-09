@@ -44,6 +44,8 @@ export default class TaskStore {
       }
     });
     task.time.push([Date.now()]);
+    task.active = true;
+    this.tasksService.save(this.tasks);
   }
 
   endTimer(task: TaskModel) {
@@ -51,6 +53,7 @@ export default class TaskStore {
     task.active = false;
     const range = task.time[task.time.length - 1];
     range.push(Date.now());
+    this.tasksService.save(this.tasks);
   }
 
   restore() {
@@ -70,6 +73,7 @@ export default class TaskStore {
     if (Array.isArray(this.tasks[projectId])) {
       this.checkTasksRecursive(this.tasks[projectId], taskIds);
     }
+    this.tasksService.save(this.tasks);
   }
 
   private getCheckedKeysRecursive(tasks: TaskModel[], checkedIds: string[]) {
