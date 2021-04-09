@@ -15,8 +15,10 @@ export default function TreeList<T extends ITreeItem>(
   updateData: (items: T[]) => void,
   options?: {
     checkable?: boolean;
+    selectable?: boolean;
     onCheck?: (checkedKeys: React.Key[]) => void;
     getCheckedKeys?: () => React.Key[];
+    titleRender?: (nodeData: T) => React.ReactNode;
   }
 ) {
   return observer(function TreeList({ onSelect }: TreeListProps) {
@@ -95,11 +97,13 @@ export default function TreeList<T extends ITreeItem>(
         checkedKeys={options?.getCheckedKeys?.()}
         checkable={options?.checkable}
         draggable
+        selectable={options?.selectable}
         blockNode
         onDrop={onDrop}
         treeData={data}
         onSelect={onSelect}
         onCheck={options?.checkable ? options?.onCheck : undefined}
+        titleRender={options?.titleRender}
       />
     );
   });

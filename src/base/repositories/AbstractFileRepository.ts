@@ -1,10 +1,6 @@
 const fs = require('fs');
 
-type RecordUnknown = unknown | unknown[];
-
-export default abstract class AbstractFileRepository<
-  T extends RecordUnknown = RecordUnknown
-> {
+export default abstract class AbstractFileRepository<T = any> {
   folder: string = 'profile1';
   fileName: string = 'defaultFileName.json';
 

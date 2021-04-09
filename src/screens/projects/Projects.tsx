@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Button, Layout, Space } from 'antd';
 import { observer } from 'mobx-react';
-import { useHistory } from 'react-router-dom';
+import { Key } from 'rc-tree/lib/interface';
+
+import './Projects.less';
 
 import TaskInput from './components/TaskInput';
 import rootStore from '../../services/RootStore';
@@ -9,8 +11,7 @@ import TreeList from './components/TreeList';
 import TaskModel from '../../models/TaskModel';
 import ProjectModel from '../../models/ProjectModel';
 import ProjectModal from './components/ProjectModal';
-import { Key } from 'rc-tree/lib/interface';
-import './Projects.less';
+import TaskNode from './components/TaskNode/TaskNode';
 
 const { Sider } = Layout;
 
@@ -28,6 +29,9 @@ const TaskList = TreeList(
     },
     getCheckedKeys() {
       return tasksStore.getCheckedKeys(projectStore.activeProject);
+    },
+    titleRender(node: TaskModel) {
+      return <TaskNode model={node} />;
     },
   }
 );

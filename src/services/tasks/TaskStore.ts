@@ -5,6 +5,7 @@ import TaskRecordModel from '../../models/TaskRecordModel';
 
 export default class TaskStore {
   tasks: TaskRecordModel = {};
+  activeTask: TaskModel | undefined;
   private tasksService = new TaskService();
 
   constructor() {
@@ -31,6 +32,26 @@ export default class TaskStore {
   }
 
   delete(projectId: string, task: TaskModel) {}
+
+  startTimer(task: TaskModel) {
+    if (this.activeTask) {
+      this.endTimer(this.activeTask);
+    }
+    this.activeTask = task;
+    task.time.forEach((range) => {
+      if (range.length === 1) {
+        range[1] = Date.now();
+      }
+    });
+    task.time.push([Date.now()]);
+  }
+
+  endTimer(task: TaskModel) {
+    this.activeTask = undefined;
+    task.active = false;
+    const range = task.time[task.time.length - 1];
+    range.push(Date.now());
+  }
 
   restore() {
     this.tasks = this.tasksService.getAll();

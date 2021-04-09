@@ -8,8 +8,8 @@ export default class TaskService implements IService<TaskRecordModel> {
   taskFactory: TaskFactory = new TaskFactory();
 
   getAll(): TaskRecordModel {
-    const tasks = this.taskRepository.restore({});
-    return tasks as TaskRecordModel;
+    const data: TaskRecordModel = this.taskRepository.restore({});
+    return this.taskFactory.createTasks(data);
   }
 
   save(data: TaskRecordModel) {
