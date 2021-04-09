@@ -25,7 +25,7 @@ const TaskList = TreeList(
   {
     checkable: true,
     onCheck(keys) {
-      tasksStore.checkTasks(keys as string[]);
+      tasksStore.checkTasks(projectStore.activeProject, keys as string[]);
     },
     getCheckedKeys() {
       return tasksStore.getCheckedKeys(projectStore.activeProject);

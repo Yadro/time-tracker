@@ -66,10 +66,10 @@ export default class TaskStore {
     return [];
   }
 
-  checkTasks(taskIds: string[]) {
-    Object.keys(this.tasks).forEach((projectId) => {
+  checkTasks(projectId: string, taskIds: string[]) {
+    if (Array.isArray(this.tasks[projectId])) {
       this.checkTasksRecursive(this.tasks[projectId], taskIds);
-    });
+    }
   }
 
   private getCheckedKeysRecursive(tasks: TaskModel[], checkedIds: string[]) {
