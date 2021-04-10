@@ -2,6 +2,7 @@ import isSameDay from 'date-fns/isSameDay';
 
 import TaskModel from '../models/TaskModel';
 import TaskTimeModel from '../models/TaskTimeModel';
+import compareAsc from 'date-fns/compareAsc';
 
 export default function getTimeItems(
   tasks: TaskModel[],
@@ -18,6 +19,7 @@ export default function getTimeItems(
       timeItems.map((time) => new TaskTimeModel(task, time))
     );
   });
+  taskTime = taskTime.sort((a, b) => compareAsc(a.time[0], b.time[0]));
   console.log(taskTime);
   return taskTime;
 }
