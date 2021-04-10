@@ -1,8 +1,14 @@
 import React from 'react';
 import { Card } from 'antd';
+import format from 'date-fns/format';
+import { observer } from 'mobx-react';
+
+import './HoursCard.less';
 
 import TaskTimeModel from '../../../../models/TaskTimeModel';
-import format from 'date-fns/format';
+import CircleButton from '../../../../components/CircleButton/CircleButton';
+import { CaretRightFilled, PauseOutlined } from '@ant-design/icons';
+import rootStore from '../../../../services/RootStore';
 
 const formatStr = 'HH:mm';
 function timeFormat(date: Date | undefined) {
@@ -12,17 +18,36 @@ function timeFormat(date: Date | undefined) {
   return '';
 }
 
+const { tasksStore } = rootStore;
+
 interface HoursCardProps {
   taskTime: TaskTimeModel;
 }
 
-export default function HoursCard({ taskTime }: HoursCardProps) {
+export default observer(function HoursCard({ taskTime }: HoursCardProps) {
+  const { task, time } = taskTime;
+
+  function handleClick() {
+    if (!task.active) {
+      tasksStore.startTimer(task);
+    } else {
+      tasksStore.endTimer(task);
+    }
+  }
+
   return (
-    <Card style={{ width: 300 }}>
-      <div>{taskTime.task.title}</div>
+    <Card className="hours-card">
       <div>
-        {`${timeFormat(taskTime.time[0])} - ${timeFormat(taskTime.time[1])}`}
+        <div>{task.title}</div>
+        <div>{`${timeFormat(time[0])} - ${timeFormat(time[1])}`}</div>
       </div>
+      <CircleButton onClick={handleClick}>
+        {!task.active ? (
+          <CaretRightFilled className="hours-card__icon" />
+        ) : (
+          <PauseOutlined className="hours-card__icon" />
+        )}
+      </CircleButton>
     </Card>
   );
-}
+});
