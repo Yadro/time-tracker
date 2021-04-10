@@ -37,11 +37,11 @@ export default observer(function HoursCard({ taskTime }: HoursCardProps) {
 
   return (
     <Card className="hours-card">
-      <div>
+      <div className="hours-card__info">
         <div>{task.title}</div>
         <div>{`${timeFormat(time[0])} - ${timeFormat(time[1])}`}</div>
       </div>
-      <CircleButton onClick={handleClick}>
+      <CircleButton onClick={handleClick} className="hours-card__button">
         {!task.active ? (
           <CaretRightFilled className="hours-card__icon" />
         ) : (

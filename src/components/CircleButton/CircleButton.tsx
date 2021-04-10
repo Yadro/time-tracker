@@ -2,9 +2,21 @@ import React from 'react';
 
 import './CircleButton.less';
 
-export default function CircleButton({ children, onClick }) {
+import cn from '../../helpers/ClassNameHelper';
+
+interface CircleButtonProps {
+  className: string;
+  onClick: () => void;
+  children: React.ReactNode;
+}
+
+export default function CircleButton({
+  className,
+  children,
+  onClick,
+}: CircleButtonProps) {
   return (
-    <span className="circle-button" onClick={onClick}>
+    <span className={cn('circle-button', className)} onClick={onClick}>
       {children}
     </span>
   );
