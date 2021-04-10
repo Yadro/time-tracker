@@ -5,7 +5,7 @@ import './CircleButton.less';
 import cn from '../../helpers/ClassNameHelper';
 
 interface CircleButtonProps {
-  className: string;
+  className?: string;
   onClick: () => void;
   children: React.ReactNode;
 }

@@ -21,11 +21,11 @@ export default observer(function TaskControl() {
   if (task) {
     return (
       <span className="task-control">
-        <div className="task-control--info">
-          <span>{project?.title}</span>
+        <div className="task-control__info">
+          <span className="task-control__project">{project?.title}</span>
           <span>{task.title}</span>
         </div>
-        <span className="task-control--duration">{duration}</span>
+        <span className="task-control__duration">{duration}</span>
         <CircleButton onClick={() => tasksStore.endTimer(task)}>
           <PauseOutlined />
         </CircleButton>
