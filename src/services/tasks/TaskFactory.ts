@@ -1,10 +1,10 @@
 import AbstractFactory from '../../base/AbstractFactory';
-import TaskRecordModel from '../../models/TaskRecordModel';
+import TasksByProject from '../../models/TasksByProject';
 import TaskModel from '../../models/TaskModel';
 
 export default class TaskFactory extends AbstractFactory {
-  createTasks(data: TaskRecordModel): TaskRecordModel {
-    const newData: TaskRecordModel = {};
+  createTasks(data: TasksByProject): TasksByProject {
+    const newData: TasksByProject = {};
     Object.keys(data).forEach((projectId) => {
       newData[projectId] = this.createList(TaskModel, data[projectId]);
     });

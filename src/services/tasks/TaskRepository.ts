@@ -1,8 +1,8 @@
 import AbstractFileRepository from '../../base/repositories/AbstractFileRepository';
-import TaskRecordModel from '../../models/TaskRecordModel';
+import TasksByProject from '../../models/TasksByProject';
 
 export default class TaskRepository extends AbstractFileRepository<
-  TaskRecordModel
+  TasksByProject
 > {
   fileName = 'tasks.json';
 }

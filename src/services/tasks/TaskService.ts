@@ -1,18 +1,18 @@
 import TaskRepository from './TaskRepository';
 import TaskFactory from './TaskFactory';
 import IService from '../../base/IService';
-import TaskRecordModel from '../../models/TaskRecordModel';
+import TasksByProject from '../../models/TasksByProject';
 
-export default class TaskService implements IService<TaskRecordModel> {
+export default class TaskService implements IService<TasksByProject> {
   taskRepository: TaskRepository = new TaskRepository();
   taskFactory: TaskFactory = new TaskFactory();
 
-  getAll(): TaskRecordModel {
-    const data: TaskRecordModel = this.taskRepository.restore({});
+  getAll(): TasksByProject {
+    const data: TasksByProject = this.taskRepository.restore({});
     return this.taskFactory.createTasks(data);
   }
 
-  save(data: TaskRecordModel) {
+  save(data: TasksByProject) {
     this.taskRepository.save(data);
   }
 }

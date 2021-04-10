@@ -8,6 +8,7 @@ import './Main.less';
 import Projects from './projects/Projects';
 import TaskControl from './projects/components/TaskControl/TaskControl';
 import HeaderMenu from '../components/HeaderMenu';
+import HoursView from './hours/HoursView';
 
 const { Header } = Layout;
 
@@ -26,7 +27,7 @@ export default observer(function Main() {
       </Header>
       <Switch>
         <Route path="/hours">
-          <h1>Test1</h1>
+          <HoursView />
         </Route>
         <Route path="/projects">
           <Projects />

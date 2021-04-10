@@ -1,10 +1,10 @@
 import { makeAutoObservable } from 'mobx';
 import TaskService from './TaskService';
 import TaskModel from '../../models/TaskModel';
-import TaskRecordModel from '../../models/TaskRecordModel';
+import TasksByProject from '../../models/TasksByProject';
 
 export default class TaskStore {
-  tasks: TaskRecordModel = {};
+  tasks: TasksByProject = {};
   activeTask: TaskModel | undefined;
   private tasksService = new TaskService();
 
@@ -21,7 +21,13 @@ export default class TaskStore {
     return this.tasks[projectId] || [];
   }
 
-  getTaskByDate(date: Date) {}
+  getTaskByDate(date: Date) {
+    const result: TaskModel[] = [];
+    for (const tasks of Object.values(this.tasks)) {
+      this.findTasksByDateRecursive(tasks, date, result);
+    }
+    return result;
+  }
 
   add(task: TaskModel) {
     const { projectId } = task;
@@ -69,9 +75,20 @@ export default class TaskStore {
     this.tasksService.save(this.tasks);
   }
 
-  private findTasksByDateRecursive(tasks: TaskModel[], result: TaskModel[]) {
+  private findTasksByDateRecursive(
+    tasks: TaskModel[],
+    date: Date,
+    result: TaskModel[]
+  ) {
     for (let task of tasks) {
+      if (task.wasActiveInDay(date)) {
+        result.push(task);
+      }
+      if (Array.isArray(task.children)) {
+        this.findTasksByDateRecursive(task.children, date, result);
+      }
     }
+    return result;
   }
 
   private findActiveTask() {

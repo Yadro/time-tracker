@@ -52,7 +52,6 @@ export default observer(function Projects() {
   }
 
   function handleSelectProject(items: Key[]) {
-    console.log(items);
     if (items.length > 0) {
       projectStore.setActiveProject(items[0] as string);
     }
