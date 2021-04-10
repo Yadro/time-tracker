@@ -2,26 +2,27 @@ import AbstractModel from '../base/AbstractModel';
 import { ITreeItem } from '../types/ITreeItem';
 import { computed, makeObservable, observable } from 'mobx';
 
-interface ITaskModel extends ITreeItem<ITaskModel> {
+interface IJsonTaskModel extends ITreeItem<IJsonTaskModel> {
   projectId: string;
   checked: boolean;
   active: boolean;
   time: number[][];
 }
 
-export default class TaskModel extends AbstractModel implements ITaskModel {
+export default class TaskModel extends AbstractModel {
   key: string = '';
   title: string = '';
   children: TaskModel[] = [];
   projectId: string = '';
   checked: boolean = false;
   active: boolean = false;
-  time: number[][] = [];
+  time: Date[][] = [];
 
-  constructor(props: ITaskModel) {
+  constructor(props: IJsonTaskModel) {
     super();
     this.load(props);
     this.children = props.children?.map((json) => new TaskModel(json)) || [];
+    this.time = props.time.map((range) => range.map((t) => new Date(t)));
 
     makeObservable(this, {
       key: observable,
@@ -36,13 +37,14 @@ export default class TaskModel extends AbstractModel implements ITaskModel {
   }
 
   get duration() {
-    return this.time.reduce((prev: number, range: number[]) => {
+    return this.time.reduce((prev: number, range: Date[]) => {
       if (range.length > 0) {
         const duration =
-          (range.length === 2 ? range[1] : Date.now()) - range[0];
+          (range.length === 2 ? range[1].getTime() : Date.now()) -
+          range[0].getTime();
         return prev + duration;
       }
-      return 0;
+      return prev;
     }, 0);
   }
 }

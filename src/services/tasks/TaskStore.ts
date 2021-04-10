@@ -38,10 +38,10 @@ export default class TaskStore {
     this.activeTask = task;
     task.time.forEach((range) => {
       if (range.length === 1) {
-        range[1] = Date.now();
+        range[1] = new Date();
       }
     });
-    task.time.push([Date.now()]);
+    task.time.push([new Date()]);
     task.active = true;
     this.tasksService.save(this.tasks);
   }
@@ -50,7 +50,7 @@ export default class TaskStore {
     this.activeTask = undefined;
     task.active = false;
     const range = task.time[task.time.length - 1];
-    range.push(Date.now());
+    range.push(new Date());
     this.tasksService.save(this.tasks);
   }
 
