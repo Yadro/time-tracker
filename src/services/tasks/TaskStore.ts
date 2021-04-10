@@ -31,8 +31,6 @@ export default class TaskStore {
     this.tasksService.save(this.tasks);
   }
 
-  delete(projectId: string, task: TaskModel) {}
-
   startTimer(task: TaskModel) {
     if (this.activeTask) {
       this.endTimer(this.activeTask);
@@ -89,7 +87,8 @@ export default class TaskStore {
   }
 
   private findActiveTaskRecursive(tasks: TaskModel[]): TaskModel | undefined {
-    return tasks.find((task) => {
+    for (const taskKey in tasks) {
+      const task = tasks[taskKey];
       if (task.active) {
         return task;
       }
@@ -99,8 +98,8 @@ export default class TaskStore {
           return found;
         }
       }
-      return false;
-    });
+    }
+    return undefined;
   }
 
   private getCheckedKeysRecursive(tasks: TaskModel[], checkedIds: string[]) {

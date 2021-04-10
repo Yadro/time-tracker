@@ -7,10 +7,11 @@ export default class ProjectModel extends AbstractModel
   implements IProjectItem {
   key: string = '';
   title: string = '';
-  children: IProjectItem[] = [];
+  children: ProjectModel[] = [];
 
   constructor(props: IProjectItem) {
     super();
     this.load(props);
+    this.children = props.children?.map((json) => new ProjectModel(json)) || [];
   }
 }

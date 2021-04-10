@@ -1,4 +1,5 @@
 module.exports = {
+  parser: '@typescript-eslint/parser',
   extends: [
     'plugin:import/errors',
     'plugin:react/recommended',

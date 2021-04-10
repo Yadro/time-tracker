@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import {
   CaretRightFilled,
   DeleteOutlined,
@@ -9,7 +9,7 @@ import './TaskNode.less';
 
 import TaskModel from '../../../../models/TaskModel';
 import rootStore from '../../../../services/RootStore';
-import { msToTime } from '../../../../helpers/DateTime';
+import { useTaskDuration } from '../../../../hooks/TaskHooks';
 
 const { tasksStore } = rootStore;
 
@@ -18,25 +18,7 @@ interface TaskNodeProps {
 }
 
 export default function TaskNode({ model }: TaskNodeProps) {
-  const intervalRef = useRef<NodeJS.Timeout>();
-  const [duration, setDuration] = useState<string>('');
-
-  useEffect(() => {
-    const duration = model.duration;
-    if (duration !== 0) {
-      setDuration(msToTime(duration));
-    }
-    if (model.active) {
-      intervalRef.current = setInterval(() => {
-        setDuration(msToTime(model.duration));
-      }, 1000);
-    }
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [model.active]);
+  const duration = useTaskDuration(model);
 
   return (
     <div className="task-node">
