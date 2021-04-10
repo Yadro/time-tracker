@@ -1,4 +1,29 @@
 .task-control {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  margin-left: 20px;
+  padding: 8px;
+  border-radius: 5px;
+  line-height: 14px;
   color: white;
-  //line-height: ;
+  background-color: #713A91;
+}
+
+.task-control--info {
+  display: inline-flex;
+  flex: 1;
+  flex-direction: column;
+  margin-right: 8px;
+  width: 140px;
+}
+
+.task-control--info span {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.task-control--duration {
+  margin-right: 8px;
 }

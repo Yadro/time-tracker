@@ -18,7 +18,7 @@ export function useTaskDuration(model: TaskModel | undefined) {
     }
     const duration = model.duration;
     if (duration !== 0) {
-      setDuration(msToTime(duration));
+      setDuration(msToTime(duration, model.active));
     }
     if (model.active) {
       intervalRef.current = setInterval(() => {

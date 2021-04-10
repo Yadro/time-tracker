@@ -1,29 +1,36 @@
 import React, { useMemo } from 'react';
 import { observer } from 'mobx-react';
+import { PauseOutlined } from '@ant-design/icons';
 
 import './TaskControl.less';
 
 import rootStore from '../../../../services/RootStore';
 import { useTaskDuration } from '../../../../hooks/TaskHooks';
+import CircleButton from '../../../../components/CircleButton/CircleButton';
 
 const { tasksStore, projectStore } = rootStore;
 
 export default observer(function TaskControl() {
-  const activeTask = tasksStore.activeTask;
-  const duration = useTaskDuration(activeTask);
+  const task = tasksStore.activeTask;
+  const duration = useTaskDuration(task);
 
   const project = useMemo(() => {
-    return projectStore.get(activeTask?.projectId || '');
-  }, [activeTask]);
+    return projectStore.get(task?.projectId || '');
+  }, [task]);
 
-  if (activeTask) {
+  if (task) {
     return (
-      <div className="task-control">
-        <div>{project?.title}</div>
-        <div>{activeTask.title}</div>
-        {duration}
-      </div>
+      <span className="task-control">
+        <div className="task-control--info">
+          <span>{project?.title}</span>
+          <span>{task.title}</span>
+        </div>
+        <span className="task-control--duration">{duration}</span>
+        <CircleButton onClick={() => tasksStore.endTimer(task)}>
+          <PauseOutlined />
+        </CircleButton>
+      </span>
     );
   }
-  return <div className="task-control">No active tasks</div>;
+  return <span className="task-control">No active tasks</span>;
 });

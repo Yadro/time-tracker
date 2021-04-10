@@ -1,8 +1,11 @@
 import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
-import { Layout, Menu } from 'antd';
+import { Layout } from 'antd';
 import { observer } from 'mobx-react';
+
 import Projects from './projects/Projects';
+import TaskControl from './projects/components/TaskControl/TaskControl';
+import HeaderMenu from '../components/HeaderMenu';
 
 const { Header } = Layout;
 
@@ -10,15 +13,15 @@ export default observer(function Main() {
   return (
     <Layout className="layout">
       <Header>
-        <div className="logo" />
-        <Menu theme="dark" mode="horizontal">
-          <Menu.Item key="1">
+        <div>
+          <HeaderMenu>
             <Link to="/hours">Hours</Link>
-          </Menu.Item>
-          <Menu.Item key="2">
+          </HeaderMenu>
+          <HeaderMenu>
             <Link to="/projects">Projects</Link>
-          </Menu.Item>
-        </Menu>
+          </HeaderMenu>
+          <TaskControl />
+        </div>
       </Header>
       <Switch>
         <Route path="/hours">
