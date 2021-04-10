@@ -21,6 +21,8 @@ export default class TaskStore {
     return this.tasks[projectId] || [];
   }
 
+  getTaskByDate(date: Date) {}
+
   add(task: TaskModel) {
     const { projectId } = task;
     if (!Array.isArray(this.tasks[projectId])) {
@@ -36,21 +38,13 @@ export default class TaskStore {
       this.endTimer(this.activeTask);
     }
     this.activeTask = task;
-    task.time.forEach((range) => {
-      if (range.length === 1) {
-        range[1] = new Date();
-      }
-    });
-    task.time.push([new Date()]);
-    task.active = true;
+    task.start();
     this.tasksService.save(this.tasks);
   }
 
   endTimer(task: TaskModel) {
     this.activeTask = undefined;
-    task.active = false;
-    const range = task.time[task.time.length - 1];
-    range.push(new Date());
+    task.end();
     this.tasksService.save(this.tasks);
   }
 
@@ -73,6 +67,11 @@ export default class TaskStore {
       this.checkTasksRecursive(this.tasks[projectId], taskIds);
     }
     this.tasksService.save(this.tasks);
+  }
+
+  private findTasksByDateRecursive(tasks: TaskModel[], result: TaskModel[]) {
+    for (let task of tasks) {
+    }
   }
 
   private findActiveTask() {

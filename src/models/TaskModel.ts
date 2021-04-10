@@ -1,6 +1,7 @@
+import { action, computed, makeObservable, observable } from 'mobx';
+
 import AbstractModel from '../base/AbstractModel';
 import { ITreeItem } from '../types/ITreeItem';
-import { computed, makeObservable, observable } from 'mobx';
 
 interface IJsonTaskModel extends ITreeItem<IJsonTaskModel> {
   projectId: string;
@@ -33,7 +34,25 @@ export default class TaskModel extends AbstractModel {
       active: observable,
       time: observable,
       duration: computed,
+      start: action,
+      end: action,
     });
+  }
+
+  start() {
+    this.active = true;
+    this.time.forEach((range) => {
+      if (range.length === 1) {
+        range.push(new Date());
+      }
+    });
+    this.time.push([new Date()]);
+  }
+
+  end() {
+    this.active = false;
+    const range = this.time[this.time.length - 1];
+    range.push(new Date());
   }
 
   get duration() {
