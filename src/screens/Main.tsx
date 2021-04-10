@@ -7,7 +7,7 @@ import './Main.less';
 
 import Projects from './projects/Projects';
 import TaskControl from './projects/components/TaskControl/TaskControl';
-import HeaderMenu from '../components/HeaderMenu';
+import HeaderMenu from '../components/HeaderMenu/HeaderMenu';
 import HoursView from './hours/HoursView';
 
 const { Header } = Layout;
