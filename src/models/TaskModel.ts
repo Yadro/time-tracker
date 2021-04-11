@@ -40,6 +40,7 @@ export default class TaskModel extends AbstractModel {
       time: observable,
       datesInProgress: observable,
       duration: computed,
+      setTitle: action,
       start: action,
       end: action,
     });
@@ -55,6 +56,10 @@ export default class TaskModel extends AbstractModel {
       }
       return prev;
     }, 0);
+  }
+
+  setTitle(title: string) {
+    this.title = title;
   }
 
   start() {

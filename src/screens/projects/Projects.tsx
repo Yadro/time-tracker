@@ -12,6 +12,7 @@ import TaskModel from '../../models/TaskModel';
 import ProjectModel from '../../models/ProjectModel';
 import ProjectModal from './components/ProjectModal';
 import TaskNode from './components/TaskNode/TaskNode';
+import DrawerTask from './components/DrawerTask/DrawerTask';
 
 const { Sider } = Layout;
 
@@ -44,8 +45,9 @@ const ProjectList = TreeList(
 );
 
 export default observer(function Projects() {
-  const [createNewProject, setCreateNewProject] = useState<boolean>();
   const [showProjectModal, setShowProjectModal] = useState<boolean>();
+  const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
+  const [selectedTask, setSelectedTask] = useState<TaskModel | undefined>();
 
   function handleCreateProject() {
     setShowProjectModal(true);
@@ -54,6 +56,14 @@ export default observer(function Projects() {
   function handleSelectProject(items: Key[]) {
     if (items.length > 0) {
       projectStore.setActiveProject(items[0] as string);
+    }
+  }
+
+  function handleSelectTask(items: Key[]) {
+    if (items.length > 0) {
+      setDrawerVisible(true);
+      const task = tasksStore.getTaskByKey(items[0] as string);
+      setSelectedTask(task);
     }
   }
 
@@ -67,16 +77,18 @@ export default observer(function Projects() {
       </Sider>
       <Layout style={{ padding: '24px' }}>
         <Space className="root" direction="vertical">
-          <TaskList />
+          <TaskList onSelect={handleSelectTask} />
           <TaskInput />
         </Space>
       </Layout>
       {showProjectModal && (
-        <ProjectModal
-          onClose={() => setShowProjectModal(false)}
-          createNew={createNewProject}
-        />
+        <ProjectModal onClose={() => setShowProjectModal(false)} />
       )}
+      <DrawerTask
+        task={selectedTask}
+        visible={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
+      />
     </Layout>
   );
 });

@@ -99,8 +99,8 @@ export default function TreeList<T extends ITreeItem>(
         draggable
         selectable={options?.selectable}
         blockNode
-        onDrop={onDrop}
         treeData={data}
+        onDrop={onDrop}
         onSelect={onSelect}
         onCheck={options?.checkable ? options?.onCheck : undefined}
         titleRender={options?.titleRender}
