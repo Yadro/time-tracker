@@ -21,10 +21,29 @@ export default class TaskStore {
     return this.tasks[projectId] || [];
   }
 
+  getTaskByKey(taskKey: string): TaskModel | undefined {
+    function condition(task: TaskModel): boolean {
+      return task.key === taskKey;
+    }
+
+    for (const tasks of Object.values(this.tasks)) {
+      const found = this.findTaskRecursive(tasks, condition);
+      if (found) {
+        return found;
+      }
+    }
+    return undefined;
+  }
+
   getTaskByDate(date: Date) {
     const result: TaskModel[] = [];
+
+    function condition(task: TaskModel): boolean {
+      return task.wasActiveInDay(date);
+    }
+
     for (const tasks of Object.values(this.tasks)) {
-      this.findTasksByDateRecursive(tasks, date, result);
+      this.findTasksRecursive(tasks, condition, result);
     }
     return result;
   }
@@ -60,10 +79,13 @@ export default class TaskStore {
   }
 
   getCheckedKeys(projectId: string): string[] {
+    function condition(task: TaskModel): boolean {
+      return task.checked;
+    }
     if (Array.isArray(this.tasks[projectId])) {
-      const checkedIds: string[] = [];
-      this.getCheckedKeysRecursive(this.tasks[projectId], checkedIds);
-      return checkedIds;
+      const found: TaskModel[] = [];
+      this.findTasksRecursive(this.tasks[projectId], condition, found);
+      return found.map((f) => f.key);
     }
     return [];
   }
@@ -73,22 +95,6 @@ export default class TaskStore {
       this.checkTasksRecursive(this.tasks[projectId], taskIds);
     }
     this.tasksService.save(this.tasks);
-  }
-
-  private findTasksByDateRecursive(
-    tasks: TaskModel[],
-    date: Date,
-    result: TaskModel[]
-  ) {
-    for (let task of tasks) {
-      if (task.wasActiveInDay(date)) {
-        result.push(task);
-      }
-      if (Array.isArray(task.children)) {
-        this.findTasksByDateRecursive(task.children, date, result);
-      }
-    }
-    return result;
   }
 
   private findActiveTask() {
@@ -103,30 +109,11 @@ export default class TaskStore {
   }
 
   private findActiveTaskRecursive(tasks: TaskModel[]): TaskModel | undefined {
-    for (const taskKey in tasks) {
-      const task = tasks[taskKey];
-      if (task.active) {
-        return task;
-      }
-      if (Array.isArray(task.children)) {
-        const found = this.findActiveTaskRecursive(task.children);
-        if (found) {
-          return found;
-        }
-      }
+    function condition(task: TaskModel): boolean {
+      return task.active;
     }
-    return undefined;
-  }
 
-  private getCheckedKeysRecursive(tasks: TaskModel[], checkedIds: string[]) {
-    tasks.forEach((task) => {
-      if (task.checked) {
-        checkedIds.push(task.key);
-      }
-      if (Array.isArray(task.children)) {
-        this.getCheckedKeysRecursive(task.children, checkedIds);
-      }
-    });
+    return this.findTaskRecursive(tasks, condition);
   }
 
   private checkTasksRecursive(tasks: TaskModel[], taskIds: string[]) {
@@ -136,5 +123,39 @@ export default class TaskStore {
         this.checkTasksRecursive(task.children, taskIds);
       }
     });
+  }
+
+  private findTaskRecursive(
+    tasks: TaskModel[],
+    condition: (task: TaskModel) => boolean
+  ): TaskModel | undefined {
+    for (const task of tasks) {
+      if (condition(task)) {
+        return task;
+      }
+      if (Array.isArray(task.children)) {
+        const found = this.findTaskRecursive(task.children, condition);
+        if (found) {
+          return found;
+        }
+      }
+    }
+    return undefined;
+  }
+
+  private findTasksRecursive(
+    tasks: TaskModel[],
+    condition: (task: TaskModel) => boolean,
+    result: TaskModel[]
+  ): TaskModel[] {
+    for (const task of tasks) {
+      if (condition(task)) {
+        result.push(task);
+      }
+      if (Array.isArray(task.children)) {
+        this.findTasksRecursive(task.children, condition, result);
+      }
+    }
+    return result;
   }
 }
