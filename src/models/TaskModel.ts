@@ -10,6 +10,7 @@ interface IJsonTaskModel extends ITreeItem<IJsonTaskModel> {
   active: boolean;
   time: string[][];
   datesInProgress: string[];
+  children: IJsonTaskModel[];
 }
 
 export default class TaskModel extends AbstractModel {

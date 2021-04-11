@@ -1,15 +1,31 @@
-import { makeAutoObservable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
+
 import TaskService from './TaskService';
 import TaskModel from '../../models/TaskModel';
 import TasksByProject from '../../models/TasksByProject';
+import AbstractTreeModelStore from '../../base/AbstractTreeModelStore';
 
-export default class TaskStore {
+export default class TaskStore extends AbstractTreeModelStore<TaskModel> {
   tasks: TasksByProject = {};
   activeTask: TaskModel | undefined;
   private tasksService = new TaskService();
 
   constructor() {
-    makeAutoObservable(this);
+    super();
+    makeObservable(this, {
+      tasks: observable,
+      activeTask: observable,
+      set: action,
+      getTasks: action,
+      getTaskByKey: action,
+      getTaskByDate: action,
+      add: action,
+      startTimer: action,
+      endTimer: action,
+      restore: action,
+      getCheckedKeys: action,
+      checkTasks: action,
+    });
   }
 
   set(projectId: string, tasks: TaskModel[]) {
@@ -27,7 +43,7 @@ export default class TaskStore {
     }
 
     for (const tasks of Object.values(this.tasks)) {
-      const found = this.findTaskRecursive(tasks, condition);
+      const found = this.getItemRecursive(tasks, condition);
       if (found) {
         return found;
       }
@@ -43,7 +59,7 @@ export default class TaskStore {
     }
 
     for (const tasks of Object.values(this.tasks)) {
-      this.findTasksRecursive(tasks, condition, result);
+      this.getItemsRecursive(tasks, condition, result);
     }
     return result;
   }
@@ -84,7 +100,7 @@ export default class TaskStore {
     }
     if (Array.isArray(this.tasks[projectId])) {
       const found: TaskModel[] = [];
-      this.findTasksRecursive(this.tasks[projectId], condition, found);
+      this.getItemsRecursive(this.tasks[projectId], condition, found);
       return found.map((f) => f.key);
     }
     return [];
@@ -113,7 +129,7 @@ export default class TaskStore {
       return task.active;
     }
 
-    return this.findTaskRecursive(tasks, condition);
+    return this.getItemRecursive(tasks, condition);
   }
 
   private checkTasksRecursive(tasks: TaskModel[], taskIds: string[]) {
@@ -123,39 +139,5 @@ export default class TaskStore {
         this.checkTasksRecursive(task.children, taskIds);
       }
     });
-  }
-
-  private findTaskRecursive(
-    tasks: TaskModel[],
-    condition: (task: TaskModel) => boolean
-  ): TaskModel | undefined {
-    for (const task of tasks) {
-      if (condition(task)) {
-        return task;
-      }
-      if (Array.isArray(task.children)) {
-        const found = this.findTaskRecursive(task.children, condition);
-        if (found) {
-          return found;
-        }
-      }
-    }
-    return undefined;
-  }
-
-  private findTasksRecursive(
-    tasks: TaskModel[],
-    condition: (task: TaskModel) => boolean,
-    result: TaskModel[]
-  ): TaskModel[] {
-    for (const task of tasks) {
-      if (condition(task)) {
-        result.push(task);
-      }
-      if (Array.isArray(task.children)) {
-        this.findTasksRecursive(task.children, condition, result);
-      }
-    }
-    return result;
   }
 }

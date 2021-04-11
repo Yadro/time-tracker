@@ -1,15 +1,26 @@
+import { action, makeObservable, observable } from 'mobx';
+
 import ProjectModel from '../../models/ProjectModel';
 import ProjectService from './ProjectService';
-import { makeAutoObservable } from 'mobx';
+import AbstractTreeModelStore from '../../base/AbstractTreeModelStore';
 
-export default class ProjectStore {
+export default class ProjectStore extends AbstractTreeModelStore<ProjectModel> {
   projects: ProjectModel[] = [];
   activeProject: string = '';
 
   private projectService = new ProjectService();
 
   constructor() {
-    makeAutoObservable(this);
+    super();
+    makeObservable(this, {
+      projects: observable,
+      activeProject: observable,
+      set: action,
+      get: action,
+      add: action,
+      setActiveProject: action,
+      restore: action,
+    });
   }
 
   set(projects: ProjectModel[]) {
@@ -17,8 +28,11 @@ export default class ProjectStore {
     this.projectService.save(this.projects);
   }
 
-  get(projectId: string): ProjectModel | undefined {
-    return this.getRecursive(this.projects, projectId);
+  get(projectKey: string): ProjectModel | undefined {
+    function compare(project: ProjectModel) {
+      return project.key === projectKey;
+    }
+    return this.getItemRecursive(this.projects, compare);
   }
 
   add(project: ProjectModel) {
@@ -34,24 +48,5 @@ export default class ProjectStore {
   restore() {
     this.projects = this.projectService.getAll();
     this.activeProject = Object.keys(this.projects)[0];
-  }
-
-  private getRecursive(
-    projects: ProjectModel[],
-    projectId: string
-  ): ProjectModel | undefined {
-    for (const projectKey in projects) {
-      const project = projects[projectKey];
-      if (project.key === projectId) {
-        return project;
-      }
-      if (Array.isArray(project.children)) {
-        const found = this.getRecursive(project.children, projectId);
-        if (found) {
-          return found;
-        }
-      }
-    }
-    return undefined;
   }
 }

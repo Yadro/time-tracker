@@ -10,7 +10,7 @@ interface TreeListProps {
   onSelect?: (selectedKeys: Key[]) => void;
 }
 
-export default function TreeList<T extends ITreeItem>(
+export default function TreeList<T extends ITreeItem<any>>(
   getData: () => T[],
   updateData: (items: T[]) => void,
   options?: {

@@ -1,13 +1,15 @@
 import AbstractModel from '../base/AbstractModel';
 import { ITreeItem } from '../types/ITreeItem';
 
-interface IProjectItem extends ITreeItem<IProjectItem> {}
+interface IProjectItem extends ITreeItem<IProjectItem> {
+  children?: IProjectItem[];
+}
 
 export default class ProjectModel extends AbstractModel
   implements IProjectItem {
   key: string = '';
   title: string = '';
-  children: ProjectModel[] = [];
+  children?: ProjectModel[] = [];
 
   constructor(props: IProjectItem) {
     super();
