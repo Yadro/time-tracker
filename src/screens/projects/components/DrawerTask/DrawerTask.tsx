@@ -1,10 +1,14 @@
 import React, { useMemo } from 'react';
 import { Checkbox, Drawer, Input, Space } from 'antd';
 import { observer } from 'mobx-react';
+import { FieldTimeOutlined } from '@ant-design/icons';
+
+import './DrawerTask.less';
 
 import TaskModel from '../../../../models/TaskModel';
 import rootStore from '../../../../services/RootStore';
 import { useTaskDuration } from '../../../../hooks/TaskHooks';
+import HoursByTask from '../HoursByTask/HoursByTask';
 
 const { projectStore } = rootStore;
 
@@ -31,7 +35,7 @@ export default observer(function DrawerTask({
       onClose={onClose}
       visible={visible}
     >
-      <Space direction="vertical">
+      <Space direction="vertical" className="drawer-task">
         <Checkbox
           onChange={(e) => {
             const { checked } = e.target;
@@ -63,7 +67,12 @@ export default observer(function DrawerTask({
             }
           }}
         />
-        <div>Duration: {duration}</div>
+        <div>
+          <FieldTimeOutlined />
+          <span>: {duration}</span>
+        </div>
+
+        <HoursByTask task={task} />
       </Space>
     </Drawer>
   );
