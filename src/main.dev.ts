@@ -44,9 +44,9 @@ const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
   const extensions = [
-    // 'REACT_DEVELOPER_TOOLS',
-    'fmkadmapgofadopljbjfkapdkoienihi',
-    'pfgnfdagidkfgccljigdamigbcnndkod', // mobx-devtool
+    'REACT_DEVELOPER_TOOLS',
+    // 'fmkadmapgofadopljbjfkapdkoienihi',
+    // 'pfgnfdagidkfgccljigdamigbcnndkod', // mobx-devtool
   ];
 
   return installer
@@ -66,7 +66,7 @@ const createWindow = async () => {
     process.env.DEBUG_PROD === 'true'
   ) {
     // Doesnt work
-    // await installExtensions();
+    await installExtensions();
   }
 
   const RESOURCES_PATH = app.isPackaged
@@ -84,6 +84,7 @@ const createWindow = async () => {
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
     },
   });
 
