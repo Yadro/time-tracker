@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Checkbox, Drawer, Input, Space } from 'antd';
 import { observer } from 'mobx-react';
-import { ClockCircleOutlined } from '@ant-design/icons';
+import { ClockCircleOutlined, ProjectOutlined } from '@ant-design/icons';
 
 import './DrawerTask.less';
 
@@ -48,7 +48,12 @@ export default observer(function DrawerTask({
         >
           Mark as done
         </Checkbox>
-        <div>Project: {project?.title}</div>
+        <div className="icon-with-value">
+          <IconTile backgroundColor="#713A91">
+            <ProjectOutlined style={{ color: 'white ' }} />
+          </IconTile>
+          <span className="value">{project?.title}</span>
+        </div>
         <Input
           value={task?.title}
           onChange={(e) => {
@@ -68,11 +73,11 @@ export default observer(function DrawerTask({
             }
           }}
         />
-        <div className="duration">
+        <div className="icon-with-value">
           <IconTile backgroundColor="#713A91">
             <ClockCircleOutlined style={{ color: 'white ' }} />
           </IconTile>
-          <span className="duration-value">{duration}</span>
+          <span className="value">{duration}</span>
         </div>
 
         <HoursByTask task={task} />
