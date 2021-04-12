@@ -1,26 +1,17 @@
-import { action, makeObservable, observable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 
 import ProjectModel from '../../models/ProjectModel';
 import ProjectService from './ProjectService';
-import AbstractTreeModelStore from '../../base/AbstractTreeModelStore';
+import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
 
-export default class ProjectStore extends AbstractTreeModelStore<ProjectModel> {
+export default class ProjectStore {
   projects: ProjectModel[] = [];
   activeProject: string = '';
 
   private projectService = new ProjectService();
 
   constructor() {
-    super();
-    makeObservable(this, {
-      projects: observable,
-      activeProject: observable,
-      set: action,
-      get: action,
-      add: action,
-      setActiveProject: action,
-      restore: action,
-    });
+    makeAutoObservable(this);
   }
 
   set(projects: ProjectModel[]) {
@@ -32,7 +23,7 @@ export default class ProjectStore extends AbstractTreeModelStore<ProjectModel> {
     function compare(project: ProjectModel) {
       return project.key === projectKey;
     }
-    return this.getItemRecursive(this.projects, compare);
+    return TreeModelStoreHelper.getItemRecursive(this.projects, compare);
   }
 
   add(project: ProjectModel) {

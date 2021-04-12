@@ -1,7 +1,7 @@
 import { ITreeItem } from '../types/ITreeItem';
 
-export default abstract class AbstractTreeModelStore<T extends ITreeItem<any>> {
-  protected getItemRecursive(
+export default abstract class TreeModelStoreHelper {
+  static getItemRecursive<T extends ITreeItem<any>>(
     tasks: T[],
     condition: (task: T) => boolean
   ): T | undefined {
@@ -19,7 +19,7 @@ export default abstract class AbstractTreeModelStore<T extends ITreeItem<any>> {
     return undefined;
   }
 
-  protected getItemsRecursive(
+  static getItemsRecursive<T extends ITreeItem<any>>(
     tasks: T[],
     condition: (task: T) => boolean,
     result: T[]

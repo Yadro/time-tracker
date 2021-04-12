@@ -1,31 +1,17 @@
-import { action, makeObservable, observable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 
 import TaskService from './TaskService';
 import TaskModel from '../../models/TaskModel';
 import TasksByProject from '../../models/TasksByProject';
-import AbstractTreeModelStore from '../../base/AbstractTreeModelStore';
+import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
 
-export default class TaskStore extends AbstractTreeModelStore<TaskModel> {
+export default class TaskStore {
   tasks: TasksByProject = {};
   activeTask: TaskModel | undefined;
   private tasksService = new TaskService();
 
   constructor() {
-    super();
-    makeObservable(this, {
-      tasks: observable,
-      activeTask: observable,
-      set: action,
-      getTasks: action,
-      getTaskByKey: action,
-      getTaskByDate: action,
-      add: action,
-      startTimer: action,
-      endTimer: action,
-      restore: action,
-      getCheckedKeys: action,
-      checkTasks: action,
-    });
+    makeAutoObservable(this);
   }
 
   set(projectId: string, tasks: TaskModel[]) {
@@ -43,7 +29,7 @@ export default class TaskStore extends AbstractTreeModelStore<TaskModel> {
     }
 
     for (const tasks of Object.values(this.tasks)) {
-      const found = this.getItemRecursive(tasks, condition);
+      const found = TreeModelStoreHelper.getItemRecursive(tasks, condition);
       if (found) {
         return found;
       }
@@ -59,7 +45,7 @@ export default class TaskStore extends AbstractTreeModelStore<TaskModel> {
     }
 
     for (const tasks of Object.values(this.tasks)) {
-      this.getItemsRecursive(tasks, condition, result);
+      TreeModelStoreHelper.getItemsRecursive(tasks, condition, result);
     }
     return result;
   }
@@ -98,9 +84,14 @@ export default class TaskStore extends AbstractTreeModelStore<TaskModel> {
     function condition(task: TaskModel): boolean {
       return task.checked;
     }
+
     if (Array.isArray(this.tasks[projectId])) {
       const found: TaskModel[] = [];
-      this.getItemsRecursive(this.tasks[projectId], condition, found);
+      TreeModelStoreHelper.getItemsRecursive(
+        this.tasks[projectId],
+        condition,
+        found
+      );
       return found.map((f) => f.key);
     }
     return [];
@@ -129,7 +120,7 @@ export default class TaskStore extends AbstractTreeModelStore<TaskModel> {
       return task.active;
     }
 
-    return this.getItemRecursive(tasks, condition);
+    return TreeModelStoreHelper.getItemRecursive(tasks, condition);
   }
 
   private checkTasksRecursive(tasks: TaskModel[], taskIds: string[]) {
