@@ -11,6 +11,7 @@ interface IJsonTaskModel extends ITreeItem<IJsonTaskModel> {
   time: string[][];
   datesInProgress: string[];
   children: IJsonTaskModel[];
+  details: string[];
 }
 
 export default class TaskModel extends AbstractModel {
@@ -22,6 +23,7 @@ export default class TaskModel extends AbstractModel {
   active: boolean = false;
   time: Date[][] = [];
   datesInProgress: Date[] = [];
+  details: string = '';
 
   constructor(props: IJsonTaskModel) {
     super();
@@ -40,8 +42,10 @@ export default class TaskModel extends AbstractModel {
       active: observable,
       time: observable,
       datesInProgress: observable,
+      details: observable,
       duration: computed,
       setTitle: action,
+      setDetails: action,
       start: action,
       end: action,
     });
@@ -61,6 +65,14 @@ export default class TaskModel extends AbstractModel {
 
   setTitle(title: string) {
     this.title = title;
+  }
+
+  setDetails(details: string) {
+    this.details = details;
+  }
+
+  setChecked(checked: boolean) {
+    this.checked = checked;
   }
 
   start() {
