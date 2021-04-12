@@ -155,6 +155,7 @@ export default merge(baseConfig, {
               lessOptions: {
                 modifyVars: {
                   'primary-color': 'purple',
+                  'border-radius-base': '5px',
                 },
                 javascriptEnabled: true,
               },

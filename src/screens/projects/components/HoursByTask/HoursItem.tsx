@@ -29,7 +29,7 @@ export default function HoursItem({ range }: HoursItemProps) {
   return (
     <Card className="hours-item">
       <div className="hours-range">{hoursRangeFormat(range)}</div>
-      <div className="space" />
+      <div className="flex-1" />
       <div className="duration">{getDuration(range)}</div>
     </Card>
   );
