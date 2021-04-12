@@ -7,6 +7,9 @@ function onlySecs(secs: number) {
 }
 
 export function msToTime(s: number, showSeconds: boolean = true) {
+  if (!s) {
+    return '0s';
+  }
   const ms = s % 1000;
   s = (s - ms) / 1000;
   const secs = s % 60;
