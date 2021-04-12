@@ -6,7 +6,7 @@ import cn from '../../helpers/ClassNameHelper';
 interface IconTileProps {
   children: React.ReactNode;
   backgroundColor: string;
-  className: string;
+  className?: string;
 }
 
 export default function IconTile({

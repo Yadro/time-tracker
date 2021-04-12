@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Checkbox, Drawer, Input, Space } from 'antd';
 import { observer } from 'mobx-react';
-import { FieldTimeOutlined } from '@ant-design/icons';
+import { ClockCircleOutlined } from '@ant-design/icons';
 
 import './DrawerTask.less';
 
@@ -9,6 +9,7 @@ import TaskModel from '../../../../models/TaskModel';
 import rootStore from '../../../../services/RootStore';
 import { useTaskDuration } from '../../../../hooks/TaskHooks';
 import HoursByTask from '../HoursByTask/HoursByTask';
+import IconTile from '../../../../components/IconTile/IconTile';
 
 const { projectStore } = rootStore;
 
@@ -67,9 +68,11 @@ export default observer(function DrawerTask({
             }
           }}
         />
-        <div>
-          <FieldTimeOutlined />
-          <span>: {duration}</span>
+        <div className="duration">
+          <IconTile backgroundColor="#713A91">
+            <ClockCircleOutlined style={{ color: 'white ' }} />
+          </IconTile>
+          <span className="duration-value">{duration}</span>
         </div>
 
         <HoursByTask task={task} />
