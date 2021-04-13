@@ -24,6 +24,7 @@ export default class TaskModel extends AbstractModel {
   time: Date[][] = [];
   datesInProgress: Date[] = [];
   details: string = '';
+  deleted: boolean = false;
 
   constructor(props: IJsonTaskModel) {
     super();
@@ -73,6 +74,10 @@ export default class TaskModel extends AbstractModel {
 
   setChecked(checked: boolean) {
     this.checked = checked;
+  }
+
+  setDeleted() {
+    this.deleted = true;
   }
 
   start() {

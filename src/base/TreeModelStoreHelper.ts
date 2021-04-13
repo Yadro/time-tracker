@@ -19,7 +19,7 @@ export default abstract class TreeModelStoreHelper {
     return undefined;
   }
 
-  static getItemsRecursive<T extends ITreeItem<any>>(
+  static getFlatItemsRecursive<T extends ITreeItem<any>>(
     tasks: T[],
     condition: (task: T) => boolean,
     result: T[]
@@ -29,7 +29,7 @@ export default abstract class TreeModelStoreHelper {
         result.push(task);
       }
       if (Array.isArray(task.children)) {
-        this.getItemsRecursive(task.children, condition, result);
+        this.getFlatItemsRecursive(task.children, condition, result);
       }
     }
     return result;

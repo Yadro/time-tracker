@@ -30,7 +30,7 @@ export default function TaskNode({ model }: TaskNodeProps) {
         ) : (
           <PauseOutlined onClick={() => tasksStore.endTimer(model)} />
         )}
-        <DeleteOutlined />
+        <DeleteOutlined onClick={() => tasksStore.delete(model)} />
       </span>
     </div>
   );

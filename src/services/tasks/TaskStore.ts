@@ -45,7 +45,7 @@ export default class TaskStore {
     }
 
     for (const tasks of Object.values(this.tasks)) {
-      TreeModelStoreHelper.getItemsRecursive(tasks, condition, result);
+      TreeModelStoreHelper.getFlatItemsRecursive(tasks, condition, result);
     }
     return result;
   }
@@ -57,6 +57,11 @@ export default class TaskStore {
     }
     this.tasks[projectId].push(task);
     this.tasks[projectId] = this.tasks[projectId].slice();
+    this.tasksService.save(this.tasks);
+  }
+
+  delete(task: TaskModel) {
+    task.setDeleted();
     this.tasksService.save(this.tasks);
   }
 
@@ -87,7 +92,7 @@ export default class TaskStore {
 
     if (Array.isArray(this.tasks[projectId])) {
       const found: TaskModel[] = [];
-      TreeModelStoreHelper.getItemsRecursive(
+      TreeModelStoreHelper.getFlatItemsRecursive(
         this.tasks[projectId],
         condition,
         found
