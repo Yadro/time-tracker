@@ -10,6 +10,8 @@ import rootStore from '../../../../services/RootStore';
 import { useTaskDuration } from '../../../../hooks/TaskHooks';
 import HoursByTask from '../HoursByTask/HoursByTask';
 import IconTile from '../../../../components/IconTile/IconTile';
+import CircleButton from '../../../../components/CircleButton/CircleButton';
+import PlayStopButton from '../../../../components/PlayStopButton/PlayStopButton';
 
 const { projectStore } = rootStore;
 
@@ -56,6 +58,7 @@ export default observer(function DrawerTask({
         </div>
         <Input
           value={task?.title}
+          placeholder="Task description"
           onChange={(e) => {
             const title = e.target.value;
             if (task) {
@@ -78,6 +81,8 @@ export default observer(function DrawerTask({
             <ClockCircleOutlined style={{ color: 'white ' }} />
           </IconTile>
           <span className="value">{duration}</span>
+          <span className="flex-1" />
+          <PlayStopButton task={task} />
         </div>
 
         <HoursByTask task={task} />
