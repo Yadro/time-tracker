@@ -10,14 +10,17 @@ export default function getTimeItems(
 ): TaskTimeModel[] {
   let taskTime: TaskTimeModel[] = [];
   tasks.forEach((task) => {
-    const timeItems = task.time.filter(
-      (range) =>
+    const taskTimeItems: TaskTimeModel[] = [];
+    for (let i = 0; i < task.time.length; i++) {
+      const range = task.time[i];
+      if (
         isSameDay(range.start, date) ||
         (range.end && isSameDay(range.end, date))
-    );
-    taskTime = taskTime.concat(
-      timeItems.map((time) => new TaskTimeModel(task, time))
-    );
+      ) {
+        taskTimeItems.push(new TaskTimeModel(task, range, i));
+      }
+    }
+    taskTime = taskTime.concat(taskTimeItems);
   });
   taskTime = taskTime.sort((a, b) => compareAsc(a.time.start, b.time.start));
   return taskTime;

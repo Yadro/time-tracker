@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 
 import TaskService from './TaskService';
-import TaskModel from '../../models/TaskModel';
+import TaskModel, { ITimeRangeModel } from '../../models/TaskModel';
 import TasksByProject from '../../models/TasksByProject';
 import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
 
@@ -16,6 +16,11 @@ export default class TaskStore {
 
   set(projectId: string, tasks: TaskModel[]) {
     this.tasks[projectId] = tasks;
+    this.tasksService.save(this.tasks);
+  }
+
+  setTime(task: TaskModel, timeIndex: number, timeRange: ITimeRangeModel) {
+    task.time[timeIndex] = timeRange;
     this.tasksService.save(this.tasks);
   }
 

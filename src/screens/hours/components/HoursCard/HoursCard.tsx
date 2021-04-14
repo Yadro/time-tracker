@@ -18,13 +18,17 @@ function timeFormat(date: Date | undefined) {
 
 interface HoursCardProps {
   taskTime: TaskTimeModel;
+  onClick: (taskTime: TaskTimeModel) => void;
 }
 
-export default observer(function HoursCard({ taskTime }: HoursCardProps) {
+export default observer(function HoursCard({
+  taskTime,
+  onClick,
+}: HoursCardProps) {
   const { task, time } = taskTime;
 
   return (
-    <Card className="hours-card">
+    <Card className="hours-card" onClick={() => onClick(taskTime)}>
       <div className="hours-card__info">
         <div>{task.title}</div>
         <div>{`${timeFormat(time.start)} - ${timeFormat(time.end)}`}</div>
