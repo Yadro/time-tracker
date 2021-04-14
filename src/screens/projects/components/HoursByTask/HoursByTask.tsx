@@ -27,16 +27,16 @@ export default function HoursByTask({ task }: HoursByTaskProps) {
           <BellFilled style={{ color: 'white' }} />
         </IconTile>
         {task?.time.length === 0 && <div>No billed hours</div>}
-        {mapLastCurrent(task?.time || [], (last, range) => {
+        {mapLastCurrent(task?.time || [], (last, range, index) => {
           if (!last || !isSameDay(last[0], range[0])) {
             return (
-              <div>
+              <div key={index}>
                 <div className="date">{dateFormat(range[0])}</div>
                 <HoursItem range={range} />
               </div>
             );
           }
-          return <HoursItem range={range} />;
+          return <HoursItem key={index} range={range} />;
         })}
       </Space>
     </Card>
