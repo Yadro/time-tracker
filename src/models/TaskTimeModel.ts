@@ -1,10 +1,10 @@
-import TaskModel from './TaskModel';
+import TaskModel, { ITimeRangeModel } from './TaskModel';
 
 export default class TaskTimeModel {
   task: TaskModel;
-  time: Date[];
+  time: ITimeRangeModel;
 
-  constructor(task: TaskModel, time: Date[]) {
+  constructor(task: TaskModel, time: ITimeRangeModel) {
     this.task = task;
     this.time = time;
   }

@@ -4,11 +4,23 @@ import isSameDay from 'date-fns/isSameDay';
 import AbstractModel from '../base/AbstractModel';
 import { ITreeItem } from '../types/ITreeItem';
 
+export interface IJsonTimeRangeModel {
+  start: string;
+  end?: string;
+  description?: string;
+}
+
+export interface ITimeRangeModel {
+  start: Date;
+  end?: Date;
+  description?: string;
+}
+
 interface IJsonTaskModel extends ITreeItem<IJsonTaskModel> {
   projectId: string;
   checked: boolean;
   active: boolean;
-  time: string[][];
+  time: string[][] | IJsonTimeRangeModel[];
   datesInProgress: string[];
   children: IJsonTaskModel[];
   details: string[];
@@ -21,7 +33,7 @@ export default class TaskModel extends AbstractModel {
   projectId: string = '';
   checked: boolean = false;
   active: boolean = false;
-  time: Date[][] = [];
+  time: ITimeRangeModel[] = [];
   datesInProgress: Date[] = [];
   details: string = '';
   deleted: boolean = false;
@@ -30,7 +42,24 @@ export default class TaskModel extends AbstractModel {
     super();
     this.load(props);
     this.children = props.children?.map((json) => new TaskModel(json)) || [];
-    this.time = props.time?.map((range) => range.map((t) => new Date(t))) || [];
+    this.time =
+      props.time?.map<ITimeRangeModel>(
+        (range: string[] | IJsonTimeRangeModel) => {
+          if (Array.isArray(range)) {
+            return {
+              start: new Date(range[0]),
+              end: range[1] ? new Date(range[1]) : undefined,
+              description: undefined,
+            };
+          } else {
+            return {
+              start: new Date(range.start),
+              end: range.end ? new Date(range.end) : undefined,
+              description: undefined,
+            };
+          }
+        }
+      ) || [];
     this.datesInProgress =
       props.datesInProgress?.map((date) => new Date(date)) || [];
 
@@ -53,14 +82,10 @@ export default class TaskModel extends AbstractModel {
   }
 
   get duration() {
-    return this.time.reduce((prev: number, range: Date[]) => {
-      if (range.length > 0) {
-        const duration =
-          (range.length === 2 ? range[1].getTime() : Date.now()) -
-          range[0].getTime();
-        return prev + duration;
-      }
-      return prev;
+    return this.time.reduce((prev: number, range: ITimeRangeModel) => {
+      const { start, end } = range;
+      const duration = (end ? end.getTime() : Date.now()) - start.getTime();
+      return prev + duration;
     }, 0);
   }
 
@@ -83,19 +108,18 @@ export default class TaskModel extends AbstractModel {
   start() {
     this.active = true;
     this.addDateWhenWasInProgress(new Date());
-    this.time.forEach((range) => {
-      if (range.length === 1) {
-        range.push(new Date());
-      }
+    this.time.push({
+      start: new Date(),
+      end: undefined,
+      description: undefined,
     });
-    this.time.push([new Date()]);
   }
 
   end() {
     if (this.active) {
       this.active = false;
       const range = this.time[this.time.length - 1];
-      range.push(new Date());
+      range.end = new Date();
     }
   }
 

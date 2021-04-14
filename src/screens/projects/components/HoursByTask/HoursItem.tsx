@@ -2,27 +2,28 @@ import React from 'react';
 import { Card } from 'antd';
 import format from 'date-fns/format';
 import { msToTime } from '../../../../helpers/DateTime';
+import { ITimeRangeModel } from '../../../../models/TaskModel';
 
 function hoursFormat(date: Date) {
   return format(date, 'HH:mm');
 }
 
-function hoursRangeFormat(date: Date[]) {
-  if (date.length === 2) {
-    return `${hoursFormat(date[0])} - ${hoursFormat(date[1])}`;
+function hoursRangeFormat(range: ITimeRangeModel) {
+  if (range.end) {
+    return `${hoursFormat(range.start)} - ${hoursFormat(range.end)}`;
   }
-  return `${hoursFormat(date[0])} -`;
+  return `${hoursFormat(range.start)} -`;
 }
 
-function getDuration(date: Date[]): string {
-  if (date.length === 2) {
-    return msToTime(date[1].getTime() - date[0].getTime(), false);
+function getDuration(range: ITimeRangeModel): string {
+  if (range.end) {
+    return msToTime(range.end.getTime() - range.start.getTime(), false);
   }
   return '';
 }
 
 interface HoursItemProps {
-  range: Date[];
+  range: ITimeRangeModel;
 }
 
 export default function HoursItem({ range }: HoursItemProps) {

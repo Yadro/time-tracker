@@ -12,13 +12,13 @@ export default function getTimeItems(
   tasks.forEach((task) => {
     const timeItems = task.time.filter(
       (range) =>
-        isSameDay(range[0], date) ||
-        (range.length >= 1 && isSameDay(range[1], date))
+        isSameDay(range.start, date) ||
+        (range.end && isSameDay(range.end, date))
     );
     taskTime = taskTime.concat(
       timeItems.map((time) => new TaskTimeModel(task, time))
     );
   });
-  taskTime = taskTime.sort((a, b) => compareAsc(a.time[0], b.time[0]));
+  taskTime = taskTime.sort((a, b) => compareAsc(a.time.start, b.time.start));
   return taskTime;
 }

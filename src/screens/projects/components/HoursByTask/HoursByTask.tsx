@@ -28,10 +28,10 @@ export default function HoursByTask({ task }: HoursByTaskProps) {
         </IconTile>
         {task?.time.length === 0 && <div>No billed hours</div>}
         {mapLastCurrent(task?.time || [], (last, range, index) => {
-          if (!last || !isSameDay(last[0], range[0])) {
+          if (!last || !isSameDay(last.start, range.start)) {
             return (
               <div key={index}>
-                <div className="date">{dateFormat(range[0])}</div>
+                <div className="date">{dateFormat(range.start)}</div>
                 <HoursItem range={range} />
               </div>
             );

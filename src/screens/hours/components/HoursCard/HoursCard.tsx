@@ -27,7 +27,7 @@ export default observer(function HoursCard({ taskTime }: HoursCardProps) {
     <Card className="hours-card">
       <div className="hours-card__info">
         <div>{task.title}</div>
-        <div>{`${timeFormat(time[0])} - ${timeFormat(time[1])}`}</div>
+        <div>{`${timeFormat(time.start)} - ${timeFormat(time.end)}`}</div>
       </div>
       <PlayStopButton task={task} />
     </Card>
