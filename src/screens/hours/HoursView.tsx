@@ -14,7 +14,7 @@ const { tasksStore } = rootStore;
 export default observer(function HoursView() {
   const [date, setDate] = useState<Date>(new Date());
 
-  const tasks = tasksStore.getTaskByDate(date);
+  const tasks = tasksStore.getTasksByDate(date);
   const timeItems = getTimeItems(tasks, date);
 
   return (

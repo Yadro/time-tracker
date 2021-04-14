@@ -37,7 +37,7 @@ export default class TaskStore {
     return undefined;
   }
 
-  getTaskByDate(date: Date) {
+  getTasksByDate(date: Date): TaskModel[] {
     const result: TaskModel[] = [];
 
     function condition(task: TaskModel): boolean {

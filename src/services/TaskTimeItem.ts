@@ -20,6 +20,5 @@ export default function getTimeItems(
     );
   });
   taskTime = taskTime.sort((a, b) => compareAsc(a.time[0], b.time[0]));
-  console.log(taskTime);
   return taskTime;
 }
