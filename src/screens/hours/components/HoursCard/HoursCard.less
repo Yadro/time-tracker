@@ -11,21 +11,34 @@
     cursor: pointer;
   }
 
-  .hours-card__title {
+  .project-title {
+    font-size: 12px;
+  }
+
+  .task-title {
     font-weight: bold;
     font-size: 12px;
   }
 
-  .hours-card__description {
-    font-size: 12px;
+  .description {
+    font-size: 11px;
   }
 
-  .hours-card__time {
+  .time-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  .time {
     font-size: 11px;
   }
 
   .play-stop-button {
     display: none;
+    position: absolute;
+    right: 8px;
   }
 
   &:hover .play-stop-button {
