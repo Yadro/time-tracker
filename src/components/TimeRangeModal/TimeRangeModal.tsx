@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Form, Input, Modal, Row, Space, TimePicker } from 'antd';
+import { Button, Col, Form, Input, Modal, Row, TimePicker } from 'antd';
 import { Moment } from 'moment/moment';
 import moment from 'moment';
+import { DeleteFilled } from '@ant-design/icons';
 
 import './TimeRangeModal.less';
 
@@ -46,6 +47,13 @@ export default function TimeRangeModal({
         timeRange.description = description;
       }
       tasksStore.setTime(task, index, timeRange);
+    }
+    onClose();
+  }
+
+  function handleDelete() {
+    if (taskTime) {
+      tasksStore.deleteTime(taskTime.task, taskTime.index);
     }
     onClose();
   }
@@ -104,6 +112,9 @@ export default function TimeRangeModal({
             </Form.Item>
           </Col>
         </Row>
+        <Button icon={<DeleteFilled />} onClick={handleDelete}>
+          Remove
+        </Button>
       </Form>
     </Modal>
   );

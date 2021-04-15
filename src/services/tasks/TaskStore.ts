@@ -24,6 +24,14 @@ export default class TaskStore {
     this.tasksService.save(this.tasks);
   }
 
+  deleteTime(task: TaskModel, timeIndex: number) {
+    if (!task.time[timeIndex].end) {
+      task.end();
+    }
+    task.time.splice(timeIndex, 1);
+    this.tasksService.save(this.tasks);
+  }
+
   getTasks(projectId: string): TaskModel[] {
     return this.tasks[projectId] || [];
   }

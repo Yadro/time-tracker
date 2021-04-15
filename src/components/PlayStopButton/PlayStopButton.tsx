@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { CaretRightFilled, PauseOutlined } from '@ant-design/icons';
 
 import './PlayStopButton.less';
@@ -14,7 +14,8 @@ interface PlayStopButtonProps {
 }
 
 export default function PlayStopButton({ task }: PlayStopButtonProps) {
-  function handleClick() {
+  function handleClick(e: SyntheticEvent) {
+    e.stopPropagation();
     if (task) {
       if (!task?.active) {
         tasksStore.startTimer(task);

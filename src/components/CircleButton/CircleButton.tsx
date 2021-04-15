@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 
 import './CircleButton.less';
 
@@ -6,7 +6,7 @@ import cn from '../../helpers/ClassNameHelper';
 
 interface CircleButtonProps {
   className?: string;
-  onClick: () => void;
+  onClick: (e: SyntheticEvent) => void;
   children: React.ReactNode;
 }
 
