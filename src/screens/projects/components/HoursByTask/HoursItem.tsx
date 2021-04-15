@@ -29,9 +29,11 @@ interface HoursItemProps {
 export default function HoursItem({ range }: HoursItemProps) {
   return (
     <Card className="hours-item">
-      <div className="hours-range">{hoursRangeFormat(range)}</div>
-      <div className="flex-1" />
-      <div className="duration">{getDuration(range)}</div>
+      <div className="description">{range.description}</div>
+      <div className="bottom">
+        <div className="hours-range">{hoursRangeFormat(range)}</div>
+        <div className="duration">{getDuration(range)}</div>
+      </div>
     </Card>
   );
 }
