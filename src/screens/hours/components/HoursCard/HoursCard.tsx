@@ -30,8 +30,11 @@ export default observer(function HoursCard({
   return (
     <Card className="hours-card" onClick={() => onClick(taskTime)}>
       <div className="hours-card__info">
-        <div>{task.title}</div>
-        <div>{`${timeFormat(time.start)} - ${timeFormat(time.end)}`}</div>
+        <div className="hours-card__title">{task.title}</div>
+        <div className="hours-card__description">{time.description}</div>
+        <div className="hours-card__time">{`${timeFormat(
+          time.start
+        )} - ${timeFormat(time.end)}`}</div>
       </div>
       <PlayStopButton task={task} />
     </Card>
