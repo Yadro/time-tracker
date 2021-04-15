@@ -26,7 +26,7 @@ export default class TaskStore {
 
   deleteTime(task: TaskModel, timeIndex: number) {
     if (!task.time[timeIndex].end) {
-      task.end();
+      task.stop();
     }
     task.time.splice(timeIndex, 1);
     this.tasksService.save(this.tasks);
@@ -74,22 +74,37 @@ export default class TaskStore {
   }
 
   delete(task: TaskModel) {
-    task.setDeleted();
+    function condition(_task: TaskModel) {
+      return _task.key === task.key;
+    }
+
+    if (task.active) {
+      this.stopTimer(task);
+    }
+
+    for (const projectKey in this.tasks) {
+      if (this.tasks.hasOwnProperty(projectKey)) {
+        this.tasks[projectKey] = TreeModelStoreHelper.deleteItems(
+          this.tasks[projectKey],
+          condition
+        );
+      }
+    }
     this.tasksService.save(this.tasks);
   }
 
   startTimer(task: TaskModel) {
     if (this.activeTask) {
-      this.endTimer(this.activeTask);
+      this.stopTimer(this.activeTask);
     }
     this.activeTask = task;
     task.start();
     this.tasksService.save(this.tasks);
   }
 
-  endTimer(task: TaskModel) {
+  stopTimer(task: TaskModel) {
     this.activeTask = undefined;
-    task.end();
+    task.stop();
     this.tasksService.save(this.tasks);
   }
 

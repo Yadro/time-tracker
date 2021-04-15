@@ -77,7 +77,7 @@ export default class TaskModel extends AbstractModel {
       setTitle: action,
       setDetails: action,
       start: action,
-      end: action,
+      stop: action,
     });
   }
 
@@ -115,7 +115,7 @@ export default class TaskModel extends AbstractModel {
     });
   }
 
-  end() {
+  stop() {
     if (this.active) {
       this.active = false;
       const range = this.time[this.time.length - 1];

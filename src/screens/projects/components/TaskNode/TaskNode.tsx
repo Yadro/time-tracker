@@ -38,7 +38,7 @@ export default function TaskNode({ model }: TaskNodeProps) {
           />
         ) : (
           <PauseOutlined
-            onClick={preventDefault(() => tasksStore.endTimer(model))}
+            onClick={preventDefault(() => tasksStore.stopTimer(model))}
           />
         )}
         <DeleteOutlined

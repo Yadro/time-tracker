@@ -26,7 +26,7 @@ export default observer(function TaskControl() {
           <span>{task.title}</span>
         </div>
         <span className="task-control__duration">{duration}</span>
-        <CircleButton onClick={() => tasksStore.endTimer(task)}>
+        <CircleButton onClick={() => tasksStore.stopTimer(task)}>
           <PauseOutlined />
         </CircleButton>
       </span>

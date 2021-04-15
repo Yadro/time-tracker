@@ -9,8 +9,6 @@ class RootStore {
   restore() {
     this.tasksStore.restore();
     this.projectStore.restore();
-    console.log(toJS(this.projectStore.projects));
-    console.log(toJS(this.tasksStore.tasks));
   }
 }
 

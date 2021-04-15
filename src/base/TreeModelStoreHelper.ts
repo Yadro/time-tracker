@@ -34,4 +34,18 @@ export default abstract class TreeModelStoreHelper {
     }
     return result;
   }
+
+  static deleteItems<T extends ITreeItem<any>>(
+    tasks: T[],
+    condition: (task: T) => boolean
+  ): T[] {
+    const result = tasks.filter((t) => !condition(t));
+    for (let i = 0; i < result.length; i++) {
+      const task = tasks[i];
+      if (Array.isArray(task.children)) {
+        tasks[i].children = this.deleteItems(task.children, condition);
+      }
+    }
+    return result;
+  }
 }

@@ -25,7 +25,7 @@ export default function PlayStopButton({
       if (!task?.active) {
         tasksStore.startTimer(task);
       } else {
-        tasksStore.endTimer(task);
+        tasksStore.stopTimer(task);
       }
     }
   }
