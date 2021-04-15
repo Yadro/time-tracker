@@ -10,9 +10,11 @@ import rootStore from '../../services/RootStore';
 import TreeList from './components/TreeList';
 import TaskModel from '../../models/TaskModel';
 import ProjectModel from '../../models/ProjectModel';
-import ProjectModal from './components/ProjectModal';
+import ProjectModal from './components/ProjectModals/ProjectModal';
 import TaskNode from './components/TaskNode/TaskNode';
 import DrawerTask from './components/DrawerTask/DrawerTask';
+import ProjectNode from './components/ProjectNode/ProjectNode';
+import EditProjectModal from './components/ProjectModals/EditProjectModal';
 
 const { Sider } = Layout;
 
@@ -41,11 +43,16 @@ const ProjectList = TreeList(
   () => projectStore.projects,
   (list: ProjectModel[]) => {
     projectStore.set(list);
+  },
+  {
+    titleRender(project: ProjectModel) {
+      return <ProjectNode project={project} />;
+    },
   }
 );
 
 export default observer(function Projects() {
-  const [showProjectModal, setShowProjectModal] = useState<boolean>();
+  const [showProjectModal, setShowProjectModal] = useState<boolean>(false);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
   const [selectedTask, setSelectedTask] = useState<TaskModel | undefined>();
 
@@ -84,6 +91,10 @@ export default observer(function Projects() {
       {showProjectModal && (
         <ProjectModal onClose={() => setShowProjectModal(false)} />
       )}
+      <EditProjectModal
+        project={projectStore.editProject}
+        onClose={() => projectStore.setEditableProject(undefined)}
+      />
       <DrawerTask
         task={selectedTask}
         visible={drawerVisible}

@@ -1,6 +1,6 @@
 import TaskStore from './tasks/TaskStore';
 import ProjectStore from './projects/ProjectStore';
-import { toJS } from 'mobx';
+import ProjectModel from '../models/ProjectModel';
 
 class RootStore {
   tasksStore = new TaskStore();
@@ -9,6 +9,11 @@ class RootStore {
   restore() {
     this.tasksStore.restore();
     this.projectStore.restore();
+  }
+
+  deleteProject(project: ProjectModel) {
+    this.tasksStore.deleteProjectTasks(project.key);
+    this.projectStore.delete(project);
   }
 }
 

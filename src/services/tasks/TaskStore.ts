@@ -93,6 +93,11 @@ export default class TaskStore {
     this.tasksService.save(this.tasks);
   }
 
+  deleteProjectTasks(projectKey: string) {
+    delete this.tasks[projectKey];
+    this.tasksService.save(this.tasks);
+  }
+
   startTimer(task: TaskModel) {
     if (this.activeTask) {
       this.stopTimer(this.activeTask);

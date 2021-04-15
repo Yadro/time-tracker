@@ -1,18 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
-import { Input, Modal } from 'antd';
-import rootStore from '../../../services/RootStore';
-import ProjectModel from '../../../models/ProjectModel';
+import { Button, Input, Modal, Space } from 'antd';
+
+import rootStore from '../../../../services/RootStore';
+import ProjectModel from '../../../../models/ProjectModel';
+
+const { projectStore } = rootStore;
 
 interface ProjectModalProps {
+  project?: ProjectModel;
   onClose: () => void;
 }
 
-export default observer(function ProjectModal({ onClose }: ProjectModalProps) {
+export default observer(function ProjectModal({
+  project,
+  onClose,
+}: ProjectModalProps) {
   const [projectName, setProjectName] = useState<string>('');
 
+  useEffect(() => {
+    setProjectName(project?.title || '');
+  }, [project]);
+
   function handleOk() {
-    const { projectStore } = rootStore;
     projectStore.add(
       new ProjectModel({
         key: String(Date.now()),
@@ -21,13 +31,14 @@ export default observer(function ProjectModal({ onClose }: ProjectModalProps) {
     );
     onClose();
   }
+
   function handleCancel() {
     onClose();
   }
 
   return (
     <Modal
-      title="Basic Modal"
+      title="Create project"
       visible
       onOk={handleOk}
       onCancel={handleCancel}

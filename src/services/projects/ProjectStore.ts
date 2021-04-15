@@ -3,10 +3,12 @@ import { makeAutoObservable } from 'mobx';
 import ProjectModel from '../../models/ProjectModel';
 import ProjectService from './ProjectService';
 import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
+import { Undefined } from '../../types/CommonTypes';
 
 export default class ProjectStore {
   projects: ProjectModel[] = [];
   activeProject: string = '';
+  editProject: Undefined<ProjectModel>;
 
   private projectService = new ProjectService();
 
@@ -16,6 +18,19 @@ export default class ProjectStore {
 
   set(projects: ProjectModel[]) {
     this.projects = projects;
+    this.projectService.save(this.projects);
+  }
+
+  setEditableProject(project?: ProjectModel) {
+    this.editProject = project;
+  }
+
+  setActiveProject(projectId: string) {
+    this.activeProject = projectId;
+  }
+
+  setTitle(project: ProjectModel, title: string) {
+    project.title = title;
     this.projectService.save(this.projects);
   }
 
@@ -32,8 +47,13 @@ export default class ProjectStore {
     this.projectService.save(this.projects);
   }
 
-  setActiveProject(projectId: string) {
-    this.activeProject = projectId;
+  delete(project: ProjectModel) {
+    function condition(_project: ProjectModel) {
+      return _project.key === project.key;
+    }
+
+    this.projects = TreeModelStoreHelper.deleteItems(this.projects, condition);
+    // this.projectService.save(this.projects);
   }
 
   restore() {
