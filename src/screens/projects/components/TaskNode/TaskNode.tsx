@@ -14,11 +14,11 @@ import { useTaskDuration } from '../../../../hooks/TaskHooks';
 const { tasksStore } = rootStore;
 
 interface TaskNodeProps {
-  model: TaskModel;
+  task: TaskModel;
 }
 
-export default function TaskNode({ model }: TaskNodeProps) {
-  const duration = useTaskDuration(model);
+export default function TaskNode({ task }: TaskNodeProps) {
+  const duration = useTaskDuration(task);
 
   function preventDefault(fn: () => void) {
     return (e: SyntheticEvent) => {
@@ -29,20 +29,20 @@ export default function TaskNode({ model }: TaskNodeProps) {
 
   return (
     <div className="task-node">
-      <span className="task-title">{model.title}</span>
+      <span className="task-title">{task.title}</span>
       <span>{duration}</span>
       <span className="task-node__actions">
-        {!model.active ? (
+        {!task.active ? (
           <CaretRightFilled
-            onClick={preventDefault(() => tasksStore.startTimer(model))}
+            onClick={preventDefault(() => tasksStore.startTimer(task))}
           />
         ) : (
           <PauseOutlined
-            onClick={preventDefault(() => tasksStore.stopTimer(model))}
+            onClick={preventDefault(() => tasksStore.stopTimer(task))}
           />
         )}
         <DeleteOutlined
-          onClick={preventDefault(() => tasksStore.delete(model))}
+          onClick={preventDefault(() => tasksStore.delete(task))}
         />
       </span>
     </div>

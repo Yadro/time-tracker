@@ -32,7 +32,7 @@ const TaskList = TreeList(
       return tasksStore.getCheckedKeys(projectStore.activeProject);
     },
     titleRender(node: TaskModel) {
-      return <TaskNode model={node} />;
+      return <TaskNode task={node} />;
     },
   }
 );
