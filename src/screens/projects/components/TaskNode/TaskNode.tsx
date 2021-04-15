@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import {
   CaretRightFilled,
   DeleteOutlined,
@@ -20,17 +20,30 @@ interface TaskNodeProps {
 export default function TaskNode({ model }: TaskNodeProps) {
   const duration = useTaskDuration(model);
 
+  function preventDefault(fn: () => void) {
+    return (e: SyntheticEvent) => {
+      e.stopPropagation();
+      fn();
+    };
+  }
+
   return (
     <div className="task-node">
       <span className="task-title">{model.title}</span>
       <span>{duration}</span>
       <span className="task-node__actions">
         {!model.active ? (
-          <CaretRightFilled onClick={() => tasksStore.startTimer(model)} />
+          <CaretRightFilled
+            onClick={preventDefault(() => tasksStore.startTimer(model))}
+          />
         ) : (
-          <PauseOutlined onClick={() => tasksStore.endTimer(model)} />
+          <PauseOutlined
+            onClick={preventDefault(() => tasksStore.endTimer(model))}
+          />
         )}
-        <DeleteOutlined onClick={() => tasksStore.delete(model)} />
+        <DeleteOutlined
+          onClick={preventDefault(() => tasksStore.delete(model))}
+        />
       </span>
     </div>
   );
