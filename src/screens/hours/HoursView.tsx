@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Layout, Space } from 'antd';
 import { observer } from 'mobx-react';
 
@@ -11,6 +11,7 @@ import SelectDate from './components/SelectDate/SelectDate';
 import TimeRangeModal from '../../components/TimeRangeModal/TimeRangeModal';
 import TaskTimeModel from '../../models/TaskTimeModel';
 import { Undefined } from '../../types/CommonTypes';
+import TotalHours from './components/TotalHours/TotalHours';
 
 const { tasksStore } = rootStore;
 
@@ -21,13 +22,14 @@ export default observer(function HoursView() {
     Undefined<TaskTimeModel>
   >();
 
-  const tasks = tasksStore.getTasksByDate(date);
+  const tasks = useMemo(() => tasksStore.getTasksByDate(date), [date]);
   const timeItems = getTimeItems(tasks, date);
 
   return (
     <Layout className="hours">
       <Space direction="vertical">
         <SelectDate date={date} onChange={setDate} />
+        <TotalHours timeItems={timeItems} />
         {timeItems.map((taskTime, index) => (
           <HoursCard
             key={index}
