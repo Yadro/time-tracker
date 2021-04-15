@@ -6,13 +6,19 @@ import format from 'date-fns/format';
 
 import './HoursByTask.less';
 
-import TaskModel from '../../../../models/TaskModel';
+import TaskModel, { ITimeRangeModel } from '../../../../models/TaskModel';
 import { mapLastCurrent } from '../../../../helpers/IterateLastCurrent';
 import HoursItem from './HoursItem';
 import IconTile from '../../../../components/IconTile/IconTile';
+import { calcDuration, msToTime } from '../../../../helpers/DateTime';
 
 function dateFormat(date: Date) {
   return format(date, 'dd.MM.yyyy');
+}
+
+function getDurationPerDay(timeItems: ITimeRangeModel[], date: Date) {
+  const filteredTimeItems = timeItems.filter((t) => isSameDay(t.start, date));
+  return msToTime(calcDuration(filteredTimeItems), false);
 }
 
 interface HoursByTaskProps {
@@ -29,9 +35,13 @@ export default function HoursByTask({ task }: HoursByTaskProps) {
         {task?.time.length === 0 && <div>No billed hours</div>}
         {mapLastCurrent(task?.time || [], (last, range, index) => {
           if (!last || !isSameDay(last.start, range.start)) {
+            const duration = getDurationPerDay(task?.time || [], range.start);
             return (
               <div key={index}>
-                <div className="date">{dateFormat(range.start)}</div>
+                <div className="header-date">
+                  <div className="date">{dateFormat(range.start)}</div>
+                  <div className="duration-date">{duration}</div>
+                </div>
                 <HoursItem range={range} />
               </div>
             );

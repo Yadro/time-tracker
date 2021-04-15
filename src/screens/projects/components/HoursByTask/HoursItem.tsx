@@ -1,6 +1,9 @@
 import React from 'react';
 import { Card } from 'antd';
 import format from 'date-fns/format';
+
+import './HoursItem.less';
+
 import { msToTime } from '../../../../helpers/DateTime';
 import { ITimeRangeModel } from '../../../../models/TaskModel';
 

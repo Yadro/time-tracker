@@ -1,3 +1,5 @@
+import { ITimeRangeModel } from '../models/TaskModel';
+
 function timePad(time: number): string {
   return String(time).padStart(2, '0');
 }
@@ -27,4 +29,13 @@ export function msToTime(s: number, showSeconds: boolean = true) {
     return onlySecs(secs);
   }
   return `${timePad(hrs)}:${timePad(mins)}`;
+}
+
+export function calcDuration(taskTime: ITimeRangeModel[]) {
+  return taskTime.reduce((prev, timeRange) => {
+    if (timeRange.end) {
+      return prev + timeRange.end.getTime() - timeRange.start.getTime();
+    }
+    return prev + new Date().getTime() - timeRange.start.getTime();
+  }, 0);
 }
