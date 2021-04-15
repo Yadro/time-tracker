@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card } from 'antd';
 import format from 'date-fns/format';
+import { observer } from 'mobx-react';
 
 import './HoursItem.less';
 
@@ -29,7 +30,7 @@ interface HoursItemProps {
   range: ITimeRangeModel;
 }
 
-export default function HoursItem({ range }: HoursItemProps) {
+export default observer(function HoursItem({ range }: HoursItemProps) {
   return (
     <Card className="hours-item">
       <div className="description">{range.description}</div>
@@ -39,4 +40,4 @@ export default function HoursItem({ range }: HoursItemProps) {
       </div>
     </Card>
   );
-}
+});

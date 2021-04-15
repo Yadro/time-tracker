@@ -4,6 +4,7 @@ import {
   DeleteOutlined,
   PauseOutlined,
 } from '@ant-design/icons';
+import { observer } from 'mobx-react';
 
 import './TaskNode.less';
 
@@ -17,7 +18,7 @@ interface TaskNodeProps {
   task: TaskModel;
 }
 
-export default function TaskNode({ task }: TaskNodeProps) {
+export default observer(function TaskNode({ task }: TaskNodeProps) {
   const duration = useTaskDuration(task);
 
   function preventDefault(fn: () => void) {
@@ -47,4 +48,4 @@ export default function TaskNode({ task }: TaskNodeProps) {
       </span>
     </div>
   );
-}
+});

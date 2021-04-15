@@ -3,6 +3,7 @@ import { Button, Col, Form, Input, Modal, Row, TimePicker } from 'antd';
 import { Moment } from 'moment/moment';
 import moment from 'moment';
 import { DeleteFilled } from '@ant-design/icons';
+import { observer } from 'mobx-react';
 
 import './TimeRangeModal.less';
 
@@ -24,7 +25,7 @@ interface TimeRangeModalProps {
   onClose: () => void;
 }
 
-export default function TimeRangeModal({
+export default observer(function TimeRangeModal({
   taskTime,
   visible,
   onClose,
@@ -118,4 +119,4 @@ export default function TimeRangeModal({
       </Form>
     </Modal>
   );
-}
+});

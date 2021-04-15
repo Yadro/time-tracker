@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import ProjectModel from '../../../../models/ProjectModel';
 import { Button, Input, Modal, Space } from 'antd';
-import rootStore from '../../../../services/RootStore';
 import { DeleteFilled } from '@ant-design/icons';
+import { observer } from 'mobx-react';
+
+import ProjectModel from '../../../../models/ProjectModel';
+import rootStore from '../../../../services/RootStore';
 
 const { projectStore } = rootStore;
 
@@ -11,7 +13,9 @@ interface EditProjectModalProps {
   onClose: () => void;
 }
 
-export default function EditProjectModal({ project }: EditProjectModalProps) {
+export default observer(function EditProjectModal({
+  project,
+}: EditProjectModalProps) {
   const [title, setTitle] = useState<string>('');
 
   useEffect(() => {
@@ -67,4 +71,4 @@ export default function EditProjectModal({ project }: EditProjectModalProps) {
       </Space>
     </Modal>
   );
-}
+});

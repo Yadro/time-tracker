@@ -1,4 +1,5 @@
 import React, { SyntheticEvent } from 'react';
+import { observer } from 'mobx-react';
 
 import './CircleButton.less';
 
@@ -10,7 +11,7 @@ interface CircleButtonProps {
   children: React.ReactNode;
 }
 
-export default function CircleButton({
+export default observer(function CircleButton({
   className,
   children,
   onClick,
@@ -20,4 +21,4 @@ export default function CircleButton({
       {children}
     </span>
   );
-}
+});

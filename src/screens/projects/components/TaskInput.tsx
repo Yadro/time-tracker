@@ -1,9 +1,11 @@
 import React, { KeyboardEvent, useState } from 'react';
 import { Input } from 'antd';
+import { observer } from 'mobx-react';
+
 import rootStore from '../../../services/RootStore';
 import TaskModel from '../../../models/TaskModel';
 
-export default function TaskInput() {
+export default observer(function TaskInput() {
   const [text, setText] = useState('');
 
   function handleKeyPress(event: KeyboardEvent) {
@@ -28,4 +30,4 @@ export default function TaskInput() {
       onChange={(e) => setText(e.target.value)}
     />
   );
-}
+});

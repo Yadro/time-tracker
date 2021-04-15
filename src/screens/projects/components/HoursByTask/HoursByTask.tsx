@@ -3,6 +3,7 @@ import { Card, Space } from 'antd';
 import { BellFilled } from '@ant-design/icons';
 import isSameDay from 'date-fns/isSameDay';
 import format from 'date-fns/format';
+import { observer } from 'mobx-react';
 
 import './HoursByTask.less';
 
@@ -22,10 +23,10 @@ function getDurationPerDay(timeItems: ITimeRangeModel[], date: Date) {
 }
 
 interface HoursByTaskProps {
-  task: TaskModel | undefined;
+  task?: TaskModel;
 }
 
-export default function HoursByTask({ task }: HoursByTaskProps) {
+export default observer(function HoursByTask({ task }: HoursByTaskProps) {
   return (
     <Card className="hours-by-task-container">
       <Space direction="vertical" className="hours-by-task">
@@ -51,4 +52,4 @@ export default function HoursByTask({ task }: HoursByTaskProps) {
       </Space>
     </Card>
   );
-}
+});

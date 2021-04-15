@@ -3,6 +3,7 @@ import { Button, DatePicker, Space } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import addDays from 'date-fns/addDays';
+import { observer } from 'mobx-react';
 
 interface SelectDateProps {
   date: Date;
@@ -13,7 +14,10 @@ function changeDate(date: Date, offsetDay: number) {
   return addDays(date, offsetDay);
 }
 
-export default function SelectDate({ date, onChange }: SelectDateProps) {
+export default observer(function SelectDate({
+  date,
+  onChange,
+}: SelectDateProps) {
   return (
     <Space direction="horizontal">
       <Button
@@ -34,4 +38,4 @@ export default function SelectDate({ date, onChange }: SelectDateProps) {
       />
     </Space>
   );
-}
+});

@@ -1,4 +1,5 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 
 import './IconTile.less';
 import cn from '../../helpers/ClassNameHelper';
@@ -9,7 +10,7 @@ interface IconTileProps {
   className?: string;
 }
 
-export default function IconTile({
+export default observer(function IconTile({
   className,
   children,
   backgroundColor,
@@ -19,4 +20,4 @@ export default function IconTile({
       {children}
     </span>
   );
-}
+});
