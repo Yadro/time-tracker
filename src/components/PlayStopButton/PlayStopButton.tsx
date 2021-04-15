@@ -1,5 +1,6 @@
 import React, { SyntheticEvent } from 'react';
 import { CaretRightFilled, PauseOutlined } from '@ant-design/icons';
+import { observer } from 'mobx-react';
 
 import './PlayStopButton.less';
 
@@ -15,7 +16,7 @@ interface PlayStopButtonProps {
   className?: string;
 }
 
-export default function PlayStopButton({
+export default observer(function PlayStopButton({
   task,
   className,
 }: PlayStopButtonProps) {
@@ -42,4 +43,4 @@ export default function PlayStopButton({
       )}
     </CircleButton>
   );
-}
+});
