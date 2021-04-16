@@ -1,9 +1,11 @@
 import { makeAutoObservable } from 'mobx';
+import { ipcRenderer } from 'electron';
 
 import TaskService from './TaskService';
 import TaskModel, { ITimeRangeModel } from '../../models/TaskModel';
 import TasksByProject from '../../models/TasksByProject';
 import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
+import BadgeService from '../BadgeService';
 
 export default class TaskStore {
   tasks: TasksByProject = {};
@@ -118,7 +120,7 @@ export default class TaskStore {
 
   restore() {
     this.tasks = this.tasksService.getAll();
-    this.findActiveTask();
+    this.findAndSetActiveTask();
     this.setupReminder(this.activeTask);
   }
 
@@ -146,15 +148,14 @@ export default class TaskStore {
     this.tasksService.save(this.tasks);
   }
 
-  private findActiveTask() {
-    Object.keys(this.tasks).find((projectId) => {
-      const found = this.findActiveTaskRecursive(this.tasks[projectId]);
+  private findAndSetActiveTask() {
+    for (const tasks of Object.values(this.tasks)) {
+      const found = this.findActiveTaskRecursive(tasks);
       if (found) {
         this.activeTask = found;
-        return true;
+        break;
       }
-      return false;
-    });
+    }
   }
 
   private findActiveTaskRecursive(tasks: TaskModel[]): TaskModel | undefined {
@@ -179,6 +180,7 @@ export default class TaskStore {
       clearInterval(this.interval);
     }
     if (task) {
+      BadgeService.setBadge(true);
       console.log('Setup: Task in progress');
       this.interval = setInterval(() => {
         console.log('Task in progress');
@@ -187,6 +189,7 @@ export default class TaskStore {
         });
       }, 40 * 60 * 1000);
     } else {
+      BadgeService.setBadge(false);
       console.log('Setup: No tasks in progress');
       this.interval = setInterval(() => {
         console.log('No tasks in progress');
