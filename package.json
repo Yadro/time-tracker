@@ -31,8 +31,8 @@
     ]
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "TimeTracker",
+    "appId": "ru.timetracker",
     "files": [
       "dist/",
       "node_modules/",
@@ -96,38 +96,22 @@
     "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
   },
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
+    "name": "Dmitry Yadrikhinsky",
+    "email": "yadrone@gmail.com",
     "url": "https://electron-react-boilerplate.js.org"
   },
-  "contributors": [
-    {
-      "name": "Amila Welihinda",
-      "email": "amilajack@gmail.com",
-      "url": "https://github.com/amilajack"
-    },
-    {
-      "name": "John Tran",
-      "email": "jptran318@gmail.com",
-      "url": "https://github.com/jooohhn"
-    }
-  ],
+  "contributors": [],
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues"
-  },
   "keywords": [
     "electron",
-    "boilerplate",
     "react",
     "typescript",
     "ts",
-    "sass",
+    "less",
     "webpack",
     "hot",
     "reload"
   ],
-  "homepage": "https://github.com/electron-react-boilerplate/electron-react-boilerplate#readme",
   "jest": {
     "testURL": "http://localhost/",
     "moduleNameMapper": {
@@ -255,6 +239,7 @@
     "electron-debug": "^3.1.0",
     "electron-log": "^4.2.4",
     "electron-updater": "^4.3.4",
+    "electron-windows-badge": "1.1.0",
     "history": "^5.0.0",
     "less": "4.1.1",
     "less-loader": "8.0.0",
