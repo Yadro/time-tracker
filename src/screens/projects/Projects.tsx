@@ -15,6 +15,7 @@ import TaskNode from './components/TaskNode/TaskNode';
 import DrawerTask from './components/DrawerTask/DrawerTask';
 import ProjectNode from './components/ProjectNode/ProjectNode';
 import EditProjectModal from './components/ProjectModals/EditProjectModal';
+import { PlusOutlined } from '@ant-design/icons';
 
 const { Sider } = Layout;
 
@@ -76,10 +77,14 @@ export default observer(function Projects() {
 
   return (
     <Layout>
-      <Sider width={250} className="site-layout-background">
+      <Sider width={250} className="sider">
         <Layout style={{ padding: '12px' }}>
-          <ProjectList onSelect={handleSelectProject} />
-          <Button onClick={handleCreateProject}>Create Project</Button>
+          <Space direction="vertical">
+            <ProjectList onSelect={handleSelectProject} />
+            <Button onClick={handleCreateProject} icon={<PlusOutlined />}>
+              Create Project
+            </Button>
+          </Space>
         </Layout>
       </Sider>
       <Layout style={{ padding: '24px' }}>
