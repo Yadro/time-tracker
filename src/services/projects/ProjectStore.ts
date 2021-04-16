@@ -53,7 +53,7 @@ export default class ProjectStore {
     }
 
     this.projects = TreeModelStoreHelper.deleteItems(this.projects, condition);
-    // this.projectService.save(this.projects);
+    this.projectService.save(this.projects);
   }
 
   restore() {

@@ -9,6 +9,7 @@ export default class TaskStore {
   tasks: TasksByProject = {};
   activeTask: TaskModel | undefined;
   private tasksService = new TaskService();
+  private interval: NodeJS.Timeout | undefined;
 
   constructor() {
     makeAutoObservable(this);
@@ -104,18 +105,21 @@ export default class TaskStore {
     }
     this.activeTask = task;
     task.start();
+    this.setupReminder(task);
     this.tasksService.save(this.tasks);
   }
 
   stopTimer(task: TaskModel) {
     this.activeTask = undefined;
     task.stop();
+    this.setupReminder();
     this.tasksService.save(this.tasks);
   }
 
   restore() {
     this.tasks = this.tasksService.getAll();
     this.findActiveTask();
+    this.setupReminder(this.activeTask);
   }
 
   getCheckedKeys(projectId: string): string[] {
@@ -168,5 +172,28 @@ export default class TaskStore {
         this.checkTasksRecursive(task.children, taskIds);
       }
     });
+  }
+
+  private setupReminder(task?: TaskModel) {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+    if (task) {
+      console.log('Setup: Task in progress');
+      this.interval = setInterval(() => {
+        console.log('Task in progress');
+        new Notification('You are tracking time', {
+          body: `Task '${task.title}' in progress`,
+        });
+      }, 40 * 60 * 1000);
+    } else {
+      console.log('Setup: No tasks in progress');
+      this.interval = setInterval(() => {
+        console.log('No tasks in progress');
+        new Notification('You are not tracking time', {
+          body: 'There are not task that you track',
+        });
+      }, 15 * 60 * 1000);
+    }
   }
 }
