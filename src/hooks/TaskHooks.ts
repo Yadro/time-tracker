@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { calcDuration, msToTime } from '../helpers/DateTime';
-import TaskModel from '../models/TaskModel';
+import TaskModel, { ITimeRangeModel } from '../models/TaskModel';
 import TaskTimeItemModel from '../models/TaskTimeItemModel';
 
 export function useTaskDuration(model: TaskModel | undefined) {
@@ -58,6 +58,31 @@ export function useTimeItemsDuration(
       }
     };
   }, [taskTime]);
+
+  return duration;
+}
+
+export function useTimeRangeDuration(timeRange: ITimeRangeModel | undefined) {
+  const [duration, setDuration] = useState<string>('');
+  const intervalRef = useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    if (!timeRange) {
+      return;
+    }
+    const haveActiveTime = !timeRange.end;
+    setDuration(msToTime(calcDuration([timeRange])));
+    if (haveActiveTime) {
+      intervalRef.current = setInterval(() => {
+        setDuration(msToTime(calcDuration([timeRange])));
+      }, 1000);
+    }
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [timeRange]);
 
   return duration;
 }

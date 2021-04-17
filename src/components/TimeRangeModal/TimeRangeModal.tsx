@@ -115,7 +115,7 @@ export default observer(function TimeRangeModal({
           </Col>
           <Col span={8}>
             <Form.Item label="Duration" labelCol={{ span: 24 }}>
-              <TimeRangeDuration taskTimeItem={taskTime} />
+              <TimeRangeDuration timeRange={timeRange} />
             </Form.Item>
           </Col>
         </Row>

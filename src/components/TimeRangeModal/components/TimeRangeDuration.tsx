@@ -1,19 +1,16 @@
 import React from 'react';
 
-import { useTimeItemsDuration } from '../../../hooks/TaskHooks';
-import TaskTimeItemModel from '../../../models/TaskTimeItemModel';
+import { useTimeRangeDuration } from '../../../hooks/TaskHooks';
+import { ITimeRangeModel } from '../../../models/TaskModel';
 
 interface TimeRangeDurationProps {
-  taskTimeItem?: TaskTimeItemModel;
+  timeRange?: ITimeRangeModel;
 }
 
 export default function TimeRangeDuration({
-  taskTimeItem,
+  timeRange,
 }: TimeRangeDurationProps) {
-  const duration = useTimeItemsDuration(
-    taskTimeItem ? [taskTimeItem] : [],
-    true
-  );
+  const duration = useTimeRangeDuration(timeRange);
 
   return <div>{duration}</div>;
 }
