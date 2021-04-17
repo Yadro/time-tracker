@@ -17,7 +17,6 @@ const { tasksStore } = rootStore;
 
 export default observer(function HoursView() {
   const [date, setDate] = useState<Date>(new Date());
-  const [showModal, setShowModal] = useState<boolean>(false);
   const [currentTaskTime, setCurrentTaskTime] = useState<
     Undefined<TaskTimeModel>
   >();
@@ -34,16 +33,13 @@ export default observer(function HoursView() {
           <HoursCard
             key={index}
             taskTime={taskTime}
-            onClick={(taskTime) => {
-              setCurrentTaskTime(taskTime);
-              setShowModal(true);
-            }}
+            onClick={(taskTime) => setCurrentTaskTime(taskTime)}
           />
         ))}
       </Space>
       <TimeRangeModal
-        visible={showModal}
-        onClose={() => setShowModal(false)}
+        visible={!!currentTaskTime}
+        onClose={() => setCurrentTaskTime(undefined)}
         taskTime={currentTaskTime}
       />
     </Layout>

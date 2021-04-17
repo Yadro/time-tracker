@@ -9,9 +9,10 @@ import './HoursByTask.less';
 
 import TaskModel, { ITimeRangeModel } from '../../../../models/TaskModel';
 import { mapLastCurrent } from '../../../../helpers/IterateLastCurrent';
-import HoursItem from './HoursItem';
+import HoursItem from './components/HoursItem';
 import IconTile from '../../../../components/IconTile/IconTile';
 import { calcDuration, msToTime } from '../../../../helpers/DateTime';
+import TaskTimeModel from '../../../../models/TaskTimeModel';
 
 function dateFormat(date: Date) {
   return format(date, 'dd.MM.yyyy');
@@ -24,9 +25,13 @@ function getDurationPerDay(timeItems: ITimeRangeModel[], date: Date) {
 
 interface HoursByTaskProps {
   task?: TaskModel;
+  onClick: (task: TaskTimeModel) => void;
 }
 
-export default observer(function HoursByTask({ task }: HoursByTaskProps) {
+export default observer(function HoursByTask({
+  task,
+  onClick,
+}: HoursByTaskProps) {
   return (
     <Card className="hours-by-task-container">
       <Space direction="vertical" className="hours-by-task">
@@ -35,6 +40,15 @@ export default observer(function HoursByTask({ task }: HoursByTaskProps) {
         </IconTile>
         {task?.time.length === 0 && <div>No billed hours</div>}
         {mapLastCurrent(task?.time || [], (last, range, index) => {
+          const hoursItem = (
+            <HoursItem
+              range={range}
+              onClick={() => {
+                console.log(task);
+                task && onClick(new TaskTimeModel(task, range, index));
+              }}
+            />
+          );
           if (!last || !isSameDay(last.start, range.start)) {
             const duration = getDurationPerDay(task?.time || [], range.start);
             return (
@@ -43,11 +57,11 @@ export default observer(function HoursByTask({ task }: HoursByTaskProps) {
                   <div className="date">{dateFormat(range.start)}</div>
                   <div className="duration-date">{duration}</div>
                 </div>
-                <HoursItem range={range} />
+                {hoursItem}
               </div>
             );
           }
-          return <HoursItem key={index} range={range} />;
+          return hoursItem;
         })}
       </Space>
     </Card>

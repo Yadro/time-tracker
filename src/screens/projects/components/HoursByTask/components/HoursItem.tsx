@@ -5,8 +5,8 @@ import { observer } from 'mobx-react';
 
 import './HoursItem.less';
 
-import { msToTime } from '../../../../helpers/DateTime';
-import { ITimeRangeModel } from '../../../../models/TaskModel';
+import { msToTime } from '../../../../../helpers/DateTime';
+import { ITimeRangeModel } from '../../../../../models/TaskModel';
 
 function hoursFormat(date: Date) {
   return format(date, 'HH:mm');
@@ -28,11 +28,12 @@ function getDuration(range: ITimeRangeModel): string {
 
 interface HoursItemProps {
   range: ITimeRangeModel;
+  onClick: () => void;
 }
 
-export default observer(function HoursItem({ range }: HoursItemProps) {
+export default observer(function HoursItem({ range, onClick }: HoursItemProps) {
   return (
-    <Card className="hours-item">
+    <Card className="hours-item" onClick={onClick}>
       <div className="description">{range.description}</div>
       <div className="bottom">
         <div className="hours-range">{hoursRangeFormat(range)}</div>

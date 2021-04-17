@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Checkbox, Drawer, Input, Space } from 'antd';
 import { observer } from 'mobx-react';
 import { ProjectOutlined } from '@ant-design/icons';
@@ -10,6 +10,9 @@ import rootStore from '../../../../services/RootStore';
 import HoursByTask from '../HoursByTask/HoursByTask';
 import IconTile from '../../../../components/IconTile/IconTile';
 import Duration from './components/Duration';
+import TimeRangeModal from '../../../../components/TimeRangeModal/TimeRangeModal';
+import { Undefined } from '../../../../types/CommonTypes';
+import TaskTimeModel from '../../../../models/TaskTimeModel';
 
 const { projectStore } = rootStore;
 
@@ -24,9 +27,14 @@ export default observer(function DrawerTask({
   visible,
   onClose,
 }: DrawerTaskProps) {
+  const [currentTaskTime, setCurrentTaskTime] = useState<
+    Undefined<TaskTimeModel>
+  >();
+
   const project = useMemo(() => projectStore.get(task?.projectId || ''), [
     task,
   ]);
+
   return (
     <Drawer
       placement="right"
@@ -75,8 +83,16 @@ export default observer(function DrawerTask({
 
         <Duration task={task} />
 
-        <HoursByTask task={task} />
+        <HoursByTask
+          task={task}
+          onClick={(taskItem) => setCurrentTaskTime(taskItem)}
+        />
       </Space>
+      <TimeRangeModal
+        visible={!!currentTaskTime}
+        onClose={() => setCurrentTaskTime(undefined)}
+        taskTime={currentTaskTime}
+      />
     </Drawer>
   );
 });
