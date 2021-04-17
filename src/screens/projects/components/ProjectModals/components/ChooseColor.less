@@ -1,0 +1,20 @@
+.choose-color {
+  display: flex;
+  flex-direction: row;
+
+  .color {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    margin-right: 8px;
+    border-radius: 3px;
+  }
+
+  .color.active,
+  .color:hover {
+    transform: scale(1.1);
+  }
+}

@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 import './Main.less';
 
 import Projects from './projects/Projects';
-import TaskControl from './projects/components/TaskControl/TaskControl';
+import TaskControl from '../components/TaskControl/TaskControl';
 import HeaderMenu from '../components/HeaderMenu/HeaderMenu';
 import HoursView from './hours/HoursView';
 

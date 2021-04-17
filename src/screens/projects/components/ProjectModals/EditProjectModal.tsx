@@ -5,6 +5,7 @@ import { observer } from 'mobx-react';
 
 import ProjectModel from '../../../../models/ProjectModel';
 import rootStore from '../../../../services/RootStore';
+import ChooseColor from './components/ChooseColor';
 
 const { projectStore } = rootStore;
 
@@ -17,11 +18,13 @@ export default observer(function EditProjectModal({
   project,
 }: EditProjectModalProps) {
   const [title, setTitle] = useState<string>('');
+  const [color, setColor] = useState<string>('');
 
   useEffect(() => {
     const editProject = projectStore.editProject;
     if (editProject) {
       setTitle(editProject.title);
+      setColor(editProject.color);
     }
   }, [projectStore.editProject]);
 
@@ -31,7 +34,7 @@ export default observer(function EditProjectModal({
 
   function handleOk() {
     if (project) {
-      projectStore.setTitle(project, title);
+      projectStore.setProjectProps(project, title, color);
     }
     onClose();
   }
@@ -64,6 +67,10 @@ export default observer(function EditProjectModal({
           placeholder="Project name..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+        />
+        <ChooseColor
+          activeColor={color}
+          onChoose={(color) => setColor(color)}
         />
         <Button icon={<DeleteFilled />} onClick={handleDelete}>
           Delete

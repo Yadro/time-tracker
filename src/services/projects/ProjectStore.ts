@@ -29,8 +29,13 @@ export default class ProjectStore {
     this.activeProject = projectId;
   }
 
-  setTitle(project: ProjectModel, title: string) {
+  setProjectProps(
+    project: ProjectModel,
+    title: string,
+    color: string | undefined
+  ) {
     project.title = title;
+    project.color = color || '';
     this.projectService.save(this.projects);
   }
 

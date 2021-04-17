@@ -1,17 +1,22 @@
 import AbstractModel from '../base/AbstractModel';
 import { ITreeItem } from '../types/ITreeItem';
 
-interface IProjectItem extends ITreeItem<IProjectItem> {
-  children?: IProjectItem[];
+interface IJsonProjectItem extends ITreeItem<IJsonProjectItem> {
+  color: string;
+}
+
+interface IProjectModel extends ITreeItem<IProjectModel> {
+  color: string;
 }
 
 export default class ProjectModel extends AbstractModel
-  implements IProjectItem {
+  implements IProjectModel {
   key: string = '';
   title: string = '';
+  color: string = '';
   children?: ProjectModel[] = [];
 
-  constructor(props: IProjectItem) {
+  constructor(props: IJsonProjectItem) {
     super();
     this.load(props);
     this.children = props.children?.map((json) => new ProjectModel(json)) || [];
