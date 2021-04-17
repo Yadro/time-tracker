@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Card } from 'antd';
 import format from 'date-fns/format';
 import { observer } from 'mobx-react';
@@ -36,7 +36,13 @@ export default observer(function HoursCard({
     : '';
 
   return (
-    <Card className="hours-card" onClick={() => onClick(taskTime)}>
+    <Card
+      className="hours-card"
+      onClick={() => onClick(taskTime)}
+      style={
+        project?.color ? { borderLeft: `4px solid ${project?.color}` } : {}
+      }
+    >
       <div className="hours-card__info">
         <div className="project-title">{project?.title}</div>
         <div className="task-title">{task.title}</div>
