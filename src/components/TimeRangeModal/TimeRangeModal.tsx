@@ -8,9 +8,10 @@ import { observer } from 'mobx-react';
 import './TimeRangeModal.less';
 
 import rootStore from '../../services/RootStore';
-import TaskTimeModel from '../../models/TaskTimeModel';
+import TaskTimeItemModel from '../../models/TaskTimeItemModel';
 import { ITimeRangeModel } from '../../models/TaskModel';
 import { Undefined } from '../../types/CommonTypes';
+import TimeRangeDuration from './components/TimeRangeDuration';
 
 const { tasksStore } = rootStore;
 
@@ -20,7 +21,7 @@ enum RangeField {
 }
 
 interface TimeRangeModalProps {
-  taskTime?: TaskTimeModel;
+  taskTime?: TaskTimeItemModel;
   visible: boolean;
   onClose: () => void;
 }
@@ -93,7 +94,7 @@ export default observer(function TimeRangeModal({
           />
         </Form.Item>
         <Row>
-          <Col span={12}>
+          <Col span={8}>
             <Form.Item label="Start" labelCol={{ span: 24 }}>
               <TimePicker
                 format="HH:mm"
@@ -102,7 +103,7 @@ export default observer(function TimeRangeModal({
               />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col span={8}>
             <Form.Item label="End" labelCol={{ span: 24 }}>
               <TimePicker
                 format="HH:mm"
@@ -110,6 +111,11 @@ export default observer(function TimeRangeModal({
                 onChange={onChange(RangeField.end)}
                 disabled={timeInProgress}
               />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label="Duration" labelCol={{ span: 24 }}>
+              <TimeRangeDuration taskTimeItem={taskTime} />
             </Form.Item>
           </Col>
         </Row>

@@ -2,10 +2,10 @@ import React from 'react';
 import { observer } from 'mobx-react';
 
 import { useTimeItemsDuration } from '../../../../hooks/TaskHooks';
-import TaskTimeModel from '../../../../models/TaskTimeModel';
+import TaskTimeItemModel from '../../../../models/TaskTimeItemModel';
 
 interface TotalHoursProps {
-  timeItems: TaskTimeModel[];
+  timeItems: TaskTimeItemModel[];
 }
 
 export default observer(function TotalHours({ timeItems }: TotalHoursProps) {

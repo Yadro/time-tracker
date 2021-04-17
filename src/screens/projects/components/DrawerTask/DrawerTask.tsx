@@ -12,7 +12,7 @@ import IconTile from '../../../../components/IconTile/IconTile';
 import Duration from './components/Duration';
 import TimeRangeModal from '../../../../components/TimeRangeModal/TimeRangeModal';
 import { Undefined } from '../../../../types/CommonTypes';
-import TaskTimeModel from '../../../../models/TaskTimeModel';
+import TaskTimeItemModel from '../../../../models/TaskTimeItemModel';
 
 const { projectStore } = rootStore;
 
@@ -28,7 +28,7 @@ export default observer(function DrawerTask({
   onClose,
 }: DrawerTaskProps) {
   const [currentTaskTime, setCurrentTaskTime] = useState<
-    Undefined<TaskTimeModel>
+    Undefined<TaskTimeItemModel>
   >();
 
   const project = useMemo(() => projectStore.get(task?.projectId || ''), [

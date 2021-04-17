@@ -12,7 +12,7 @@ import { mapLastCurrent } from '../../../../helpers/IterateLastCurrent';
 import HoursItem from './components/HoursItem';
 import IconTile from '../../../../components/IconTile/IconTile';
 import { calcDuration, msToTime } from '../../../../helpers/DateTime';
-import TaskTimeModel from '../../../../models/TaskTimeModel';
+import TaskTimeItemModel from '../../../../models/TaskTimeItemModel';
 
 function dateFormat(date: Date) {
   return format(date, 'dd.MM.yyyy');
@@ -25,7 +25,7 @@ function getDurationPerDay(timeItems: ITimeRangeModel[], date: Date) {
 
 interface HoursByTaskProps {
   task?: TaskModel;
-  onClick: (task: TaskTimeModel) => void;
+  onClick: (task: TaskTimeItemModel) => void;
 }
 
 export default observer(function HoursByTask({
@@ -45,7 +45,7 @@ export default observer(function HoursByTask({
               range={range}
               onClick={() => {
                 console.log(task);
-                task && onClick(new TaskTimeModel(task, range, index));
+                task && onClick(new TaskTimeItemModel(task, range, index));
               }}
             />
           );

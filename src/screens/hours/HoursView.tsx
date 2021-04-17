@@ -9,7 +9,7 @@ import HoursCard from './components/HoursCard/HoursCard';
 import getTimeItems from '../../services/TaskTimeItem';
 import SelectDate from './components/SelectDate/SelectDate';
 import TimeRangeModal from '../../components/TimeRangeModal/TimeRangeModal';
-import TaskTimeModel from '../../models/TaskTimeModel';
+import TaskTimeItemModel from '../../models/TaskTimeItemModel';
 import { Undefined } from '../../types/CommonTypes';
 import TotalHours from './components/TotalHours/TotalHours';
 
@@ -18,7 +18,7 @@ const { tasksStore } = rootStore;
 export default observer(function HoursView() {
   const [date, setDate] = useState<Date>(new Date());
   const [currentTaskTime, setCurrentTaskTime] = useState<
-    Undefined<TaskTimeModel>
+    Undefined<TaskTimeItemModel>
   >();
 
   const tasks = useMemo(() => tasksStore.getTasksByDate(date), [date]);

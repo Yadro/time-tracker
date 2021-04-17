@@ -5,7 +5,7 @@ import { observer } from 'mobx-react';
 
 import './HoursCard.less';
 
-import TaskTimeModel from '../../../../models/TaskTimeModel';
+import TaskTimeItemModel from '../../../../models/TaskTimeItemModel';
 import PlayStopButton from '../../../../components/PlayStopButton/PlayStopButton';
 import rootStore from '../../../../services/RootStore';
 import { msToTime } from '../../../../helpers/DateTime';
@@ -21,8 +21,8 @@ function timeFormat(date: Date | undefined) {
 }
 
 interface HoursCardProps {
-  taskTime: TaskTimeModel;
-  onClick: (taskTime: TaskTimeModel) => void;
+  taskTime: TaskTimeItemModel;
+  onClick: (taskTime: TaskTimeItemModel) => void;
 }
 
 export default observer(function HoursCard({

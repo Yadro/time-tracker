@@ -1,23 +1,23 @@
 import isSameDay from 'date-fns/isSameDay';
 
 import TaskModel from '../models/TaskModel';
-import TaskTimeModel from '../models/TaskTimeModel';
+import TaskTimeItemModel from '../models/TaskTimeItemModel';
 import compareAsc from 'date-fns/compareAsc';
 
 export default function getTimeItems(
   tasks: TaskModel[],
   date: Date
-): TaskTimeModel[] {
-  let taskTime: TaskTimeModel[] = [];
+): TaskTimeItemModel[] {
+  let taskTime: TaskTimeItemModel[] = [];
   tasks.forEach((task) => {
-    const taskTimeItems: TaskTimeModel[] = [];
+    const taskTimeItems: TaskTimeItemModel[] = [];
     for (let i = 0; i < task.time.length; i++) {
       const range = task.time[i];
       if (
         isSameDay(range.start, date) ||
         (range.end && isSameDay(range.end, date))
       ) {
-        taskTimeItems.push(new TaskTimeModel(task, range, i));
+        taskTimeItems.push(new TaskTimeItemModel(task, range, i));
       }
     }
     taskTime = taskTime.concat(taskTimeItems);
