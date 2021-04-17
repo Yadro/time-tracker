@@ -63,6 +63,8 @@ export default class ProjectStore {
 
   restore() {
     this.projects = this.projectService.getAll();
-    this.activeProject = Object.keys(this.projects)[0];
+    if (this.projects.length > 0) {
+      this.activeProject = this.projects[0].key;
+    }
   }
 }
