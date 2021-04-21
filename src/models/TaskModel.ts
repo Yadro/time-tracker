@@ -11,7 +11,7 @@ export interface IJsonTimeRangeModel {
 }
 
 export interface ITimeRangeModel {
-  start: Date;
+  start?: Date;
   end?: Date;
   description?: string;
 }

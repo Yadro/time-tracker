@@ -33,6 +33,9 @@ export function msToTime(s: number, showSeconds: boolean = true) {
 
 export function calcDuration(taskTime: ITimeRangeModel[]) {
   return taskTime.reduce((prev, timeRange) => {
+    if (!timeRange.start) {
+      return 0;
+    }
     if (timeRange.end) {
       return prev + timeRange.end.getTime() - timeRange.start.getTime();
     }

@@ -4,6 +4,7 @@ import { Moment } from 'moment/moment';
 import moment from 'moment';
 import { DeleteFilled } from '@ant-design/icons';
 import { observer } from 'mobx-react';
+import isBefore from 'date-fns/isBefore';
 
 import './TimeRangeModal.less';
 
@@ -31,9 +32,21 @@ export default observer(function TimeRangeModal({
   visible,
   onClose,
 }: TimeRangeModalProps) {
+  const [valid, setValid] = useState<boolean>(false);
   const [description, setDescription] = useState<string>('');
   const [timeRange, setTimeRange] = useState<Undefined<ITimeRangeModel>>();
   const timeInProgress = !taskTime?.time.end;
+
+  useEffect(() => {
+    setValid(
+      !!timeRange?.start ||
+        !!(
+          timeRange?.start &&
+          timeRange?.end &&
+          isBefore(timeRange?.start, timeRange?.end)
+        )
+    );
+  }, [timeRange]);
 
   useEffect(() => {
     if (taskTime) {
@@ -43,7 +56,7 @@ export default observer(function TimeRangeModal({
   }, [taskTime]);
 
   function handleOk() {
-    if (taskTime?.task && timeRange) {
+    if (taskTime?.task && timeRange?.start) {
       const { task, index } = taskTime;
       if (description) {
         timeRange.description = description;
@@ -78,6 +91,7 @@ export default observer(function TimeRangeModal({
     <Modal
       title="Edit time range"
       visible={visible}
+      okButtonProps={{ disabled: !valid }}
       onOk={handleOk}
       onCancel={handleCancel}
       okText="Save"
@@ -98,7 +112,7 @@ export default observer(function TimeRangeModal({
             <Form.Item label="Start" labelCol={{ span: 24 }}>
               <TimePicker
                 format="HH:mm"
-                value={moment(timeRange?.start)}
+                value={timeRange?.start && moment(timeRange?.start)}
                 onChange={onChange(RangeField.start)}
               />
             </Form.Item>
