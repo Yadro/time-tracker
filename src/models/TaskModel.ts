@@ -55,7 +55,7 @@ export default class TaskModel extends AbstractModel {
             return {
               start: new Date(range.start),
               end: range.end ? new Date(range.end) : undefined,
-              description: undefined,
+              description: range.description,
             };
           }
         }
