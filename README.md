@@ -1,9 +1,9 @@
 # Time Tracker
 
 ## Screenshots
-<img src=".github/hours-screenshot.png" width="100%" />
-<img src=".github/projects-screenshot.png" width="100%" />
-<img src=".github/projects-drawer-screenshot.png" width="100%" />
+<img src=".github/hours-screenshot.png" />
+<img src=".github/projects-screenshot.png" />
+<img src=".github/projects-drawer-screenshot.png" />
 
 
 ## Starting Development
