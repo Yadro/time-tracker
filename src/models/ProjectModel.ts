@@ -18,7 +18,7 @@ export default class ProjectModel extends AbstractModel
 
   constructor(props: IJsonProjectItem) {
     super();
-    this.load(props);
+    this.load(props); // TODO вынести итератор
     this.children = props.children?.map((json) => new ProjectModel(json)) || [];
   }
 }
