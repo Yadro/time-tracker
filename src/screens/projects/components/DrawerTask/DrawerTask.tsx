@@ -2,8 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Checkbox, Drawer, Input, Space } from 'antd';
 import { observer } from 'mobx-react';
 import { ProjectOutlined } from '@ant-design/icons';
-
-import './DrawerTask.less';
+import { createUseStyles } from 'react-jss';
 
 import TaskModel from '../../../../models/TaskModel';
 import rootStore from '../../../../services/RootStore';
@@ -27,6 +26,7 @@ export default observer(function DrawerTask({
   visible,
   onClose,
 }: DrawerTaskProps) {
+  const classes = useStyle();
   const [currentTaskTime, setCurrentTaskTime] = useState<
     Undefined<TaskTimeItemModel>
   >();
@@ -42,7 +42,7 @@ export default observer(function DrawerTask({
       onClose={onClose}
       visible={visible}
     >
-      <Space direction="vertical" className="drawer-task">
+      <Space direction="vertical" className={classes.container}>
         <Checkbox
           onChange={(e) => {
             const { checked } = e.target;
@@ -54,11 +54,11 @@ export default observer(function DrawerTask({
         >
           Mark as done
         </Checkbox>
-        <div className="icon-with-value">
+        <div className={classes.iconWithValue}>
           <IconTile backgroundColor="#713A91">
             <ProjectOutlined style={{ color: 'white ' }} />
           </IconTile>
-          <span className="value">{project?.title}</span>
+          <span className={classes.projectTitle}>{project?.title}</span>
         </div>
         <Input
           value={task?.title}
@@ -95,4 +95,18 @@ export default observer(function DrawerTask({
       />
     </Drawer>
   );
+});
+
+const useStyle = createUseStyles({
+  container: {
+    width: '100%',
+  },
+  iconWithValue: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  projectTitle: {
+    paddingLeft: 5,
+  },
 });

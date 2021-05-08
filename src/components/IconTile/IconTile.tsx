@@ -1,8 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-
-import './IconTile.less';
-import cn from '../../helpers/ClassNameHelper';
+import { createUseStyles } from 'react-jss';
+import clsx from 'clsx';
 
 interface IconTileProps {
   children: React.ReactNode;
@@ -15,9 +14,23 @@ export default observer(function IconTile({
   children,
   backgroundColor,
 }: IconTileProps) {
+  const classes = useStyles();
+
   return (
-    <span className={cn('icon-tile', className)} style={{ backgroundColor }}>
+    <span className={clsx(classes.root, className)} style={{ backgroundColor }}>
       {children}
     </span>
   );
+});
+
+const useStyles = createUseStyles({
+  root: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 30,
+    width: 30,
+    padding: 8,
+    borderRadius: 5,
+  },
 });

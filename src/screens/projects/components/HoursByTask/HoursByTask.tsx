@@ -4,11 +4,10 @@ import { BellFilled } from '@ant-design/icons';
 import isSameDay from 'date-fns/isSameDay';
 import format from 'date-fns/format';
 import { observer } from 'mobx-react';
-
-import './HoursByTask.less';
+import { createUseStyles } from 'react-jss';
 
 import TaskModel, { ITimeRangeModel } from '../../../../models/TaskModel';
-import { mapLastCurrent } from '../../../../helpers/IterateLastCurrent';
+import { mapPrevCurrent } from '../../../../helpers/IterateLastCurrent';
 import HoursItem from './components/HoursItem';
 import IconTile from '../../../../components/IconTile/IconTile';
 import { calcDuration, msToTime } from '../../../../helpers/DateTime';
@@ -32,30 +31,33 @@ export default observer(function HoursByTask({
   task,
   onClick,
 }: HoursByTaskProps) {
+  const classes = useStyle();
+
   return (
-    <Card className="hours-by-task-container">
-      <Space direction="vertical" className="hours-by-task">
-        <IconTile backgroundColor="#F5AB28" className="bell">
+    <Card className={classes.root}>
+      <Space direction="vertical" className={classes.hoursByTask}>
+        <IconTile backgroundColor="#F5AB28">
           <BellFilled style={{ color: 'white' }} />
         </IconTile>
         {task?.time.length === 0 && <div>No billed hours</div>}
-        {mapLastCurrent(task?.time || [], (last, range, index) => {
+        {mapPrevCurrent(task?.time || [], (prev, range, index) => {
           const hoursItem = (
             <HoursItem
               range={range}
               onClick={() => {
-                console.log(task);
-                task && onClick(new TaskTimeItemModel(task, range, index));
+                if (task) {
+                  onClick(new TaskTimeItemModel(task, range, index));
+                }
               }}
             />
           );
-          if (!last || !isSameDay(last.start, range.start)) {
+          if (!prev || !isSameDay(prev.start, range.start)) {
             const duration = getDurationPerDay(task?.time || [], range.start);
             return (
               <div key={index}>
-                <div className="header-date">
-                  <div className="date">{dateFormat(range.start)}</div>
-                  <div className="duration-date">{duration}</div>
+                <div className={classes.headerDate}>
+                  <div className={classes.date}>{dateFormat(range.start)}</div>
+                  <div className={classes.durationDate}>{duration}</div>
                 </div>
                 {hoursItem}
               </div>
@@ -66,4 +68,31 @@ export default observer(function HoursByTask({
       </Space>
     </Card>
   );
+});
+
+const useStyle = createUseStyles({
+  root: {
+    '& > .ant-card-body': {
+      borderLeft: '2px solid #F5AB28',
+      padding: 8,
+    },
+  },
+  hoursByTask: {
+    width: '100%',
+  },
+  headerDate: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  date: {
+    marginLeft: 8,
+    fontSize: 11,
+    fontWeight: 'bold',
+  },
+  durationDate: {
+    marginRight: 8,
+    fontSize: 11,
+    fontWeight: 'bold',
+  },
 });

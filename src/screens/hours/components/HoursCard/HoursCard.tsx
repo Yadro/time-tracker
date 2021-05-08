@@ -2,8 +2,7 @@ import React, { useMemo } from 'react';
 import { Card } from 'antd';
 import format from 'date-fns/format';
 import { observer } from 'mobx-react';
-
-import './HoursCard.less';
+import { createUseStyles } from 'react-jss';
 
 import TaskTimeItemModel from '../../../../models/TaskTimeItemModel';
 import PlayStopButton from '../../../../components/PlayStopButton/PlayStopButton';
@@ -30,6 +29,7 @@ export default observer(function HoursCard({
   onClick,
 }: HoursCardProps) {
   const { task, time } = taskTime;
+  const classes = useStyle();
   const project = useMemo(() => projectStore.get(task.projectId), [task]);
   const duration = time.end
     ? msToTime(time.end.getTime() - time.start.getTime())
@@ -37,24 +37,67 @@ export default observer(function HoursCard({
 
   return (
     <Card
-      className="hours-card"
+      className={classes.root}
       onClick={() => onClick(taskTime)}
       style={
         project?.color ? { borderLeft: `4px solid ${project?.color}` } : {}
       }
     >
-      <div className="hours-card__info">
-        <div className="project-title">{project?.title}</div>
-        <div className="task-title">{task.title}</div>
-        <div className="description">{time.description}</div>
-        <div className="time-container">
-          <div className="time">{`${timeFormat(time.start)} - ${timeFormat(
-            time.end
-          )}`}</div>
-          <div className="time">{duration}</div>
+      <div className={classes.hoursCard}>
+        <div className={classes.projectTitle}>{project?.title}</div>
+        <div className={classes.taskTitle}>{task.title}</div>
+        <div className={classes.description}>{time.description}</div>
+        <div className={classes.timeContainer}>
+          <div className={classes.time}>{`${timeFormat(
+            time.start
+          )} - ${timeFormat(time.end)}`}</div>
+          <div className={classes.time}>{duration}</div>
         </div>
       </div>
-      <PlayStopButton task={task} />
+      <PlayStopButton className={classes.playButton} task={task} />
     </Card>
   );
+});
+
+const useStyle = createUseStyles({
+  root: {
+    width: 300,
+
+    '& .ant-card-body': {
+      display: 'flex',
+      flexDirection: 'row',
+      cursor: 'pointer',
+    },
+
+    '&:hover $playButton': {
+      display: 'inline-flex',
+    },
+  },
+  hoursCard: {
+    flex: 1,
+  },
+  projectTitle: {
+    fontSize: 12,
+  },
+  taskTitle: {
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
+  description: {
+    fontSize: 11,
+  },
+  timeContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 8,
+  },
+  time: {
+    fontSize: 11,
+  },
+  playButton: {
+    display: 'none',
+    position: 'absolute',
+    right: 8,
+  },
 });

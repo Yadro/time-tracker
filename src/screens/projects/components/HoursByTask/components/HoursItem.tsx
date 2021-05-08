@@ -2,8 +2,7 @@ import React from 'react';
 import { Card } from 'antd';
 import format from 'date-fns/format';
 import { observer } from 'mobx-react';
-
-import './HoursItem.less';
+import { createUseStyles } from 'react-jss';
 
 import { msToTime } from '../../../../../helpers/DateTime';
 import { ITimeRangeModel } from '../../../../../models/TaskModel';
@@ -32,13 +31,40 @@ interface HoursItemProps {
 }
 
 export default observer(function HoursItem({ range, onClick }: HoursItemProps) {
+  const classes = useStyle();
+
   return (
-    <Card className="hours-item" onClick={onClick}>
-      <div className="description">{range.description}</div>
-      <div className="bottom">
-        <div className="hours-range">{hoursRangeFormat(range)}</div>
-        <div className="duration">{getDuration(range)}</div>
+    <Card className={classes.root} onClick={onClick}>
+      <div className={classes.description}>{range.description}</div>
+      <div className={classes.button}>
+        <div className={classes.hoursRange}>{hoursRangeFormat(range)}</div>
+        <div className={classes.duration}>{getDuration(range)}</div>
       </div>
     </Card>
   );
+});
+
+const useStyle = createUseStyles({
+  root: {
+    cursor: 'pointer',
+
+    '& .ant-card-body': {
+      padding: 8,
+    },
+  },
+  description: {
+    fontSize: 11,
+  },
+  button: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  hoursRange: {
+    fontSize: 10,
+  },
+  duration: {
+    fontSize: 11,
+    fontWeight: 'bold',
+  },
 });
