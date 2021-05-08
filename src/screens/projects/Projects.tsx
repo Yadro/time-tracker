@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Button, Layout, Space } from 'antd';
 import { observer } from 'mobx-react';
 import { Key } from 'rc-tree/lib/interface';
-
-import './Projects.less';
+import { createUseStyles } from 'react-jss';
 
 import TaskInput from './components/TaskInput';
 import rootStore from '../../services/RootStore';
@@ -53,6 +52,7 @@ const ProjectList = TreeList(
 );
 
 export default observer(function Projects() {
+  const classes = useStyles();
   const [showProjectModal, setShowProjectModal] = useState<boolean>(false);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
   const [selectedTask, setSelectedTask] = useState<TaskModel | undefined>();
@@ -77,8 +77,8 @@ export default observer(function Projects() {
 
   return (
     <Layout>
-      <Sider width={250} className="sider">
-        <Layout style={{ padding: '12px' }}>
+      <Sider width={250} className={classes.sider}>
+        <Layout style={{ padding: '12px' }} className="side-bar">
           <Space direction="vertical">
             <ProjectList onSelect={handleSelectProject} />
             <Button onClick={handleCreateProject} icon={<PlusOutlined />}>
@@ -87,7 +87,7 @@ export default observer(function Projects() {
           </Space>
         </Layout>
       </Sider>
-      <Layout style={{ padding: '24px' }}>
+      <Layout style={{ padding: '24px' }} className={classes.tasks}>
         <Space className="root" direction="vertical">
           <TaskList onSelect={handleSelectTask} />
           <TaskInput />
@@ -107,4 +107,14 @@ export default observer(function Projects() {
       />
     </Layout>
   );
+});
+
+const useStyles = createUseStyles({
+  sider: {
+    backgroundColor: '#f0f2f5',
+    borderRight: '1px solid #d9d9d9',
+  },
+  tasks: {
+    overflowY: 'auto',
+  },
 });

@@ -5,8 +5,7 @@ import {
   PauseOutlined,
 } from '@ant-design/icons';
 import { observer } from 'mobx-react';
-
-import './TaskNode.less';
+import { createUseStyles } from 'react-jss';
 
 import TaskModel from '../../../../models/TaskModel';
 import rootStore from '../../../../services/RootStore';
@@ -19,6 +18,8 @@ interface TaskNodeProps {
 }
 
 export default observer(function TaskNode({ task }: TaskNodeProps) {
+  const classes = useStyle();
+
   const duration = useTaskDuration(task);
 
   function preventDefault(fn: () => void) {
@@ -29,10 +30,10 @@ export default observer(function TaskNode({ task }: TaskNodeProps) {
   }
 
   return (
-    <div className="task-node">
-      <span className="task-title">{task.title}</span>
+    <div className={classes.taskNode}>
+      <span className={classes.taskTitle}>{task.title}</span>
       <span>{duration}</span>
-      <span className="task-node__actions">
+      <span className={classes.taskNodeActions}>
         {!task.active ? (
           <CaretRightFilled
             onClick={preventDefault(() => tasksStore.startTimer(task))}
@@ -48,4 +49,20 @@ export default observer(function TaskNode({ task }: TaskNodeProps) {
       </span>
     </div>
   );
+});
+
+const useStyle = createUseStyles({
+  taskNode: {
+    display: 'flex',
+
+    '&:hover $taskNodeActions': {
+      display: 'inline',
+    },
+  },
+  taskNodeActions: {
+    display: 'none',
+  },
+  taskTitle: {
+    flex: 1,
+  },
 });

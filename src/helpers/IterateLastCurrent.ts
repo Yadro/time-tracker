@@ -1,6 +1,6 @@
 type Callback<T, R> = (last: T | undefined, cur: T, index: number) => R;
 
-export function mapLastCurrent<T, R = any>(
+export function mapPrevCurrent<T, R = any>(
   items: T[],
   callback: Callback<T, R>
 ): R[] {

@@ -1,13 +1,12 @@
 import React, { SyntheticEvent } from 'react';
 import { CaretRightFilled, PauseOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react';
-
-import './PlayStopButton.less';
+import clsx from 'clsx';
+import { createUseStyles } from 'react-jss';
 
 import CircleButton from '../CircleButton/CircleButton';
 import rootStore from '../../services/RootStore';
 import TaskModel from '../../models/TaskModel';
-import cn from '../../helpers/ClassNameHelper';
 
 const { tasksStore } = rootStore;
 
@@ -20,6 +19,8 @@ export default observer(function PlayStopButton({
   task,
   className,
 }: PlayStopButtonProps) {
+  const classes = useStyles();
+
   function handleClick(e: SyntheticEvent) {
     e.stopPropagation();
     if (task) {
@@ -34,13 +35,19 @@ export default observer(function PlayStopButton({
   return (
     <CircleButton
       onClick={handleClick}
-      className={cn('play-stop-button', className)}
+      className={clsx('play-stop-button', className)}
     >
       {!task?.active ? (
-        <CaretRightFilled className="play-stop-button__icon" />
+        <CaretRightFilled className={classes.icon} />
       ) : (
-        <PauseOutlined className="play-stop-button__icon" />
+        <PauseOutlined className={classes.icon} />
       )}
     </CircleButton>
   );
+});
+
+const useStyles = createUseStyles({
+  icon: {
+    color: 'white',
+  },
 });

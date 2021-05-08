@@ -15,9 +15,8 @@ import {
   yellow,
 } from '@ant-design/colors';
 import { CheckOutlined } from '@ant-design/icons';
-
-import './ChooseColor.less';
-import cn from '../../../../../helpers/ClassNameHelper';
+import { createUseStyles } from 'react-jss';
+import clsx from 'clsx';
 
 const colors = [
   red,
@@ -44,12 +43,17 @@ export default function ChooseColor({
   activeColor,
   onChoose,
 }: ChooseColorProps) {
+  const classes = useStyle();
+
   return (
-    <div className="choose-color">
+    <div className={classes.root}>
       {colors.map((color, index) => (
         <div
           key={index}
-          className={cn('color', activeColor === color && 'active')}
+          className={clsx(
+            classes.color,
+            activeColor === color && classes.colorActive
+          )}
           style={{ backgroundColor: color }}
           onClick={() => {
             if (color) {
@@ -65,3 +69,27 @@ export default function ChooseColor({
     </div>
   );
 }
+
+const useStyle = createUseStyles({
+  root: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  color: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+    height: 20,
+    width: 20,
+    marginRight: 8,
+    borderRadius: 3,
+
+    '&:hover': {
+      transform: 'scale(1.1)',
+    },
+  },
+  colorActive: {
+    transform: 'scale(1.1)',
+  },
+});
