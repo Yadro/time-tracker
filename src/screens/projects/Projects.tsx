@@ -78,7 +78,7 @@ export default observer(function Projects() {
   return (
     <Layout>
       <Sider width={250} className="sider">
-        <Layout style={{ padding: '12px' }}>
+        <Layout style={{ padding: '12px' }} className="side-bar">
           <Space direction="vertical">
             <ProjectList onSelect={handleSelectProject} />
             <Button onClick={handleCreateProject} icon={<PlusOutlined />}>
@@ -87,7 +87,7 @@ export default observer(function Projects() {
           </Space>
         </Layout>
       </Sider>
-      <Layout style={{ padding: '24px' }}>
+      <Layout style={{ padding: '24px' }} className="tasks">
         <Space className="root" direction="vertical">
           <TaskList onSelect={handleSelectTask} />
           <TaskInput />
