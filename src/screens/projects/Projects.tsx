@@ -3,6 +3,7 @@ import { Button, Layout, Space } from 'antd';
 import { observer } from 'mobx-react';
 import { Key } from 'rc-tree/lib/interface';
 import { createUseStyles } from 'react-jss';
+import { PlusOutlined } from '@ant-design/icons';
 
 import TaskInput from './components/TaskInput';
 import rootStore from '../../services/RootStore';
@@ -14,7 +15,6 @@ import TaskNode from './components/TaskNode/TaskNode';
 import DrawerTask from './components/DrawerTask/DrawerTask';
 import ProjectNode from './components/ProjectNode/ProjectNode';
 import EditProjectModal from './components/ProjectModals/EditProjectModal';
-import { PlusOutlined } from '@ant-design/icons';
 
 const { Sider } = Layout;
 
@@ -78,7 +78,7 @@ export default observer(function Projects() {
   return (
     <Layout>
       <Sider width={250} className={classes.sider}>
-        <Layout style={{ padding: '12px' }} className="side-bar">
+        <Layout style={{ padding: '12px' }}>
           <Space direction="vertical">
             <ProjectList onSelect={handleSelectProject} />
             <Button onClick={handleCreateProject} icon={<PlusOutlined />}>
