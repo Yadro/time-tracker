@@ -7,6 +7,7 @@ import Projects from './projects/Projects';
 import TaskControl from '../components/TaskControl/TaskControl';
 import HeaderMenu from '../components/HeaderMenu/HeaderMenu';
 import HoursView from './hours/HoursView';
+import Dashboard from './dashboard/Dashboard';
 
 const { Header } = Layout;
 
@@ -20,6 +21,9 @@ export default observer(function Main() {
         <HeaderMenu>
           <Link to="/projects">Projects</Link>
         </HeaderMenu>
+        <HeaderMenu>
+          <Link to="/dashboard">Dashboard</Link>
+        </HeaderMenu>
         <span className="flex-1" />
         <TaskControl />
       </Header>
@@ -32,6 +36,9 @@ export default observer(function Main() {
         </Route>
         <Route path="/projects">
           <Projects />
+        </Route>
+        <Route path="/dashboard">
+          <Dashboard />
         </Route>
       </Switch>
     </Layout>
