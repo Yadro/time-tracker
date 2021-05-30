@@ -22,7 +22,11 @@ export default observer(function ProjectNode({ project }: ProjectNodeProps) {
 
   return (
     <div className={classes.projectNode}>
-      <div>{project.title}</div>
+      <div
+        className={classes.projectColor}
+        style={{ backgroundColor: project.color }}
+      />
+      <div className={classes.title}>{project.title}</div>
       <EditOutlined className={classes.editButton} onClick={onClick} />
     </div>
   );
@@ -32,12 +36,20 @@ const useStyle = createUseStyles({
   projectNode: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
 
     '&:hover $editButton': {
       display: 'inline',
     },
+  },
+  projectColor: {
+    width: 16,
+    height: 16,
+    borderRadius: 4,
+    marginRight: 8,
+  },
+  title: {
+    flex: 1,
   },
   editButton: {
     display: 'none',
