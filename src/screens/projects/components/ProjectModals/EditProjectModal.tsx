@@ -14,9 +14,7 @@ interface EditProjectModalProps {
   onClose: () => void;
 }
 
-export default observer(function EditProjectModal({
-  project,
-}: EditProjectModalProps) {
+const EditProjectModal = observer(({ project }: EditProjectModalProps) => {
   const [title, setTitle] = useState<string>('');
   const [color, setColor] = useState<string>('');
 
@@ -79,3 +77,5 @@ export default observer(function EditProjectModal({
     </Modal>
   );
 });
+
+export default EditProjectModal;

@@ -9,6 +9,7 @@ export default observer(function TaskInput() {
   const [text, setText] = useState('');
 
   function handleKeyPress(event: KeyboardEvent) {
+    // Hotkey: Enter
     if (event.key === 'Enter') {
       const { tasksStore, projectStore } = rootStore;
       tasksStore.add(
@@ -16,6 +17,12 @@ export default observer(function TaskInput() {
           key: String(Date.now()),
           title: text,
           projectId: projectStore.activeProject,
+          active: false,
+          time: [],
+          checked: false,
+          children: [],
+          datesInProgress: [],
+          details: [],
         })
       );
       setText('');
