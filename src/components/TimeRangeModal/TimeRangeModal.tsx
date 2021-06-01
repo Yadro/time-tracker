@@ -6,7 +6,7 @@ import { DeleteFilled } from '@ant-design/icons';
 import { observer } from 'mobx-react';
 import isBefore from 'date-fns/isBefore';
 
-import rootStore from '../../services/RootStore';
+import rootStore from '../../modules/RootStore';
 import TaskTimeItemModel from '../../models/TaskTimeItemModel';
 import { ITimeRangeModel } from '../../models/TaskModel';
 import { Undefined } from '../../types/CommonTypes';

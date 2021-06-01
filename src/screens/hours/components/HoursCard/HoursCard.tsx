@@ -6,7 +6,7 @@ import { createUseStyles } from 'react-jss';
 
 import TaskTimeItemModel from '../../../../models/TaskTimeItemModel';
 import PlayStopButton from '../../../../components/PlayStopButton/PlayStopButton';
-import rootStore from '../../../../services/RootStore';
+import rootStore from '../../../../modules/RootStore';
 import { msToTime } from '../../../../helpers/DateTime';
 
 const { projectStore } = rootStore;

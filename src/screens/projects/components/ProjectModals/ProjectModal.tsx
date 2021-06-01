@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import { Input, Modal, Space } from 'antd';
 
-import rootStore from '../../../../services/RootStore';
+import rootStore from '../../../../modules/RootStore';
 import ProjectModel from '../../../../models/ProjectModel';
 import ChooseColor from './components/ChooseColor';
 

@@ -4,7 +4,7 @@ import { Layout, Space } from 'antd';
 import { observer } from 'mobx-react';
 
 import SelectDate from '../../components/SelectDate/SelectDate';
-import rootStore from '../../services/RootStore';
+import rootStore from '../../modules/RootStore';
 import { getTasksWithTotalTimeForDay } from '../../helpers/TaskHelper';
 import HoursWithDuration from './components/HoursWithDuration';
 

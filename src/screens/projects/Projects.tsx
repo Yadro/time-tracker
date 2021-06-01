@@ -6,7 +6,7 @@ import { createUseStyles } from 'react-jss';
 import { PlusOutlined } from '@ant-design/icons';
 
 import TaskInput from './components/TaskInput';
-import rootStore from '../../services/RootStore';
+import rootStore from '../../modules/RootStore';
 import TreeList from './components/TreeList';
 import TaskModel from '../../models/TaskModel';
 import ProjectModel from '../../models/ProjectModel';

@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Layout, Space } from 'antd';
 import { observer } from 'mobx-react';
 
-import rootStore from '../../services/RootStore';
+import rootStore from '../../modules/RootStore';
 import HoursCard from './components/HoursCard/HoursCard';
 import { getTimeItems } from '../../helpers/TaskHelper';
 import SelectDate from '../../components/SelectDate/SelectDate';

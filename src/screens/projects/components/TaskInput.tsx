@@ -2,7 +2,7 @@ import React, { KeyboardEvent, useState } from 'react';
 import { Input } from 'antd';
 import { observer } from 'mobx-react';
 
-import rootStore from '../../../services/RootStore';
+import rootStore from '../../../modules/RootStore';
 import TaskModel from '../../../models/TaskModel';
 
 export default observer(function TaskInput() {

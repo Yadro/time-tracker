@@ -1,5 +1,4 @@
 import { makeAutoObservable } from 'mobx';
-import { ipcRenderer } from 'electron';
 
 import TaskService from './TaskService';
 import TaskModel, { ITimeRangeModel } from '../../models/TaskModel';

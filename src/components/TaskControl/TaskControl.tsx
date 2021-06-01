@@ -4,7 +4,7 @@ import { PauseOutlined } from '@ant-design/icons';
 
 import './TaskControl.less';
 
-import rootStore from '../../services/RootStore';
+import rootStore from '../../modules/RootStore';
 import { useTaskDuration } from '../../hooks/TaskHooks';
 import CircleButton from '../CircleButton/CircleButton';
 

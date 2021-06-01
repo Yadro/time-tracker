@@ -4,7 +4,7 @@ import { DeleteFilled } from '@ant-design/icons';
 import { observer } from 'mobx-react';
 
 import ProjectModel from '../../../../models/ProjectModel';
-import rootStore from '../../../../services/RootStore';
+import rootStore from '../../../../modules/RootStore';
 import ChooseColor from './components/ChooseColor';
 
 const { projectStore } = rootStore;
@@ -21,7 +21,7 @@ export default observer(function EditProjectModal({
   const [color, setColor] = useState<string>('');
 
   useEffect(() => {
-    const editProject = projectStore.editProject;
+    const { editProject } = projectStore;
     if (editProject) {
       setTitle(editProject.title);
       setColor(editProject.color);

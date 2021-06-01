@@ -5,7 +5,7 @@ import { ProjectOutlined } from '@ant-design/icons';
 import { createUseStyles } from 'react-jss';
 
 import TaskModel from '../../../../models/TaskModel';
-import rootStore from '../../../../services/RootStore';
+import rootStore from '../../../../modules/RootStore';
 import HoursByTask from '../HoursByTask/HoursByTask';
 import IconTile from '../../../../components/IconTile/IconTile';
 import Duration from './components/Duration';
