@@ -45,8 +45,14 @@ const ProjectList = TreeList(
     projectStore.set(list);
   },
   {
+    selectable: false,
     titleRender(project: ProjectModel) {
-      return <ProjectNode project={project} />;
+      return (
+        <ProjectNode
+          project={project}
+          active={projectStore.activeProject === project.key}
+        />
+      );
     },
   }
 );

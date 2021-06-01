@@ -27,6 +27,7 @@ export default class ProjectStore {
 
   setActiveProject(projectId: string) {
     this.activeProject = projectId;
+    this.projects = this.projects.slice(); // trigger to update view
   }
 
   setProjectProps(
@@ -36,6 +37,7 @@ export default class ProjectStore {
   ) {
     project.title = title;
     project.color = color || '';
+    this.projects = this.projects.slice();
     this.projectService.save(this.projects);
   }
 
@@ -47,8 +49,9 @@ export default class ProjectStore {
   }
 
   add(project: ProjectModel) {
-    this.projects.push(project);
-    this.projects = this.projects.slice();
+    const newProjects = this.projects.slice();
+    newProjects.push(project);
+    this.projects = newProjects;
     this.projectService.save(this.projects);
   }
 
