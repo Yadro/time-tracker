@@ -5,23 +5,26 @@ import { Key } from 'rc-tree/lib/interface';
 
 import { IDragInfo } from '../../../types/IDragInfo';
 import { ITreeItem } from '../../../types/ITreeItem';
+import { TreeProps } from 'antd/lib/tree/Tree';
 
 interface TreeListProps {
   onSelect?: (selectedKeys: Key[]) => void;
 }
 
+interface TreePropsExtended<T>
+  extends Omit<TreeProps, 'onDrop' | 'onSelect' | 'titleRender'> {
+  getCheckedKeys?: () => Key[];
+  titleRender?: (item: T) => React.ReactNode;
+}
+
 export default function TreeList<T extends ITreeItem<any>>(
   getData: () => T[],
   updateData: (items: T[]) => void,
-  options?: {
-    checkable?: boolean;
-    selectable?: boolean;
-    onCheck?: (checkedKeys: React.Key[]) => void;
-    getCheckedKeys?: () => React.Key[];
-    titleRender?: (nodeData: T) => React.ReactNode;
-  }
+  options: TreePropsExtended<T>
 ) {
-  return observer(function TreeList({ onSelect }: TreeListProps) {
+  const { getCheckedKeys, ...rest } = options;
+
+  return observer(({ onSelect }: TreeListProps) => {
     const data = getData();
 
     function onDrop(info: IDragInfo) {
@@ -76,14 +79,16 @@ export default function TreeList<T extends ITreeItem<any>>(
         });
       } else {
         let ar: ITreeItem[];
-        let i;
-        loop(dataCopy, dropKey, (item, index, arr) => {
+        let i: number;
+        loop(dataCopy, dropKey, (_item, index, arr) => {
           ar = arr;
           i = index;
         });
         if (dropPosition === -1) {
+          // @ts-ignore
           ar?.splice(i, 0, dragObj);
         } else {
+          // @ts-ignore
           ar?.splice(i + 1, 0, dragObj);
         }
       }
@@ -94,16 +99,13 @@ export default function TreeList<T extends ITreeItem<any>>(
     return (
       <Tree
         className="draggable-tree"
-        checkedKeys={options?.getCheckedKeys?.()}
-        checkable={options?.checkable}
+        checkedKeys={getCheckedKeys?.()}
         draggable
-        selectable={options?.selectable}
         blockNode
         treeData={data}
         onDrop={onDrop}
         onSelect={onSelect}
-        onCheck={options?.checkable ? options?.onCheck : undefined}
-        titleRender={options?.titleRender}
+        {...rest}
       />
     );
   });
