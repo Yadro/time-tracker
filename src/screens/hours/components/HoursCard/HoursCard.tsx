@@ -62,6 +62,7 @@ export default observer(function HoursCard({
 const useStyle = createUseStyles({
   root: {
     width: 300,
+    margin: 4,
 
     '& .ant-card-body': {
       display: 'flex',
