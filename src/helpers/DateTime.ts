@@ -1,4 +1,6 @@
 import { ITimeRangeModel } from '../models/TaskModel';
+import { format } from 'date-fns';
+import { mapPrevCurrent } from './MapPrevCurrent';
 
 function timePad(time: number): string {
   return String(time).padStart(2, '0');
@@ -41,4 +43,35 @@ export function calcDuration(taskTime: ITimeRangeModel[]): number {
     }
     return prev + timeRange.end.getTime() - timeRange.start.getTime();
   }, 0);
+}
+
+export function calcDurationGaps(taskTime: ITimeRangeModel[]): number {
+  let result = 0;
+  mapPrevCurrent(taskTime, (prev, cur) => {
+    if (prev?.end) {
+      result += cur.start.getTime() - prev.end.getTime();
+    }
+  });
+  return result;
+}
+
+const TIME_FORMAT = 'HH:mm';
+const NO_TIME = '--:--';
+
+export function getTime(date: Date | undefined) {
+  if (!date) {
+    return NO_TIME;
+  }
+  return format(date, TIME_FORMAT);
+}
+
+const EIGHT_HOURS = 8 * 60 * 60 * 1000;
+
+export function estimateWorkingTimeEnd(
+  startDate: Date | undefined,
+  restTimeMs: number
+): Date | undefined {
+  return startDate
+    ? new Date(startDate.getTime() + restTimeMs + EIGHT_HOURS)
+    : undefined;
 }

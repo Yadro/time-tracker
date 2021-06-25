@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { isBefore } from 'date-fns';
 
-import { calcDuration, msToTime } from '../helpers/DateTime';
+import { calcDuration, calcDurationGaps, msToTime } from '../helpers/DateTime';
 import TaskModel, { ITimeRangeModel } from '../models/TaskModel';
 import TaskTimeItemModel from '../models/TaskTimeItemModel';
 
@@ -31,25 +32,33 @@ export function useTaskDuration(model: TaskModel | undefined) {
   return duration;
 }
 
-export function useTimeItemsDuration(
-  taskTime: TaskTimeItemModel[],
-  showSeconds: boolean = false
-) {
-  const [duration, setDuration] = useState<string>('');
+export function useTimeItemsDuration(taskTime: TaskTimeItemModel[]) {
+  const [durationMs, setDurationMs] = useState<number>(0);
+  const [gapsMs, setGapsMs] = useState<number>(0);
   const intervalRef = useRef<NodeJS.Timeout>();
 
   const calcTaskDuration = useCallback(
-    () => msToTime(calcDuration(taskTime.map((t) => t.time)), showSeconds),
-    [showSeconds, taskTime]
+    () => calcDuration(taskTime.map((t) => t.time)),
+    [taskTime]
   );
 
+  const calcTaskGapsDuration = useCallback(
+    () => calcDurationGaps(taskTime.map((t) => t.time)),
+    [taskTime]
+  );
+
+  const setTimes = useCallback(() => {
+    setDurationMs(calcTaskDuration());
+    setGapsMs(calcTaskGapsDuration());
+  }, [calcTaskDuration, calcTaskGapsDuration]);
+
   useEffect(() => {
-    setDuration(calcTaskDuration());
+    setTimes();
 
     const haveActiveTime = taskTime.some((t) => !t.time.end);
     if (haveActiveTime) {
       intervalRef.current = setInterval(() => {
-        setDuration(calcTaskDuration());
+        setTimes();
       }, 1000);
     }
 
@@ -58,9 +67,12 @@ export function useTimeItemsDuration(
         clearInterval(intervalRef.current);
       }
     };
-  }, [calcTaskDuration, taskTime]);
+  }, [setTimes, taskTime]);
 
-  return duration;
+  return {
+    durationMs,
+    gapsMs,
+  };
 }
 
 export function useTimeRangeDuration(timeRange: ITimeRangeModel | undefined) {
@@ -92,4 +104,18 @@ export function useTimeRangeDuration(timeRange: ITimeRangeModel | undefined) {
   }, [calcTimeRangeDuration, timeRange]);
 
   return duration;
+}
+
+export function useStartWorkingTime(
+  timeItems: TaskTimeItemModel[]
+): Date | undefined {
+  return useMemo(() => {
+    let minTime: Date | undefined;
+    timeItems.forEach((time) => {
+      if (!minTime || isBefore(time.time.start, minTime)) {
+        minTime = time.time.start;
+      }
+    });
+    return minTime;
+  }, [timeItems]);
 }
