@@ -14,13 +14,19 @@ interface TotalHoursProps {
   timeItems: TaskTimeItemModel[];
 }
 
-export default observer(function TotalHours({ timeItems }: TotalHoursProps) {
+const TotalHours = observer((props: TotalHoursProps) => {
+  const { timeItems } = props;
+
   const { durationMs, gapsMs } = TaskHooks.useTimeItemsDuration(timeItems);
   const startWorkingTime = TaskHooks.useStartWorkingTime(timeItems);
   const estimatedWorkingTimeEnd = estimateWorkingTimeEnd(
     startWorkingTime,
     gapsMs
   );
+
+  if (!timeItems.length) {
+    return null;
+  }
 
   return (
     <Space>
@@ -31,3 +37,5 @@ export default observer(function TotalHours({ timeItems }: TotalHoursProps) {
     </Space>
   );
 });
+
+export default TotalHours;
