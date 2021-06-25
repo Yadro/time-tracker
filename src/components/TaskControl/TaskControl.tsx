@@ -5,14 +5,14 @@ import { PauseOutlined } from '@ant-design/icons';
 import './TaskControl.less';
 
 import rootStore from '../../modules/RootStore';
-import { useTaskDuration } from '../../hooks/TaskHooks';
+import * as TaskHooks from '../../hooks/TaskHooks';
 import CircleButton from '../CircleButton/CircleButton';
 
 const { tasksStore, projectStore } = rootStore;
 
 export default observer(function TaskControl() {
   const task = tasksStore.activeTask;
-  const duration = useTaskDuration(task);
+  const duration = TaskHooks.useTaskDuration(task);
 
   const project = useMemo(() => {
     return projectStore.get(task?.projectId || '');

@@ -1,12 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { calcDuration, msToTime } from '../helpers/DateTime';
 import TaskModel, { ITimeRangeModel } from '../models/TaskModel';
 import TaskTimeItemModel from '../models/TaskTimeItemModel';
 
 export function useTaskDuration(model: TaskModel | undefined) {
-  model = model || ({} as TaskModel);
-
   const intervalRef = useRef<NodeJS.Timeout>();
   const [duration, setDuration] = useState<string>('');
 
@@ -28,7 +26,7 @@ export function useTaskDuration(model: TaskModel | undefined) {
         clearInterval(intervalRef.current);
       }
     };
-  }, [model, model.active]);
+  }, [model, model?.active]);
 
   return duration;
 }
@@ -40,24 +38,27 @@ export function useTimeItemsDuration(
   const [duration, setDuration] = useState<string>('');
   const intervalRef = useRef<NodeJS.Timeout>();
 
+  const calcTaskDuration = useCallback(
+    () => msToTime(calcDuration(taskTime.map((t) => t.time)), showSeconds),
+    [showSeconds, taskTime]
+  );
+
   useEffect(() => {
+    setDuration(calcTaskDuration());
+
     const haveActiveTime = taskTime.some((t) => !t.time.end);
-    setDuration(
-      msToTime(calcDuration(taskTime.map((t) => t.time)), showSeconds)
-    );
     if (haveActiveTime) {
       intervalRef.current = setInterval(() => {
-        setDuration(
-          msToTime(calcDuration(taskTime.map((t) => t.time)), showSeconds)
-        );
+        setDuration(calcTaskDuration());
       }, 1000);
     }
+
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
     };
-  }, [taskTime]);
+  }, [calcTaskDuration, taskTime]);
 
   return duration;
 }
@@ -66,15 +67,21 @@ export function useTimeRangeDuration(timeRange: ITimeRangeModel | undefined) {
   const [duration, setDuration] = useState<string>('');
   const intervalRef = useRef<NodeJS.Timeout>();
 
+  const calcTimeRangeDuration = useCallback(
+    () => msToTime(timeRange ? calcDuration([timeRange]) : 0),
+    [timeRange]
+  );
+
   useEffect(() => {
     if (!timeRange) {
       return;
     }
+    setDuration(calcTimeRangeDuration());
+
     const haveActiveTime = !timeRange.end;
-    setDuration(msToTime(calcDuration([timeRange])));
     if (haveActiveTime) {
       intervalRef.current = setInterval(() => {
-        setDuration(msToTime(calcDuration([timeRange])));
+        setDuration(calcTimeRangeDuration());
       }, 1000);
     }
     return () => {
@@ -82,7 +89,7 @@ export function useTimeRangeDuration(timeRange: ITimeRangeModel | undefined) {
         clearInterval(intervalRef.current);
       }
     };
-  }, [timeRange]);
+  }, [calcTimeRangeDuration, timeRange]);
 
   return duration;
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useTimeRangeDuration } from '../../../hooks/TaskHooks';
+import * as TaskHooks from '../../../hooks/TaskHooks';
 import { ITimeRangeModel } from '../../../models/TaskModel';
 
 interface TimeRangeDurationProps {
@@ -10,7 +10,7 @@ interface TimeRangeDurationProps {
 export default function TimeRangeDuration({
   timeRange,
 }: TimeRangeDurationProps) {
-  const duration = useTimeRangeDuration(timeRange);
+  const duration = TaskHooks.useTimeRangeDuration(timeRange);
 
   return <div>{duration}</div>;
 }

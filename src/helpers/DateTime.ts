@@ -31,14 +31,14 @@ export function msToTime(s: number, showSeconds: boolean = true) {
   return `${timePad(hrs)}:${timePad(mins)}`;
 }
 
-export function calcDuration(taskTime: ITimeRangeModel[]) {
+export function calcDuration(taskTime: ITimeRangeModel[]): number {
   return taskTime.reduce((prev, timeRange) => {
     if (!timeRange.start) {
       return 0;
     }
-    if (timeRange.end) {
-      return prev + timeRange.end.getTime() - timeRange.start.getTime();
+    if (!timeRange.end) {
+      return prev + new Date().getTime() - timeRange.start.getTime();
     }
-    return prev + new Date().getTime() - timeRange.start.getTime();
+    return prev + timeRange.end.getTime() - timeRange.start.getTime();
   }, 0);
 }
