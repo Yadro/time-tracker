@@ -246,6 +246,7 @@
     "history": "^5.0.0",
     "less": "4.1.1",
     "less-loader": "8.0.0",
+    "material-icons": "0.7.4",
     "mobx": "6.1.8",
     "mobx-react": "7.1.0",
     "moment": "2.29.1",

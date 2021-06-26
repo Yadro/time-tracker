@@ -45,9 +45,8 @@ export default observer(function HoursView() {
         <TotalHours timeItems={timeItems} />
         <div className={classes.cards}>
           {mapCurrentNext(timeItems, (item, next, index) => (
-            <div>
+            <div key={index}>
               <HoursCard
-                key={index}
                 taskTime={item}
                 onClick={(taskTime) => setCurrentTaskTime(taskTime)}
               />
