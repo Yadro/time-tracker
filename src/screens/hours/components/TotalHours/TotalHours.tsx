@@ -5,6 +5,7 @@ import { Space } from 'antd';
 import * as TaskHooks from '../../../../hooks/TaskHooks';
 import TaskTimeItemModel from '../../../../models/TaskTimeItemModel';
 import {
+  EIGHT_HOURS,
   estimateWorkingTimeEnd,
   getTime,
   msToTime,
@@ -20,14 +21,13 @@ const TotalHours = observer((props: TotalHoursProps) => {
   const { timeItems } = props;
   const classes = useStyle();
 
-  console.log();
-
   const { durationMs, gapsMs } = TaskHooks.useTimeItemsDuration(timeItems);
   const startWorkingTime = TaskHooks.useStartWorkingTime(timeItems);
   const estimatedWorkingTimeEnd = estimateWorkingTimeEnd(
     startWorkingTime,
     gapsMs
   );
+  const restHoursMs = EIGHT_HOURS - durationMs;
 
   if (!timeItems.length) {
     return null;
@@ -48,6 +48,7 @@ const TotalHours = observer((props: TotalHoursProps) => {
         <span className={clsx('mi mi-notifications', classes.icon)} />
         <span>{getTime(estimatedWorkingTimeEnd)}</span>
       </div>
+      <span>{msToTime(restHoursMs, false)}</span>
     </Space>
   );
 });

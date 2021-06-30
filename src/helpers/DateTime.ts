@@ -14,6 +14,8 @@ export function msToTime(s: number, showSeconds: boolean = true) {
   if (!s) {
     return '0s';
   }
+  const sign = s < 0 ? '-' : '';
+  s = Math.abs(s);
   const ms = s % 1000;
   s = (s - ms) / 1000;
   const secs = s % 60;
@@ -30,7 +32,7 @@ export function msToTime(s: number, showSeconds: boolean = true) {
   if (hrs === 0 && mins === 0) {
     return onlySecs(secs);
   }
-  return `${timePad(hrs)}:${timePad(mins)}`;
+  return `${sign}${timePad(hrs)}:${timePad(mins)}`;
 }
 
 export function calcDuration(taskTime: ITimeRangeModel[]): number {
@@ -65,7 +67,7 @@ export function getTime(date: Date | undefined) {
   return format(date, TIME_FORMAT);
 }
 
-const EIGHT_HOURS = 8 * 60 * 60 * 1000;
+export const EIGHT_HOURS = 8 * 60 * 60 * 1000;
 
 export function estimateWorkingTimeEnd(
   startDate: Date | undefined,
