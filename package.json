@@ -1,7 +1,7 @@
 {
-  "name": "electron-react-boilerplate",
-  "productName": "ElectronReact",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Fast Refresh for rapid application development",
+  "name": "time-tracker",
+  "productName": "TimeTracker",
+  "description": "Start and stop time, jump between tasks, and add details on how time was spent.",
   "scripts": {
     "build": "concurrently \"yarn build:main\" \"yarn build:renderer\"",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.babel.js",
@@ -87,18 +87,18 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
+      "owner": "time-tracker",
+      "repo": "time-tracker"
     }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
+    "url": "git+https://github.com/Yadro/time-tracker.git"
   },
   "author": {
     "name": "Dmitry Yadrikhinsky",
-    "email": "yadrone@gmail.com",
-    "url": "https://electron-react-boilerplate.js.org"
+    "email": "yadrowork@gmail.com",
+    "url": "https://github.com/Yadro/time-tracker"
   },
   "contributors": [],
   "license": "MIT",
