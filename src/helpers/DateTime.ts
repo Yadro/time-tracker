@@ -1,4 +1,4 @@
-import { ITimeRangeModel } from '../models/TaskModel';
+import { ITimeRangeModel } from '../modules/tasks/models/TaskModel';
 import { format } from 'date-fns';
 import { mapPrevCurrent } from './MapPrevCurrent';
 

@@ -1,8 +1,8 @@
 import { makeAutoObservable } from 'mobx';
 
 import TaskService from './TaskService';
-import TaskModel, { ITimeRangeModel } from '../../models/TaskModel';
-import TasksByProject from '../../models/TasksByProject';
+import TaskModel, { ITimeRangeModel } from './models/TaskModel';
+import TasksByProject from '../../modules/tasks/models/TasksByProject';
 import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
 import BadgeService from '../BadgeService';
 
@@ -88,7 +88,7 @@ export default class TaskStore {
       if (this.tasks.hasOwnProperty(projectKey)) {
         this.tasks[projectKey] = TreeModelStoreHelper.deleteItems(
           this.tasks[projectKey],
-          condition
+          condition,
         );
       }
     }
@@ -131,7 +131,7 @@ export default class TaskStore {
     if (Array.isArray(this.tasks[projectId])) {
       return TreeModelStoreHelper.getFlatItemsRecursive(
         this.tasks[projectId],
-        condition
+        condition,
       ).map((task) => task.key);
     }
     return [];

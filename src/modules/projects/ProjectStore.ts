@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-import ProjectModel from '../../models/ProjectModel';
+import ProjectModel from './ProjectModel';
 import ProjectService from './ProjectService';
 import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
 import { Undefined } from '../../types/CommonTypes';

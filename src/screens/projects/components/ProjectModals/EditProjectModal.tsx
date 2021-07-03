@@ -3,7 +3,7 @@ import { Button, Input, Modal, Space } from 'antd';
 import { DeleteFilled } from '@ant-design/icons';
 import { observer } from 'mobx-react';
 
-import ProjectModel from '../../../../models/ProjectModel';
+import ProjectModel from '../../../../modules/projects/ProjectModel';
 import rootStore from '../../../../modules/RootStore';
 import ChooseColor from './components/ChooseColor';
 
@@ -24,7 +24,7 @@ const EditProjectModal = observer(({ project }: EditProjectModalProps) => {
       setTitle(editProject.title);
       setColor(editProject.color);
     }
-  }, [projectStore.editProject]);
+  }, []);
 
   useEffect(() => {
     setTitle(project?.title || '');

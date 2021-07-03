@@ -1,5 +1,5 @@
 import IService from '../../base/IService';
-import ProjectModel from '../../models/ProjectModel';
+import ProjectModel from './ProjectModel';
 import ProjectFactory from './ProjectFactory';
 import ProjectRepository from './ProjectRepository';
 

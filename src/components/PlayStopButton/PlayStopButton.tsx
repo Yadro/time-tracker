@@ -6,7 +6,7 @@ import { createUseStyles } from 'react-jss';
 
 import CircleButton from '../CircleButton/CircleButton';
 import rootStore from '../../modules/RootStore';
-import TaskModel from '../../models/TaskModel';
+import TaskModel from '../../modules/tasks/models/TaskModel';
 
 const { tasksStore } = rootStore;
 

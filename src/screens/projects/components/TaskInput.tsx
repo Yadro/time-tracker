@@ -3,7 +3,7 @@ import { Input } from 'antd';
 import { observer } from 'mobx-react';
 
 import rootStore from '../../../modules/RootStore';
-import TaskModel from '../../../models/TaskModel';
+import TaskModel from '../../../modules/tasks/models/TaskModel';
 
 export default observer(function TaskInput() {
   const [text, setText] = useState('');

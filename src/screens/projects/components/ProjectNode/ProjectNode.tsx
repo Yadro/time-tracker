@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { createUseStyles } from 'react-jss';
 import clsx from 'clsx';
 
-import ProjectModel from '../../../../models/ProjectModel';
+import ProjectModel from '../../../../modules/projects/ProjectModel';
 import rootStore from '../../../../modules/RootStore';
 
 const { projectStore } = rootStore;

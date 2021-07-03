@@ -1,9 +1,8 @@
-import isSameDay from 'date-fns/isSameDay';
+import { isSameDay, compareAsc } from 'date-fns';
 
-import TaskModel from '../models/TaskModel';
-import TaskTimeItemModel from '../models/TaskTimeItemModel';
-import compareAsc from 'date-fns/compareAsc';
-import TaskWithDurationModel from '../models/TaskWithDurationModel';
+import TaskModel from '../modules/tasks/models/TaskModel';
+import TaskTimeItemModel from '../modules/tasks/models/TaskTimeItemModel';
+import TaskWithDurationModel from '../modules/tasks/models/TaskWithDurationModel';
 
 /**
  * Returns TaskTimeItemModel contains time range
@@ -19,7 +18,7 @@ import TaskWithDurationModel from '../models/TaskWithDurationModel';
  */
 export function getTimeItems(
   tasks: TaskModel[],
-  date: Date
+  date: Date,
 ): TaskTimeItemModel[] {
   let taskTime: TaskTimeItemModel[] = [];
   tasks.forEach((task) => {
@@ -46,9 +45,9 @@ export function getTimeItems(
  */
 export function getTasksWithTotalTimeForDay(
   tasks: TaskModel[],
-  date: Date
+  date: Date,
 ): TaskWithDurationModel[] {
   return tasks.map(
-    (task) => new TaskWithDurationModel(task, task.getDurationByDate(date))
+    (task) => new TaskWithDurationModel(task, task.getDurationByDate(date)),
   );
 }

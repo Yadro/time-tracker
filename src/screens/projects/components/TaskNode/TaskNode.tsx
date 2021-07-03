@@ -7,7 +7,7 @@ import {
 import { observer } from 'mobx-react';
 import { createUseStyles } from 'react-jss';
 
-import TaskModel from '../../../../models/TaskModel';
+import TaskModel from '../../../../modules/tasks/models/TaskModel';
 import rootStore from '../../../../modules/RootStore';
 import * as TaskHooks from '../../../../hooks/TaskHooks';
 

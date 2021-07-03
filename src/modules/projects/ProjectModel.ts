@@ -1,5 +1,5 @@
-import AbstractModel from '../base/AbstractModel';
-import { ITreeItem } from '../types/ITreeItem';
+import AbstractModel from '../../base/AbstractModel';
+import { ITreeItem } from '../../types/ITreeItem';
 
 interface IJsonProjectItem extends ITreeItem<IJsonProjectItem> {
   color: string;

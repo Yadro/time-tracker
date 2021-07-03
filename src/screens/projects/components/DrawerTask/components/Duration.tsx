@@ -5,7 +5,7 @@ import { createUseStyles } from 'react-jss';
 
 import IconTile from '../../../../../components/IconTile/IconTile';
 import PlayStopButton from '../../../../../components/PlayStopButton/PlayStopButton';
-import TaskModel from '../../../../../models/TaskModel';
+import TaskModel from '../../../../../modules/tasks/models/TaskModel';
 import * as TaskHooks from '../../../../../hooks/TaskHooks';
 
 interface DurationProps {
