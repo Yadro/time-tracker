@@ -8,6 +8,7 @@ import TaskControl from '../components/TaskControl/TaskControl';
 import HeaderMenu from '../components/HeaderMenu/HeaderMenu';
 import HoursScreen from './hours/HoursScreen';
 import Dashboard from './dashboard/Dashboard';
+import Profile from '../components/Profile/Profile';
 
 const { Header } = Layout;
 
@@ -26,6 +27,7 @@ export default observer(function Main() {
         </HeaderMenu>
         <span className="flex-1" />
         <TaskControl />
+        <Profile />
       </Header>
       <Switch>
         <Route exact path="/">
