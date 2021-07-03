@@ -1,7 +1,7 @@
 import TaskRepository from './TaskRepository';
 import TaskFactory from './TaskFactory';
 import IService from '../../base/IService';
-import TasksByProject from '../../models/TasksByProject';
+import TasksByProject from './models/TasksByProject';
 
 export default class TaskService implements IService<TasksByProject> {
   taskRepository: TaskRepository = new TaskRepository();
