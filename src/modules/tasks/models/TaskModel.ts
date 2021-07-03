@@ -1,8 +1,8 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import isSameDay from 'date-fns/isSameDay';
 
-import AbstractModel from '../base/AbstractModel';
-import { ITreeItem } from '../types/ITreeItem';
+import AbstractModel from '../../../base/AbstractModel';
+import { ITreeItem } from '../../../types/ITreeItem';
 import { startOfDay } from 'date-fns';
 
 export interface IJsonTimeRangeModel {

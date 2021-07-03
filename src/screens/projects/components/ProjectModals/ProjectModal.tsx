@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Input, Modal, Space } from 'antd';
 
 import rootStore from '../../../../modules/RootStore';
-import ProjectModel from '../../../../models/ProjectModel';
+import ProjectModel from '../../../../modules/projects/ProjectModel';
 import ChooseColor from './components/ChooseColor';
 
 const { projectStore } = rootStore;

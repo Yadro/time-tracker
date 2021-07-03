@@ -1,6 +1,6 @@
 import TaskStore from './tasks/TaskStore';
 import ProjectStore from './projects/ProjectStore';
-import ProjectModel from '../models/ProjectModel';
+import ProjectModel from './projects/ProjectModel';
 
 class RootStore {
   tasksStore = new TaskStore();

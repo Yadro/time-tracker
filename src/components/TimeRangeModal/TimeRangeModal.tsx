@@ -7,8 +7,8 @@ import { observer } from 'mobx-react';
 import isBefore from 'date-fns/isBefore';
 
 import rootStore from '../../modules/RootStore';
-import TaskTimeItemModel from '../../models/TaskTimeItemModel';
-import { ITimeRangeModel } from '../../models/TaskModel';
+import TaskTimeItemModel from '../../modules/tasks/models/TaskTimeItemModel';
+import { ITimeRangeModel } from '../../modules/tasks/models/TaskModel';
 import { Undefined } from '../../types/CommonTypes';
 import TimeRangeDuration from './components/TimeRangeDuration';
 

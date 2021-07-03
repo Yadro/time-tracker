@@ -7,12 +7,12 @@ import HoursCard from './components/HoursCard/HoursCard';
 import { getTimeItems } from '../../helpers/TaskHelper';
 import SelectDate from '../../components/SelectDate/SelectDate';
 import TimeRangeModal from '../../components/TimeRangeModal/TimeRangeModal';
-import TaskTimeItemModel from '../../models/TaskTimeItemModel';
+import TaskTimeItemModel from '../../modules/tasks/models/TaskTimeItemModel';
 import { Undefined } from '../../types/CommonTypes';
 import TotalHours from './components/TotalHours/TotalHours';
 import { createUseStyles } from 'react-jss';
 import { mapCurrentNext } from '../../helpers/ArrayHelper';
-import { ITimeRangeModel } from '../../models/TaskModel';
+import { ITimeRangeModel } from '../../modules/tasks/models/TaskModel';
 import { msToTime } from '../../helpers/DateTime';
 
 const { tasksStore } = rootStore;
