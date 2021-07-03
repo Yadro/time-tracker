@@ -4,15 +4,19 @@ import ProjectFactory from './ProjectFactory';
 import ProjectRepository from './ProjectRepository';
 
 export default class ProjectService implements IService<ProjectModel[]> {
-  projectFactory = new ProjectFactory();
-  projectRepository = new ProjectRepository();
+  factory = new ProjectFactory();
+  repository = new ProjectRepository();
+
+  setProfile(profile: string) {
+    this.repository.setProfile(profile);
+  }
 
   getAll(): ProjectModel[] {
-    const data = this.projectRepository.restore([]);
-    return this.projectFactory.createList(ProjectModel, data);
+    const data = this.repository.restore([]);
+    return this.factory.createList(ProjectModel, data);
   }
 
   save(data: ProjectModel[]): void {
-    this.projectRepository.save(data);
+    this.repository.save(data);
   }
 }

@@ -1,9 +1,10 @@
-import { makeAutoObservable } from 'mobx';
+import { autorun, makeAutoObservable } from 'mobx';
 
 import ProjectModel from './ProjectModel';
 import ProjectService from './ProjectService';
 import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
 import { Undefined } from '../../types/CommonTypes';
+import {RootStore} from '../RootStore';
 
 export default class ProjectStore {
   projects: ProjectModel[] = [];
@@ -12,8 +13,14 @@ export default class ProjectStore {
 
   private projectService = new ProjectService();
 
-  constructor() {
+  constructor(private rootStore: RootStore) {
     makeAutoObservable(this);
+    autorun(() => {
+      const profile = this.rootStore.settingsStore.settings.currentProfile;
+      if (profile) {
+        this.projectService.setProfile(profile);
+      }
+    });
   }
 
   set(projects: ProjectModel[]) {
@@ -33,7 +40,7 @@ export default class ProjectStore {
   setProjectProps(
     project: ProjectModel,
     title: string,
-    color: string | undefined
+    color: string | undefined,
   ) {
     project.title = title;
     project.color = color || '';

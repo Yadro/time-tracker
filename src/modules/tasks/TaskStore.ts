@@ -1,10 +1,11 @@
-import { makeAutoObservable } from 'mobx';
+import { autorun, makeAutoObservable } from 'mobx';
 
 import TaskService from './TaskService';
 import TaskModel, { ITimeRangeModel } from './models/TaskModel';
 import TasksByProject from '../../modules/tasks/models/TasksByProject';
 import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
 import BadgeService from '../BadgeService';
+import { RootStore } from '../RootStore';
 
 export default class TaskStore {
   tasks: TasksByProject = {};
@@ -12,8 +13,14 @@ export default class TaskStore {
   private tasksService = new TaskService();
   private interval: NodeJS.Timeout | undefined;
 
-  constructor() {
+  constructor(private rootStore: RootStore) {
     makeAutoObservable(this);
+    autorun(() => {
+      const profile = this.rootStore.settingsStore.settings.currentProfile;
+      if (profile) {
+        this.tasksService.setProfile(profile);
+      }
+    });
   }
 
   set(projectId: string, tasks: TaskModel[]) {

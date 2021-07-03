@@ -1,5 +1,5 @@
 import AbstractFileRepository from '../../base/repositories/AbstractFileRepository';
-import TasksByProject from '../../models/TasksByProject';
+import TasksByProject from './models/TasksByProject';
 
 export default class TaskRepository extends AbstractFileRepository<
   TasksByProject
