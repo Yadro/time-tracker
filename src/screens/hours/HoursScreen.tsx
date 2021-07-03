@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Layout, Space } from 'antd';
 import { observer } from 'mobx-react';
+import * as Sentry from '@sentry/electron';
 
 import rootStore from '../../modules/RootStore';
 import HoursCard from './components/HoursCard/HoursCard';
@@ -38,9 +39,14 @@ export default observer(function HoursView() {
   const tasks = useMemo(() => tasksStore.getTasksByDate(date), [date]);
   const timeItems = getTimeItems(tasks, date);
 
+  useEffect(() => {
+    Sentry.captureException(new Error(`${process.env.NODE_ENV} exception`));
+  }, []);
+
   return (
     <Layout className={classes.hours}>
       <Space direction="vertical">
+        {`${process.env.NODE_ENV} ${process.env.NODE_ENV === 'production'}`}
         <SelectDate date={date} onChange={setDate} />
         <TotalHours timeItems={timeItems} />
         <div className={classes.cards}>
