@@ -12,13 +12,12 @@ import Duration from './components/Duration';
 import TimeRangeModal from '../../../../components/TimeRangeModal/TimeRangeModal';
 import { Undefined } from '../../../../types/CommonTypes';
 import TaskTimeItemModel from '../../../../modules/tasks/models/TaskTimeItemModel';
+import IModalProps from '../../../../types/IModalProps';
 
 const { projectStore } = rootStore;
 
-interface DrawerTaskProps {
-  task: TaskModel | undefined;
-  visible: boolean;
-  onClose: () => void;
+interface DrawerTaskProps extends IModalProps {
+  task?: TaskModel;
 }
 
 export default observer(function DrawerTask({
