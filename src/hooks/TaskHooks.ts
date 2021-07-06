@@ -34,7 +34,7 @@ export function useTaskDuration(model: TaskModel | undefined) {
 
 export function useTimeItemsDuration(taskTime: TaskTimeItemModel[]) {
   const [durationMs, setDurationMs] = useState<number>(0);
-  const [gapsMs, setGapsMs] = useState<number>(0);
+  const [restMs, setRestMs] = useState<number>(0);
   const intervalRef = useRef<NodeJS.Timeout>();
 
   const calcTaskDuration = useCallback(
@@ -49,18 +49,15 @@ export function useTimeItemsDuration(taskTime: TaskTimeItemModel[]) {
 
   const setTimes = useCallback(() => {
     setDurationMs(calcTaskDuration());
-    setGapsMs(calcTaskGapsDuration());
+    setRestMs(calcTaskGapsDuration());
   }, [calcTaskDuration, calcTaskGapsDuration]);
 
   useEffect(() => {
     setTimes();
 
-    const haveActiveTime = taskTime.some((t) => !t.time.end);
-    if (haveActiveTime) {
-      intervalRef.current = setInterval(() => {
-        setTimes();
-      }, 1000);
-    }
+    intervalRef.current = setInterval(() => {
+      setTimes();
+    }, 1000);
 
     return () => {
       if (intervalRef.current) {
@@ -71,7 +68,7 @@ export function useTimeItemsDuration(taskTime: TaskTimeItemModel[]) {
 
   return {
     durationMs,
-    gapsMs,
+    restMs,
   };
 }
 

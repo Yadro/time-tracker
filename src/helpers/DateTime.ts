@@ -1,6 +1,6 @@
 import { ITimeRangeModel } from '../models/TaskModel';
 import { format } from 'date-fns';
-import { mapPrevCurrent } from './MapPrevCurrent';
+import { iterPrevCurrent } from './ArrayHelper';
 
 function timePad(time: number): string {
   return String(time).padStart(2, '0');
@@ -49,11 +49,17 @@ export function calcDuration(taskTime: ITimeRangeModel[]): number {
 
 export function calcDurationGaps(taskTime: ITimeRangeModel[]): number {
   let result = 0;
-  mapPrevCurrent(taskTime, (prev, cur) => {
+  iterPrevCurrent(taskTime, (prev, cur) => {
     if (prev?.end) {
       result += cur.start.getTime() - prev.end.getTime();
     }
   });
+
+  const lastTask = taskTime[taskTime.length - 1];
+  if (lastTask && lastTask.end) {
+    result += new Date().getTime() - lastTask.end.getTime();
+  }
+
   return result;
 }
 

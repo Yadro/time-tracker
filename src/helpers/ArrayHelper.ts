@@ -1,6 +1,19 @@
 type CallbackPrev<T, R> = (prev: T | undefined, cur: T, index: number) => R;
 
-export function mapPrevCurrent<T, R = any>(
+export function iterPrevCurrent<T, R = any>(
+  items: T[],
+  callback: CallbackPrev<T, R>
+) {
+  for (let i = 0; i < items.length; i++) {
+    if (i === 0) {
+      callback(undefined, items[i], i);
+    } else {
+      callback(items[i - 1], items[i], i);
+    }
+  }
+}
+
+export function arrayHelper<T, R = any>(
   items: T[],
   callback: CallbackPrev<T, R>
 ): R[] {

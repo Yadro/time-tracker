@@ -10,8 +10,6 @@ import {
   getTime,
   msToTime,
 } from '../../../../helpers/DateTime';
-import { createUseStyles } from 'react-jss';
-import clsx from 'clsx';
 import LabelWithTooltip, { ILabelWithTooltipProps } from './LabelWithTooltip';
 
 interface TotalHoursProps {
@@ -20,13 +18,12 @@ interface TotalHoursProps {
 
 const TotalHours = observer((props: TotalHoursProps) => {
   const { timeItems } = props;
-  const classes = useStyle();
 
-  const { durationMs, gapsMs } = TaskHooks.useTimeItemsDuration(timeItems);
+  const { durationMs, restMs } = TaskHooks.useTimeItemsDuration(timeItems);
   const startWorkingTime = TaskHooks.useStartWorkingTime(timeItems);
   const estimatedWorkingTimeEnd = estimateWorkingTimeEnd(
     startWorkingTime,
-    gapsMs
+    restMs
   );
   const restHoursMs = EIGHT_HOURS - durationMs;
 
@@ -46,7 +43,7 @@ const TotalHours = observer((props: TotalHoursProps) => {
     },
     {
       icon: 'mi-local-cafe',
-      label: msToTime(gapsMs, false),
+      label: msToTime(restMs, false),
       tooltip: 'Rest hours',
     },
     {
@@ -67,18 +64,6 @@ const TotalHours = observer((props: TotalHoursProps) => {
       ))}
     </Space>
   );
-});
-
-const useStyle = createUseStyles({
-  iconAndLabel: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  icon: {
-    fontSize: 18,
-    color: '#5f6368',
-    marginRight: 4,
-  },
 });
 
 export default TotalHours;

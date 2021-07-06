@@ -12,7 +12,7 @@ import TaskTimeItemModel from '../../models/TaskTimeItemModel';
 import { Undefined } from '../../types/CommonTypes';
 import TotalHours from './components/TotalHours/TotalHours';
 import { createUseStyles } from 'react-jss';
-import { mapCurrentNext } from '../../helpers/MapPrevCurrent';
+import { mapCurrentNext } from '../../helpers/ArrayHelper';
 import { ITimeRangeModel } from '../../models/TaskModel';
 import { msToTime } from '../../helpers/DateTime';
 
