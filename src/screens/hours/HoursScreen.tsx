@@ -46,7 +46,6 @@ export default observer(function HoursView() {
   return (
     <Layout className={classes.hours}>
       <Space direction="vertical">
-        {`${process.env.NODE_ENV} ${process.env.NODE_ENV === 'production'}`}
         <SelectDate date={date} onChange={setDate} />
         <TotalHours timeItems={timeItems} />
         <div className={classes.cards}>

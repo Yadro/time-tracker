@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Space } from 'antd';
+import { Space, Tooltip } from 'antd';
 
 import * as TaskHooks from '../../../../hooks/TaskHooks';
 import TaskTimeItemModel from '../../../../models/TaskTimeItemModel';
@@ -12,6 +12,7 @@ import {
 } from '../../../../helpers/DateTime';
 import { createUseStyles } from 'react-jss';
 import clsx from 'clsx';
+import LabelWithTooltip, { ILabelWithTooltipProps } from './LabelWithTooltip';
 
 interface TotalHoursProps {
   timeItems: TaskTimeItemModel[];
@@ -33,29 +34,50 @@ const TotalHours = observer((props: TotalHoursProps) => {
     return null;
   }
 
+  const items: ILabelWithTooltipProps[] = [
+    {
+      label: getTime(startWorkingTime),
+      tooltip: 'Start time',
+    },
+    {
+      icon: 'mi-work-outline',
+      label: msToTime(durationMs, false),
+      tooltip: 'Working hours',
+    },
+    {
+      icon: 'mi-local-cafe',
+      label: msToTime(gapsMs, false),
+      tooltip: 'Rest hours',
+    },
+    {
+      icon: 'mi-notifications',
+      label: getTime(estimatedWorkingTimeEnd),
+      tooltip: 'Estimated end of working hours',
+    },
+    {
+      label: msToTime(restHoursMs, false),
+      tooltip: 'Left to work',
+    },
+  ];
+
   return (
-    <Space>
-      <span>{getTime(startWorkingTime)}</span>
-      <div>
-        <span className={clsx('mi mi-work-outline', classes.icon)} />
-        <span>{msToTime(durationMs, false)}</span>
-      </div>
-      <div>
-        <span className={clsx('mi mi-local-cafe', classes.icon)} />
-        <span>{msToTime(gapsMs, false)}</span>
-      </div>
-      <div>
-        <span className={clsx('mi mi-notifications', classes.icon)} />
-        <span>{getTime(estimatedWorkingTimeEnd)}</span>
-      </div>
-      <span>{msToTime(restHoursMs, false)}</span>
+    <Space size="middle">
+      {items.map((props, index) => (
+        <LabelWithTooltip key={index} {...props} />
+      ))}
     </Space>
   );
 });
 
 const useStyle = createUseStyles({
+  iconAndLabel: {
+    display: 'flex',
+    alignItems: 'center',
+  },
   icon: {
     fontSize: 18,
+    color: '#5f6368',
+    marginRight: 4,
   },
 });
 
