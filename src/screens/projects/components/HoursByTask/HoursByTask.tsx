@@ -7,7 +7,7 @@ import { observer } from 'mobx-react';
 import { createUseStyles } from 'react-jss';
 
 import TaskModel, { ITimeRangeModel } from '../../../../models/TaskModel';
-import { arrayHelpers } from '../../../../helpers/ArrayHelper';
+import { mapPrevCurrent } from '../../../../helpers/ArrayHelper';
 import HoursItem from './components/HoursItem';
 import IconTile from '../../../../components/IconTile/IconTile';
 import { calcDuration, msToTime } from '../../../../helpers/DateTime';
@@ -40,7 +40,7 @@ export default observer(function HoursByTask({
           <BellFilled style={{ color: 'white' }} />
         </IconTile>
         {task?.time.length === 0 && <div>No billed hours</div>}
-        {arrayHelpers(task?.time || [], (prev, range, index) => {
+        {mapPrevCurrent(task?.time || [], (prev, range, index) => {
           const hoursItem = (
             <HoursItem
               range={range}

@@ -13,7 +13,7 @@ export function iterPrevCurrent<T, R = any>(
   }
 }
 
-export function arrayHelper<T, R = any>(
+export function mapPrevCurrent<T, R = any>(
   items: T[],
   callback: CallbackPrev<T, R>
 ): R[] {
