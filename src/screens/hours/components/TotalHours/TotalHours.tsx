@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Space, Tooltip } from 'antd';
+import { Space } from 'antd';
 
 import * as TaskHooks from '../../../../hooks/TaskHooks';
 import TaskTimeItemModel from '../../../../models/TaskTimeItemModel';
@@ -49,11 +49,11 @@ const TotalHours = observer((props: TotalHoursProps) => {
     {
       icon: 'mi-notifications',
       label: getTime(estimatedWorkingTimeEnd),
-      tooltip: 'Estimated end of working hours',
+      tooltip: 'Estimated end time',
     },
     {
       label: msToTime(restHoursMs, false),
-      tooltip: 'Left to work',
+      tooltip: 'Time left',
     },
   ];
 
