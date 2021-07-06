@@ -8,8 +8,8 @@ import { observer } from 'mobx-react';
 import { createUseStyles } from 'react-jss';
 
 import TaskModel from '../../../../models/TaskModel';
-import rootStore from '../../../../services/RootStore';
-import { useTaskDuration } from '../../../../hooks/TaskHooks';
+import rootStore from '../../../../modules/RootStore';
+import * as TaskHooks from '../../../../hooks/TaskHooks';
 
 const { tasksStore } = rootStore;
 
@@ -20,7 +20,7 @@ interface TaskNodeProps {
 export default observer(function TaskNode({ task }: TaskNodeProps) {
   const classes = useStyle();
 
-  const duration = useTaskDuration(task);
+  const duration = TaskHooks.useTaskDuration(task);
 
   function preventDefault(fn: () => void) {
     return (e: SyntheticEvent) => {

@@ -7,7 +7,7 @@ import { observer } from 'mobx-react';
 import { createUseStyles } from 'react-jss';
 
 import TaskModel, { ITimeRangeModel } from '../../../../models/TaskModel';
-import { mapPrevCurrent } from '../../../../helpers/IterateLastCurrent';
+import { mapPrevCurrent } from '../../../../helpers/ArrayHelper';
 import HoursItem from './components/HoursItem';
 import IconTile from '../../../../components/IconTile/IconTile';
 import { calcDuration, msToTime } from '../../../../helpers/DateTime';

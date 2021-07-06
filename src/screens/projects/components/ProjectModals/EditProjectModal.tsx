@@ -4,7 +4,7 @@ import { DeleteFilled } from '@ant-design/icons';
 import { observer } from 'mobx-react';
 
 import ProjectModel from '../../../../models/ProjectModel';
-import rootStore from '../../../../services/RootStore';
+import rootStore from '../../../../modules/RootStore';
 import ChooseColor from './components/ChooseColor';
 
 const { projectStore } = rootStore;
@@ -14,14 +14,12 @@ interface EditProjectModalProps {
   onClose: () => void;
 }
 
-export default observer(function EditProjectModal({
-  project,
-}: EditProjectModalProps) {
+const EditProjectModal = observer(({ project }: EditProjectModalProps) => {
   const [title, setTitle] = useState<string>('');
   const [color, setColor] = useState<string>('');
 
   useEffect(() => {
-    const editProject = projectStore.editProject;
+    const { editProject } = projectStore;
     if (editProject) {
       setTitle(editProject.title);
       setColor(editProject.color);
@@ -79,3 +77,5 @@ export default observer(function EditProjectModal({
     </Modal>
   );
 });
+
+export default EditProjectModal;

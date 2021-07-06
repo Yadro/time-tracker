@@ -3,9 +3,10 @@ import { Button, Layout, Space } from 'antd';
 import { observer } from 'mobx-react';
 import { Key } from 'rc-tree/lib/interface';
 import { createUseStyles } from 'react-jss';
+import { PlusOutlined } from '@ant-design/icons';
 
 import TaskInput from './components/TaskInput';
-import rootStore from '../../services/RootStore';
+import rootStore from '../../modules/RootStore';
 import TreeList from './components/TreeList';
 import TaskModel from '../../models/TaskModel';
 import ProjectModel from '../../models/ProjectModel';
@@ -14,7 +15,6 @@ import TaskNode from './components/TaskNode/TaskNode';
 import DrawerTask from './components/DrawerTask/DrawerTask';
 import ProjectNode from './components/ProjectNode/ProjectNode';
 import EditProjectModal from './components/ProjectModals/EditProjectModal';
-import { PlusOutlined } from '@ant-design/icons';
 
 const { Sider } = Layout;
 
@@ -27,7 +27,7 @@ const TaskList = TreeList(
   },
   {
     checkable: true,
-    onCheck(keys) {
+    onCheck(keys: any) {
       tasksStore.checkTasks(projectStore.activeProject, keys as string[]);
     },
     getCheckedKeys() {
@@ -45,8 +45,14 @@ const ProjectList = TreeList(
     projectStore.set(list);
   },
   {
+    selectable: false,
     titleRender(project: ProjectModel) {
-      return <ProjectNode project={project} />;
+      return (
+        <ProjectNode
+          project={project}
+          active={projectStore.activeProject === project.key}
+        />
+      );
     },
   }
 );
@@ -78,7 +84,7 @@ export default observer(function Projects() {
   return (
     <Layout>
       <Sider width={250} className={classes.sider}>
-        <Layout style={{ padding: '12px' }} className="side-bar">
+        <Layout style={{ padding: '12px' }}>
           <Space direction="vertical">
             <ProjectList onSelect={handleSelectProject} />
             <Button onClick={handleCreateProject} icon={<PlusOutlined />}>

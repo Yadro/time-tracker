@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { createUseStyles } from 'react-jss';
 
 import CircleButton from '../CircleButton/CircleButton';
-import rootStore from '../../services/RootStore';
+import rootStore from '../../modules/RootStore';
 import TaskModel from '../../models/TaskModel';
 
 const { tasksStore } = rootStore;

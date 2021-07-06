@@ -1,5 +1,4 @@
 import { makeAutoObservable } from 'mobx';
-import { ipcRenderer } from 'electron';
 
 import TaskService from './TaskService';
 import TaskModel, { ITimeRangeModel } from '../../models/TaskModel';
@@ -61,7 +60,7 @@ export default class TaskStore {
     }
 
     for (const tasks of Object.values(this.tasks)) {
-      TreeModelStoreHelper.getFlatItemsRecursive(tasks, condition, result);
+      TreeModelStoreHelper.getFlatItemsRecursiveBase(tasks, condition, result);
     }
     return result;
   }
@@ -130,13 +129,10 @@ export default class TaskStore {
     }
 
     if (Array.isArray(this.tasks[projectId])) {
-      const found: TaskModel[] = [];
-      TreeModelStoreHelper.getFlatItemsRecursive(
+      return TreeModelStoreHelper.getFlatItemsRecursive(
         this.tasks[projectId],
-        condition,
-        found
-      );
-      return found.map((f) => f.key);
+        condition
+      ).map((task) => task.key);
     }
     return [];
   }

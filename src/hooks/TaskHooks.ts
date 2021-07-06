@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { isBefore } from 'date-fns';
 
-import { calcDuration, msToTime } from '../helpers/DateTime';
+import { calcDuration, calcDurationGaps, msToTime } from '../helpers/DateTime';
 import TaskModel, { ITimeRangeModel } from '../models/TaskModel';
 import TaskTimeItemModel from '../models/TaskTimeItemModel';
 
 export function useTaskDuration(model: TaskModel | undefined) {
-  model = model || ({} as TaskModel);
-
   const intervalRef = useRef<NodeJS.Timeout>();
   const [duration, setDuration] = useState<string>('');
 
@@ -28,53 +27,70 @@ export function useTaskDuration(model: TaskModel | undefined) {
         clearInterval(intervalRef.current);
       }
     };
-  }, [model, model.active]);
+  }, [model, model?.active]);
 
   return duration;
 }
 
-export function useTimeItemsDuration(
-  taskTime: TaskTimeItemModel[],
-  showSeconds: boolean = false
-) {
-  const [duration, setDuration] = useState<string>('');
+export function useTimeItemsDuration(taskTime: TaskTimeItemModel[]) {
+  const [durationMs, setDurationMs] = useState<number>(0);
+  const [restMs, setRestMs] = useState<number>(0);
   const intervalRef = useRef<NodeJS.Timeout>();
 
+  const calcTaskDuration = useCallback(
+    () => calcDuration(taskTime.map((t) => t.time)),
+    [taskTime]
+  );
+
+  const calcTaskGapsDuration = useCallback(
+    () => calcDurationGaps(taskTime.map((t) => t.time)),
+    [taskTime]
+  );
+
+  const setTimes = useCallback(() => {
+    setDurationMs(calcTaskDuration());
+    setRestMs(calcTaskGapsDuration());
+  }, [calcTaskDuration, calcTaskGapsDuration]);
+
   useEffect(() => {
-    const haveActiveTime = taskTime.some((t) => !t.time.end);
-    setDuration(
-      msToTime(calcDuration(taskTime.map((t) => t.time)), showSeconds)
-    );
-    if (haveActiveTime) {
-      intervalRef.current = setInterval(() => {
-        setDuration(
-          msToTime(calcDuration(taskTime.map((t) => t.time)), showSeconds)
-        );
-      }, 1000);
-    }
+    setTimes();
+
+    intervalRef.current = setInterval(() => {
+      setTimes();
+    }, 1000);
+
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
     };
-  }, [taskTime]);
+  }, [setTimes, taskTime]);
 
-  return duration;
+  return {
+    durationMs,
+    restMs,
+  };
 }
 
 export function useTimeRangeDuration(timeRange: ITimeRangeModel | undefined) {
   const [duration, setDuration] = useState<string>('');
   const intervalRef = useRef<NodeJS.Timeout>();
 
+  const calcTimeRangeDuration = useCallback(
+    () => msToTime(timeRange ? calcDuration([timeRange]) : 0),
+    [timeRange]
+  );
+
   useEffect(() => {
     if (!timeRange) {
       return;
     }
+    setDuration(calcTimeRangeDuration());
+
     const haveActiveTime = !timeRange.end;
-    setDuration(msToTime(calcDuration([timeRange])));
     if (haveActiveTime) {
       intervalRef.current = setInterval(() => {
-        setDuration(msToTime(calcDuration([timeRange])));
+        setDuration(calcTimeRangeDuration());
       }, 1000);
     }
     return () => {
@@ -82,7 +98,21 @@ export function useTimeRangeDuration(timeRange: ITimeRangeModel | undefined) {
         clearInterval(intervalRef.current);
       }
     };
-  }, [timeRange]);
+  }, [calcTimeRangeDuration, timeRange]);
 
   return duration;
+}
+
+export function useStartWorkingTime(
+  timeItems: TaskTimeItemModel[]
+): Date | undefined {
+  return useMemo(() => {
+    let minTime: Date | undefined;
+    timeItems.forEach((time) => {
+      if (!minTime || isBefore(time.time.start, minTime)) {
+        minTime = time.time.start;
+      }
+    });
+    return minTime;
+  }, [timeItems]);
 }

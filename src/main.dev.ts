@@ -10,12 +10,17 @@
  */
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
+require('dotenv').config();
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import Badge from 'electron-windows-badge';
+
 import MenuBuilder from './menu';
+import { initSentry } from './shared/initSentry';
+
+initSentry();
 
 console.log('Working path:', app.getAppPath());
 

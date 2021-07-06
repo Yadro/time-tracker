@@ -3,8 +3,21 @@ import isSameDay from 'date-fns/isSameDay';
 import TaskModel from '../models/TaskModel';
 import TaskTimeItemModel from '../models/TaskTimeItemModel';
 import compareAsc from 'date-fns/compareAsc';
+import TaskWithDurationModel from '../models/TaskWithDurationModel';
 
-export default function getTimeItems(
+/**
+ * Returns TaskTimeItemModel contains time range
+ * return {
+ *   task,
+ *   time: {
+ *     start: Date,
+ *     end: Date,
+ *     description
+ *   },
+ *   index,
+ * }
+ */
+export function getTimeItems(
   tasks: TaskModel[],
   date: Date
 ): TaskTimeItemModel[] {
@@ -24,4 +37,18 @@ export default function getTimeItems(
   });
   taskTime = taskTime.sort((a, b) => compareAsc(a.time.start, b.time.start));
   return taskTime;
+}
+
+/**
+ * Return tasks with total time for selected day
+ * @param tasks
+ * @param date
+ */
+export function getTasksWithTotalTimeForDay(
+  tasks: TaskModel[],
+  date: Date
+): TaskWithDurationModel[] {
+  return tasks.map(
+    (task) => new TaskWithDurationModel(task, task.getDurationByDate(date))
+  );
 }

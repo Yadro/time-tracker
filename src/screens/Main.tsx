@@ -3,10 +3,11 @@ import { Route, Switch, Link, Redirect } from 'react-router-dom';
 import { Layout } from 'antd';
 import { observer } from 'mobx-react';
 
-import Projects from './projects/Projects';
+import ProjectsScreen from './projects/ProjectsScreen';
 import TaskControl from '../components/TaskControl/TaskControl';
 import HeaderMenu from '../components/HeaderMenu/HeaderMenu';
-import HoursView from './hours/HoursView';
+import HoursScreen from './hours/HoursScreen';
+import Dashboard from './dashboard/Dashboard';
 
 const { Header } = Layout;
 
@@ -20,6 +21,9 @@ export default observer(function Main() {
         <HeaderMenu>
           <Link to="/projects">Projects</Link>
         </HeaderMenu>
+        <HeaderMenu>
+          <Link to="/dashboard">Dashboard</Link>
+        </HeaderMenu>
         <span className="flex-1" />
         <TaskControl />
       </Header>
@@ -28,10 +32,13 @@ export default observer(function Main() {
           <Redirect to="/projects" />
         </Route>
         <Route path="/hours">
-          <HoursView />
+          <HoursScreen />
         </Route>
         <Route path="/projects">
-          <Projects />
+          <ProjectsScreen />
+        </Route>
+        <Route path="/dashboard">
+          <Dashboard />
         </Route>
       </Switch>
     </Layout>

@@ -3,6 +3,7 @@ import isSameDay from 'date-fns/isSameDay';
 
 import AbstractModel from '../base/AbstractModel';
 import { ITreeItem } from '../types/ITreeItem';
+import { startOfDay } from 'date-fns';
 
 export interface IJsonTimeRangeModel {
   start: string;
@@ -11,7 +12,7 @@ export interface IJsonTimeRangeModel {
 }
 
 export interface ITimeRangeModel {
-  start?: Date;
+  start: Date;
   end?: Date;
   description?: string;
 }
@@ -36,7 +37,6 @@ export default class TaskModel extends AbstractModel {
   time: ITimeRangeModel[] = [];
   datesInProgress: Date[] = [];
   details: string = '';
-  deleted: boolean = false;
 
   constructor(props: IJsonTaskModel) {
     super();
@@ -82,10 +82,21 @@ export default class TaskModel extends AbstractModel {
   }
 
   get duration() {
-    return this.time.reduce((prev: number, range: ITimeRangeModel) => {
+    return this.time.reduce((acc: number, range: ITimeRangeModel) => {
       const { start, end } = range;
       const duration = (end ? end.getTime() : Date.now()) - start.getTime();
-      return prev + duration;
+      return acc + duration;
+    }, 0);
+  }
+
+  getDurationByDate(date: Date) {
+    return this.time.reduce((acc: number, range: ITimeRangeModel) => {
+      const { start, end } = range;
+      let duration = 0;
+      if (isSameDay(start, date)) {
+        duration = (end ? end.getTime() : Date.now()) - start.getTime();
+      }
+      return acc + duration;
     }, 0);
   }
 
@@ -99,10 +110,6 @@ export default class TaskModel extends AbstractModel {
 
   setChecked(checked: boolean) {
     this.checked = checked;
-  }
-
-  setDeleted() {
-    this.deleted = true;
   }
 
   start() {
@@ -128,9 +135,10 @@ export default class TaskModel extends AbstractModel {
   }
 
   private addDateWhenWasInProgress(date: Date) {
-    const found = this.datesInProgress.find((d) => isSameDay(d, date));
+    const normalDate = startOfDay(date);
+    const found = this.datesInProgress.find((d) => isSameDay(d, normalDate));
     if (!found) {
-      this.datesInProgress.push(date);
+      this.datesInProgress.push(normalDate);
     }
   }
 }

@@ -6,7 +6,7 @@ import { createUseStyles } from 'react-jss';
 import IconTile from '../../../../../components/IconTile/IconTile';
 import PlayStopButton from '../../../../../components/PlayStopButton/PlayStopButton';
 import TaskModel from '../../../../../models/TaskModel';
-import { useTaskDuration } from '../../../../../hooks/TaskHooks';
+import * as TaskHooks from '../../../../../hooks/TaskHooks';
 
 interface DurationProps {
   task?: TaskModel;
@@ -14,7 +14,7 @@ interface DurationProps {
 
 export default observer(function Duration({ task }: DurationProps) {
   const classes = useStyle();
-  const duration = useTaskDuration(task);
+  const duration = TaskHooks.useTaskDuration(task);
 
   return (
     <div className={classes.root}>
