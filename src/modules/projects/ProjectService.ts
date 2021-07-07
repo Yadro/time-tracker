@@ -1,5 +1,5 @@
 import IService from '../../base/IService';
-import ProjectModel from './ProjectModel';
+import ProjectModel, { DEFAULT_PROJECTS } from './models/ProjectModel';
 import ProjectFactory from './ProjectFactory';
 import ProjectRepository from './ProjectRepository';
 
@@ -8,7 +8,7 @@ export default class ProjectService implements IService<ProjectModel[]> {
   projectRepository = new ProjectRepository();
 
   getAll(): ProjectModel[] {
-    const data = this.projectRepository.restore([]);
+    const data = this.projectRepository.restore(DEFAULT_PROJECTS);
     return this.projectFactory.createList(ProjectModel, data);
   }
 

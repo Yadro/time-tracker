@@ -9,7 +9,7 @@ import TaskInput from './components/TaskInput';
 import rootStore from '../../modules/RootStore';
 import TreeList from './components/TreeList';
 import TaskModel from '../../modules/tasks/models/TaskModel';
-import ProjectModel from '../../modules/projects/ProjectModel';
+import ProjectModel from '../../modules/projects/models/ProjectModel';
 import ProjectModal from './components/ProjectModals/ProjectModal';
 import TaskNode from './components/TaskNode/TaskNode';
 import DrawerTask from './components/DrawerTask/DrawerTask';

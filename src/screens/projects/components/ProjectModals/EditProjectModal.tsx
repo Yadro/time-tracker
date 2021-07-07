@@ -3,7 +3,7 @@ import { Button, Input, Modal, Space } from 'antd';
 import { DeleteFilled } from '@ant-design/icons';
 import { observer } from 'mobx-react';
 
-import ProjectModel from '../../../../modules/projects/ProjectModel';
+import ProjectModel from '../../../../modules/projects/models/ProjectModel';
 import rootStore from '../../../../modules/RootStore';
 import ChooseColor from './components/ChooseColor';
 
