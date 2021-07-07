@@ -1,5 +1,4 @@
-# 🕒 Time Tracker
-Track time, add notes, view reports of your time, and more.
+# 🕘 Track time, add notes, view reports of your time, and more.
 
 Start and stop time, jump between tasks, and add details on how time was spent.
 
@@ -9,8 +8,8 @@ Start and stop time, jump between tasks, and add details on how time was spent.
 - create tasks with subtasks (drag&drop supported)
 - track time in tasks
 - change start time and end time of tasks
-- add details on how time was spen
-- receive notifications when task is in progress or when you are idle
+- add details on how time was spent
+- receive notifications when a task is in progress or when you are idle
 
 ## Screenshots
 <img src=".github/hours-screenshot.png" />
