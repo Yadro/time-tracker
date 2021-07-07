@@ -1,4 +1,5 @@
-# 🕘 Track time, add notes, view reports of your time, and more.
+# 🕘 TimeTracker
+Track time, add notes, view reports of your time, and more.
 
 Start and stop time, jump between tasks, and add details on how time was spent.
 
