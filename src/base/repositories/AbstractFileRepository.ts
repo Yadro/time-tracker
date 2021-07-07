@@ -18,7 +18,7 @@ export default abstract class AbstractFileRepository<T = any> {
     return path.join(
       AbstractFileRepository.appDataFolder,
       APP_FOLDER,
-      PROFILE_FOLDER,
+      PROFILE_FOLDER
     );
   }
 

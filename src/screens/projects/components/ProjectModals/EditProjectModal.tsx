@@ -17,6 +17,7 @@ interface EditProjectModalProps {
 const EditProjectModal = observer(({ project }: EditProjectModalProps) => {
   const [title, setTitle] = useState<string>('');
   const [color, setColor] = useState<string>('');
+  const canDelete = projectStore.projects.length > 1;
 
   useEffect(() => {
     const { editProject } = projectStore;
@@ -42,7 +43,7 @@ const EditProjectModal = observer(({ project }: EditProjectModalProps) => {
   }
 
   function handleDelete() {
-    if (project) {
+    if (project && canDelete) {
       rootStore.deleteProject(project);
     }
     onClose();
@@ -70,7 +71,11 @@ const EditProjectModal = observer(({ project }: EditProjectModalProps) => {
           activeColor={color}
           onChoose={(color) => setColor(color)}
         />
-        <Button icon={<DeleteFilled />} onClick={handleDelete}>
+        <Button
+          icon={<DeleteFilled />}
+          onClick={handleDelete}
+          disabled={!canDelete}
+        >
           Delete
         </Button>
       </Space>
