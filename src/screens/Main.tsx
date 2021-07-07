@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Switch, Link, Redirect } from 'react-router-dom';
 import { Layout } from 'antd';
-import { observer } from 'mobx-react';
 
 import ProjectsScreen from './projects/ProjectsScreen';
 import TaskControl from '../components/TaskControl/TaskControl';
@@ -11,7 +10,7 @@ import Dashboard from './dashboard/Dashboard';
 
 const { Header } = Layout;
 
-export default observer(function Main() {
+const Main = () => {
   return (
     <Layout className="layout">
       <Header>
@@ -35,4 +34,6 @@ export default observer(function Main() {
       </Switch>
     </Layout>
   );
-});
+};
+
+export default Main;
