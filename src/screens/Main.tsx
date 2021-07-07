@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, Switch, Link, Redirect } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Switch, Link, Redirect, useLocation } from 'react-router-dom';
 import { Layout } from 'antd';
 
 import ProjectsScreen from './projects/ProjectsScreen';
@@ -7,10 +7,17 @@ import TaskControl from '../components/TaskControl/TaskControl';
 import HeaderMenu from '../components/HeaderMenu/HeaderMenu';
 import HoursScreen from './hours/HoursScreen';
 import Dashboard from './dashboard/Dashboard';
+import analytics from '../services/GaService';
 
 const { Header } = Layout;
 
 const Main = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    analytics?.pageview(location.pathname);
+  }, [location.pathname]);
+
   return (
     <Layout className="layout">
       <Header>
