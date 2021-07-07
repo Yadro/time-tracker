@@ -88,7 +88,7 @@ export default observer(function Projects() {
           <Space direction="vertical">
             <ProjectList onSelect={handleSelectProject} />
             <Button onClick={handleCreateProject} icon={<PlusOutlined />}>
-              Create Project
+              Project
             </Button>
           </Space>
         </Layout>
