@@ -26,12 +26,13 @@ export default class MenuBuilder {
       this.setupDevelopmentEnvironment();
     }
 
-    const template =
-      process.platform === 'darwin'
-        ? this.buildDarwinTemplate()
-        : this.buildDefaultTemplate();
-
-    const menu = Menu.buildFromTemplate(template);
+    // const template =
+    //   process.platform === 'darwin'
+    //     ? this.buildDarwinTemplate()
+    //     : this.buildDefaultTemplate();
+    //
+    // const menu = Menu.buildFromTemplate(template);
+    const menu = Menu.buildFromTemplate([]);
     Menu.setApplicationMenu(menu);
 
     return menu;
@@ -285,6 +286,6 @@ export default class MenuBuilder {
       },
     ];
 
-    return templateDefault;
+    return null;
   }
 }
