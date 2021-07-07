@@ -7,6 +7,10 @@ import 'antd/dist/antd.less';
 import './App.global.less';
 
 export default observer(() => {
+  // useEffect(() => {
+  //   Sentry.captureException(new Error(`${process.env.NODE_ENV} exception`));
+  // }, []);
+
   return (
     <Router>
       <Main />
