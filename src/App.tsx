@@ -1,19 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { observer } from 'mobx-react';
+import { BrowserRouter } from 'react-router-dom';
 
 import Main from './screens/Main';
 import 'antd/dist/antd.less';
 import './App.global.less';
 
-export default observer(() => {
+const App = () => {
   // useEffect(() => {
   //   Sentry.captureException(new Error(`${process.env.NODE_ENV} exception`));
   // }, []);
 
   return (
-    <Router>
+    <BrowserRouter>
       <Main />
-    </Router>
+    </BrowserRouter>
   );
-});
+};
+
+export default App;

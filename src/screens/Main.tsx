@@ -28,18 +28,10 @@ export default observer(function Main() {
         <TaskControl />
       </Header>
       <Switch>
-        <Route exact path="/">
-          <Redirect to="/projects" />
-        </Route>
-        <Route path="/hours">
-          <HoursScreen />
-        </Route>
-        <Route path="/projects">
-          <ProjectsScreen />
-        </Route>
-        <Route path="/dashboard">
-          <Dashboard />
-        </Route>
+        <Redirect exact from="/" to="/projects" />
+        <Route path="/hours" component={HoursScreen} />
+        <Route path="/projects" component={ProjectsScreen} />
+        <Route path="/dashboard" component={Dashboard} />
       </Switch>
     </Layout>
   );
