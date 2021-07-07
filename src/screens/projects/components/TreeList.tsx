@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tree } from 'antd';
+import { Empty, Tree } from 'antd';
 import { observer } from 'mobx-react';
 import { Key } from 'rc-tree/lib/interface';
 
@@ -94,6 +94,21 @@ export default function TreeList<T extends ITreeItem<any>>(
       }
 
       updateData(dataCopy);
+    }
+
+    if (!data.length) {
+      return (
+        <Empty
+          image={Empty.PRESENTED_IMAGE_DEFAULT}
+          description={
+            <>
+              There are no tasks yet.
+              <br />
+              Type a new task name below and press Enter
+            </>
+          }
+        />
+      );
     }
 
     return (
