@@ -10,7 +10,7 @@ Start and stop time, jump between tasks, and add details on how time was spent.
 - track time in tasks
 - change start time and end time of tasks
 - add details on how time was spen
-- receive notifications when task is in progress or when you idle
+- receive notifications when task is in progress or when you are idle
 
 ## Screenshots
 <img src=".github/hours-screenshot.png" />
