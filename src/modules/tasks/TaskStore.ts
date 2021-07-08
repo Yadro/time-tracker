@@ -5,6 +5,12 @@ import TaskModel, { ITimeRangeModel } from './models/TaskModel';
 import TasksByProject from '../../modules/tasks/models/TasksByProject';
 import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
 import BadgeService from '../BadgeService';
+import GaService from '../../services/GaService';
+import {
+  EEventCategory,
+  ETasksEvents,
+  ETimeRangeEvents,
+} from '../../services/EEvents';
 
 export default class TaskStore {
   tasks: TasksByProject = {};
@@ -24,6 +30,7 @@ export default class TaskStore {
   setTime(task: TaskModel, timeIndex: number, timeRange: ITimeRangeModel) {
     task.time[timeIndex] = timeRange;
     this.tasksService.save(this.tasks);
+    GaService.event(EEventCategory.TimeRange, ETimeRangeEvents.Update);
   }
 
   deleteTime(task: TaskModel, timeIndex: number) {
@@ -32,6 +39,7 @@ export default class TaskStore {
     }
     task.time.splice(timeIndex, 1);
     this.tasksService.save(this.tasks);
+    GaService.event(EEventCategory.TimeRange, ETimeRangeEvents.Delete);
   }
 
   getTasks(projectId: string): TaskModel[] {
@@ -73,6 +81,7 @@ export default class TaskStore {
     this.tasks[projectId].push(task);
     this.tasks[projectId] = this.tasks[projectId].slice();
     this.tasksService.save(this.tasks);
+    GaService.event(EEventCategory.Tasks, ETasksEvents.Create);
   }
 
   delete(task: TaskModel) {
@@ -88,11 +97,12 @@ export default class TaskStore {
       if (this.tasks.hasOwnProperty(projectKey)) {
         this.tasks[projectKey] = TreeModelStoreHelper.deleteItems(
           this.tasks[projectKey],
-          condition,
+          condition
         );
       }
     }
     this.tasksService.save(this.tasks);
+    GaService.event(EEventCategory.Tasks, ETasksEvents.Delete);
   }
 
   deleteProjectTasks(projectKey: string) {
@@ -131,7 +141,7 @@ export default class TaskStore {
     if (Array.isArray(this.tasks[projectId])) {
       return TreeModelStoreHelper.getFlatItemsRecursive(
         this.tasks[projectId],
-        condition,
+        condition
       ).map((task) => task.key);
     }
     return [];
@@ -142,6 +152,7 @@ export default class TaskStore {
       this.checkTasksRecursive(this.tasks[projectId], taskIds);
     }
     this.tasksService.save(this.tasks);
+    GaService.event(EEventCategory.Tasks, ETasksEvents.Check);
   }
 
   private findAndSetActiveTask() {

@@ -4,6 +4,8 @@ import ProjectModel from './models/ProjectModel';
 import ProjectService from './ProjectService';
 import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
 import { Undefined } from '../../types/CommonTypes';
+import GaService from '../../services/GaService';
+import { EEventCategory, EProjectEvents } from '../../services/EEvents';
 
 export default class ProjectStore {
   projects: ProjectModel[] = [];
@@ -39,6 +41,7 @@ export default class ProjectStore {
     project.color = color || '';
     this.projects = this.projects.slice();
     this.projectService.save(this.projects);
+    GaService.event(EEventCategory.Projects, EProjectEvents.Update);
   }
 
   get(projectKey: string): ProjectModel | undefined {
@@ -53,6 +56,7 @@ export default class ProjectStore {
     newProjects.push(project);
     this.projects = newProjects;
     this.projectService.save(this.projects);
+    GaService.event(EEventCategory.Projects, EProjectEvents.Create);
   }
 
   delete(project: ProjectModel) {
@@ -62,6 +66,7 @@ export default class ProjectStore {
 
     this.projects = TreeModelStoreHelper.deleteItems(this.projects, condition);
     this.projectService.save(this.projects);
+    GaService.event(EEventCategory.Projects, EProjectEvents.Delete);
   }
 
   restore() {
