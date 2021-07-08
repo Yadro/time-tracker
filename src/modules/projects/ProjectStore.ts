@@ -4,8 +4,11 @@ import ProjectModel from './models/ProjectModel';
 import ProjectService from './ProjectService';
 import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
 import { Undefined } from '../../types/CommonTypes';
-import GaService from '../../services/GaService';
-import { EEventCategory, EProjectEvents } from '../../services/EEvents';
+import GaService from '../../services/gaService/GaService';
+import {
+  EEventCategory,
+  EProjectEvents,
+} from '../../services/gaService/EEvents';
 
 export default class ProjectStore {
   projects: ProjectModel[] = [];

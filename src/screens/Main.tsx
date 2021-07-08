@@ -7,7 +7,7 @@ import TaskControl from '../components/TaskControl/TaskControl';
 import HeaderMenu from '../components/HeaderMenu/HeaderMenu';
 import HoursScreen from './hours/HoursScreen';
 import Dashboard from './dashboard/Dashboard';
-import GaService from '../services/GaService';
+import GaService from '../services/gaService/GaService';
 
 const { Header } = Layout;
 

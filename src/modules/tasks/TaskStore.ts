@@ -5,12 +5,12 @@ import TaskModel, { ITimeRangeModel } from './models/TaskModel';
 import TasksByProject from '../../modules/tasks/models/TasksByProject';
 import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
 import BadgeService from '../BadgeService';
-import GaService from '../../services/GaService';
+import GaService from '../../services/gaService/GaService';
 import {
   EEventCategory,
   ETasksEvents,
   ETimeRangeEvents,
-} from '../../services/EEvents';
+} from '../../services/gaService/EEvents';
 
 export default class TaskStore {
   tasks: TasksByProject = {};
