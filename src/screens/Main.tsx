@@ -15,7 +15,7 @@ const Main = () => {
   const location = useLocation();
 
   useEffect(() => {
-    analytics?.pageview(location.pathname);
+    analytics?.pageview(location.pathname).event('Event', 'test').send();
   }, [location.pathname]);
 
   return (

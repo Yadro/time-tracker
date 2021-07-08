@@ -4,6 +4,7 @@ require('dotenv').config();
 
 import App from './App';
 import { initSentry } from './shared/initSentry';
+import './services/GaService';
 
 initSentry();
 
