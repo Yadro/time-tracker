@@ -7,7 +7,7 @@ import TaskControl from '../components/TaskControl/TaskControl';
 import HeaderMenu from '../components/HeaderMenu/HeaderMenu';
 import HoursScreen from './hours/HoursScreen';
 import Dashboard from './dashboard/Dashboard';
-import analytics from '../services/GaService';
+import GaService from '../services/GaService';
 
 const { Header } = Layout;
 
@@ -15,7 +15,11 @@ const Main = () => {
   const location = useLocation();
 
   useEffect(() => {
-    analytics?.pageview(location.pathname).event('Event', 'test').send();
+    let path = location.pathname;
+    if (path.includes('index.html')) {
+      path = '/';
+    }
+    GaService.pageView(path);
   }, [location.pathname]);
 
   return (
@@ -34,10 +38,10 @@ const Main = () => {
         <TaskControl />
       </Header>
       <Switch>
-        <Redirect exact from="/" to="/projects" />
         <Route path="/hours" component={HoursScreen} />
         <Route path="/projects" component={ProjectsScreen} />
         <Route path="/dashboard" component={Dashboard} />
+        <Redirect from="*" to="/projects" />
       </Switch>
     </Layout>
   );
