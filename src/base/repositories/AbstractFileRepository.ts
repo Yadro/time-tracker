@@ -5,7 +5,7 @@ const path = require('path');
 
 import FsHelper from '../../helpers/FsHelper';
 
-const APP_FOLDER = 'YadroTimeTracker_test';
+const APP_FOLDER = 'YadroTimeTracker';
 const PROFILE_FOLDER = 'profile1';
 
 export default abstract class AbstractFileRepository<T = any> {
