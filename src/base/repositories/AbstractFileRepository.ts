@@ -1,14 +1,18 @@
+import PromiseQueue from '../../helpers/PromiseQueueHellper';
+
 const fs = require('fs');
 const path = require('path');
 
 import FsHelper from '../../helpers/FsHelper';
 
-const APP_FOLDER = 'YadroTimeTracker';
+const APP_FOLDER = 'YadroTimeTracker_test';
 const PROFILE_FOLDER = 'profile1';
 
 export default abstract class AbstractFileRepository<T = any> {
   folderWithProfile: string = 'profile1';
   fileName: string = 'defaultFileName.json';
+
+  writeFileQueue = new PromiseQueue();
 
   private static get appDataFolder() {
     return process.env.APPDATA || '';
@@ -37,6 +41,13 @@ export default abstract class AbstractFileRepository<T = any> {
 
   public save(data: T) {
     FsHelper.mkdirIfNotExists(AbstractFileRepository.profileFolder);
-    return FsHelper.writeFile(this.filePath, data);
+    this.writeFileQueue.add(() =>
+      FsHelper.writeFile(this.filePath, data).catch(() => {
+        console.error(
+          `AbstractFileRepository: can't save file ${this.fileName} ${this.filePath}`
+        );
+      })
+    );
+    this.writeFileQueue.run();
   }
 }

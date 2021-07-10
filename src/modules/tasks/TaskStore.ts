@@ -183,7 +183,7 @@ export default class TaskStore {
   }
 
   private setupReminder(task?: TaskModel) {
-    if (this.interval) {
+    if (this.interval !== undefined) {
       clearInterval(this.interval);
     }
     if (task) {
