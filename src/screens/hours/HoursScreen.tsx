@@ -35,7 +35,10 @@ export default observer(function HoursView() {
     Undefined<TaskTimeItemModel>
   >();
 
-  const tasks = useMemo(() => tasksStore.getTasksByDate(date), [date]);
+  const tasks = useMemo(() => tasksStore.getTasksByDate(date), [
+    tasksStore.tasks,
+    date,
+  ]);
   const timeItems = getTimeItems(tasks, date);
 
   return (
