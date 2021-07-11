@@ -7,6 +7,7 @@ import TaskControl from '../components/TaskControl/TaskControl';
 import HeaderMenu from '../components/HeaderMenu/HeaderMenu';
 import HoursScreen from './hours/HoursScreen';
 import Dashboard from './dashboard/Dashboard';
+import Profile from '../components/Profile/Profile';
 import GaService from '../services/gaService/GaService';
 
 const { Header } = Layout;
@@ -36,6 +37,7 @@ const Main = () => {
         </HeaderMenu>
         <span className="flex-1" />
         <TaskControl />
+        <Profile />
       </Header>
       <Switch>
         <Route path="/hours" component={HoursScreen} />

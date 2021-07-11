@@ -1,16 +1,17 @@
-import PromiseQueue from '../../helpers/PromiseQueueHellper';
-
 const fs = require('fs');
 const path = require('path');
 
 import FsHelper from '../../helpers/FsHelper';
+import PromiseQueue from '../../helpers/PromiseQueueHellper';
 
-const APP_FOLDER = 'YadroTimeTracker';
-const PROFILE_FOLDER = 'profile1';
+const APP_DIR = 'YadroTimeTracker';
 
 export default abstract class AbstractFileRepository<T = any> {
-  folderWithProfile: string = 'profile1';
+  dirWithProfileData: string = 'profile1';
   fileName: string = 'defaultFileName.json';
+  saveInRoot: boolean = false;
+
+  private logPrefix = `Repository[${this.fileName}]:`;
 
   writeFileQueue = new PromiseQueue();
 
@@ -18,16 +19,25 @@ export default abstract class AbstractFileRepository<T = any> {
     return process.env.APPDATA || '';
   }
 
-  private static get profileFolder() {
-    return path.join(
-      AbstractFileRepository.appDataFolder,
-      APP_FOLDER,
-      PROFILE_FOLDER
-    );
+  private get destFolder() {
+    const pathItems = [AbstractFileRepository.appDataFolder, APP_DIR];
+    if (!this.saveInRoot) {
+      pathItems.push(this.dirWithProfileData);
+    }
+    return path.join(...pathItems);
   }
 
   private get filePath() {
-    return path.join(AbstractFileRepository.profileFolder, this.fileName);
+    return path.join(this.destFolder, this.fileName);
+  }
+
+  public setProfile(profile: string | null) {
+    if (profile) {
+      this.dirWithProfileData = profile;
+      console.log(`${this.logPrefix} set profile=${profile}`);
+    } else {
+      console.error(`${this.logPrefix} set profile=null`);
+    }
   }
 
   public restore(defaultValue: T): T {
@@ -40,7 +50,7 @@ export default abstract class AbstractFileRepository<T = any> {
   }
 
   public save(data: T) {
-    FsHelper.mkdirIfNotExists(AbstractFileRepository.profileFolder);
+    FsHelper.mkdirIfNotExists(this.destFolder);
     this.writeFileQueue.add(() =>
       FsHelper.writeFile(this.filePath, data).catch(() => {
         console.error(

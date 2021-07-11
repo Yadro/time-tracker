@@ -11,6 +11,7 @@ import TaskTimeItemModel from '../../modules/tasks/models/TaskTimeItemModel';
 import { ITimeRangeModel } from '../../modules/tasks/models/TaskModel';
 import { Undefined } from '../../types/CommonTypes';
 import TimeRangeDuration from './components/TimeRangeDuration';
+import IModalProps from '../../types/IModalProps';
 
 const { tasksStore } = rootStore;
 
@@ -19,10 +20,8 @@ enum RangeField {
   end = 'end',
 }
 
-interface TimeRangeModalProps {
+interface TimeRangeModalProps extends IModalProps {
   taskTime?: TaskTimeItemModel;
-  visible: boolean;
-  onClose: () => void;
 }
 
 const TimeRangeModal = observer(

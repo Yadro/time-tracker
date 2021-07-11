@@ -1,10 +1,11 @@
-import { makeAutoObservable } from 'mobx';
+import { autorun, makeAutoObservable } from 'mobx';
 
 import TaskService from './TaskService';
 import TaskModel, { ITimeRangeModel } from './models/TaskModel';
 import TasksByProject from '../../modules/tasks/models/TasksByProject';
 import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
 import BadgeService from '../BadgeService';
+import { RootStore } from '../RootStore';
 import GaService from '../../services/gaService/GaService';
 import {
   EEventCategory,
@@ -18,8 +19,14 @@ export default class TaskStore {
   private tasksService = new TaskService();
   private interval: NodeJS.Timeout | undefined;
 
-  constructor() {
+  constructor(private rootStore: RootStore) {
     makeAutoObservable(this);
+    autorun(() => {
+      const profile = this.rootStore.settingsStore.settings.currentProfile;
+      if (profile) {
+        this.tasksService.setProfile(profile);
+      }
+    });
   }
 
   set(projectId: string, tasks: TaskModel[]) {
@@ -97,7 +104,7 @@ export default class TaskStore {
       if (this.tasks.hasOwnProperty(projectKey)) {
         this.tasks[projectKey] = TreeModelStoreHelper.deleteItems(
           this.tasks[projectKey],
-          condition
+          condition,
         );
       }
     }
@@ -141,7 +148,7 @@ export default class TaskStore {
     if (Array.isArray(this.tasks[projectId])) {
       return TreeModelStoreHelper.getFlatItemsRecursive(
         this.tasks[projectId],
-        condition
+        condition,
       ).map((task) => task.key);
     }
     return [];

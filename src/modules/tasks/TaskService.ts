@@ -4,15 +4,19 @@ import IService from '../../base/IService';
 import TasksByProject from './models/TasksByProject';
 
 export default class TaskService implements IService<TasksByProject> {
-  taskRepository: TaskRepository = new TaskRepository();
-  taskFactory: TaskFactory = new TaskFactory();
+  repository: TaskRepository = new TaskRepository();
+  factory: TaskFactory = new TaskFactory();
+
+  setProfile(profile: string) {
+    this.repository.setProfile(profile);
+  }
 
   getAll(): TasksByProject {
-    const data: TasksByProject = this.taskRepository.restore({});
-    return this.taskFactory.createTasks(data);
+    const data: TasksByProject = this.repository.restore({});
+    return this.factory.createTasks(data);
   }
 
   save(data: TasksByProject) {
-    this.taskRepository.save(data);
+    this.repository.save(data);
   }
 }
