@@ -1,12 +1,12 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
-import { createUseStyles } from 'react-jss';
 import { Button, Input, Popover, Space } from 'antd';
 import { UserAddOutlined } from '@ant-design/icons';
+
 import rootStore from '../../modules/RootStore';
 
 interface INewProfilePopoverProps {
   visible: boolean;
-  setVisible: (visible: boolean) => void;
+  onChange: (visible: boolean, profile?: string) => void;
 }
 
 const { settingsStore } = rootStore;
@@ -14,8 +14,7 @@ const { settingsStore } = rootStore;
 const NewProfilePopover: React.FC<INewProfilePopoverProps> = (
   props: INewProfilePopoverProps
 ) => {
-  const { visible, setVisible } = props;
-  const classes = useStyles();
+  const { visible, onChange } = props;
 
   const [profile, setProfile] = useState<string>('');
   const [isValid, setIsValid] = useState<boolean>(false);
@@ -38,9 +37,9 @@ const NewProfilePopover: React.FC<INewProfilePopoverProps> = (
 
   const handleCreate = useCallback(() => {
     settingsStore.addProfile(profile);
-    setVisible(false);
+    onChange(false, profile);
     setProfile('');
-  }, [profile, setVisible]);
+  }, [profile, onChange]);
 
   return (
     <Popover
@@ -59,7 +58,7 @@ const NewProfilePopover: React.FC<INewProfilePopoverProps> = (
       title="Create a new profile"
       trigger="click"
       visible={visible}
-      onVisibleChange={setVisible}
+      onVisibleChange={onChange}
     >
       <Button type="primary">
         <UserAddOutlined />
@@ -67,9 +66,5 @@ const NewProfilePopover: React.FC<INewProfilePopoverProps> = (
     </Popover>
   );
 };
-
-const useStyles = createUseStyles({
-  root: {},
-});
 
 export default NewProfilePopover;

@@ -31,6 +31,16 @@ const SettingsModal: React.VFC<ISettingsModalProps> = observer(
       setProfile(selected);
     }, []);
 
+    const handleCreateProfile = useCallback(
+      (visible: boolean, profile?: string) => {
+        setShowNewProfilePopover(visible);
+        if (profile) {
+          setProfile(profile);
+        }
+      },
+      []
+    );
+
     return (
       <Modal
         title="Settings"
@@ -40,30 +50,28 @@ const SettingsModal: React.VFC<ISettingsModalProps> = observer(
         onOk={handleSave}
         onCancel={onClose}
       >
-        <Row>
-          <Col span={24}>
-            <Form.Item label="Profile" labelCol={{ span: 24 }}>
-              <Space>
-                <Select value={profile} onChange={handleChangeProfile}>
-                  {settingsStore.settings.profiles.map((profile) => (
-                    <Select.Option key={profile} value={profile}>
-                      {profile}
-                    </Select.Option>
-                  ))}
-                </Select>
-                <NewProfilePopover
-                  visible={showNewProfilePopover}
-                  setVisible={setShowNewProfilePopover}
-                />
-              </Space>
-            </Form.Item>
-          </Col>
-        </Row>
+        <Form.Item label="Profile" labelCol={{ span: 24 }}>
+          <Space>
+            <Select
+              value={profile}
+              onChange={handleChangeProfile}
+              style={{ width: 200 }}
+            >
+              {settingsStore.settings.profiles.map((profile) => (
+                <Select.Option key={profile} value={profile}>
+                  {profile}
+                </Select.Option>
+              ))}
+            </Select>
+            <NewProfilePopover
+              visible={showNewProfilePopover}
+              onChange={handleCreateProfile}
+            />
+          </Space>
+        </Form.Item>
       </Modal>
     );
   }
 );
-
-const useStyles = createUseStyles({});
 
 export default SettingsModal;
