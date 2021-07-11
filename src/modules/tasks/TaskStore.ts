@@ -1,4 +1,4 @@
-import { autorun, makeAutoObservable } from 'mobx';
+import { autorun, makeAutoObservable, reaction } from 'mobx';
 
 import TaskService from './TaskService';
 import TaskModel, { ITimeRangeModel } from './models/TaskModel';
@@ -96,15 +96,13 @@ export default class TaskStore {
       return _task.key === task.key;
     }
 
-    if (task.active) {
-      this.stopTimer(task);
-    }
+    this.stopTimer();
 
     for (const projectKey in this.tasks) {
       if (this.tasks.hasOwnProperty(projectKey)) {
         this.tasks[projectKey] = TreeModelStoreHelper.deleteItems(
           this.tasks[projectKey],
-          condition,
+          condition
         );
       }
     }
@@ -118,20 +116,23 @@ export default class TaskStore {
   }
 
   startTimer(task: TaskModel) {
-    if (this.activeTask) {
-      this.stopTimer(this.activeTask);
-    }
+    this.stopTimer(true);
     this.activeTask = task;
     task.start();
     this.setupReminder(task);
     this.tasksService.save(this.tasks);
   }
 
-  stopTimer(task: TaskModel) {
-    this.activeTask = undefined;
-    task.stop();
-    this.setupReminder();
-    this.tasksService.save(this.tasks);
+  stopTimer(silent?: boolean) {
+    if (this.activeTask) {
+      this.activeTask.stop();
+      this.activeTask = undefined;
+    }
+
+    if (!silent) {
+      this.setupReminder();
+      this.tasksService.save(this.tasks);
+    }
   }
 
   restore() {
@@ -148,7 +149,7 @@ export default class TaskStore {
     if (Array.isArray(this.tasks[projectId])) {
       return TreeModelStoreHelper.getFlatItemsRecursive(
         this.tasks[projectId],
-        condition,
+        condition
       ).map((task) => task.key);
     }
     return [];

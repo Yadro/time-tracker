@@ -1,4 +1,5 @@
 import AbstractModel from '../../../base/AbstractModel';
+import { makeObservable, observable } from 'mobx';
 
 export const DEFAULT_SETTINGS = {
   currentProfile: 'profile1',
@@ -16,5 +17,11 @@ export default class SettingsModel extends AbstractModel {
   constructor(data: any) {
     super();
     this.load(data);
+    makeObservable(this, {
+      currentProfile: observable,
+      profiles: observable,
+      hoursInWorkingDay: observable,
+      isFirstLoad: observable,
+    });
   }
 }

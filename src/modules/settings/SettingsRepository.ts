@@ -2,4 +2,5 @@ import AbstractFileRepository from '../../base/repositories/AbstractFileReposito
 
 export default class SettingsRepository extends AbstractFileRepository {
   saveInRoot = true;
+  fileName = 'settings.json';
 }

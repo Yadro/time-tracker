@@ -40,7 +40,7 @@ export default observer(function TaskNode({ task }: TaskNodeProps) {
           />
         ) : (
           <PauseOutlined
-            onClick={preventDefault(() => tasksStore.stopTimer(task))}
+            onClick={preventDefault(() => tasksStore.stopTimer())}
           />
         )}
         <DeleteOutlined

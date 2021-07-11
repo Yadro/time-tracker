@@ -27,11 +27,20 @@ const NewProfilePopover: React.FC<INewProfilePopoverProps> = (
     return !settingsStore.settings.profiles.includes(profile);
   }, []);
 
-  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    const profile = event.target.value;
-    setProfile(profile);
-    setIsValid(isProfileValid(profile));
-  }, []);
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const profile = event.target.value;
+      setProfile(profile);
+      setIsValid(isProfileValid(profile));
+    },
+    [isProfileValid]
+  );
+
+  const handleCreate = useCallback(() => {
+    settingsStore.addProfile(profile);
+    setVisible(false);
+    setProfile('');
+  }, [profile, setVisible]);
 
   return (
     <Popover
@@ -42,7 +51,7 @@ const NewProfilePopover: React.FC<INewProfilePopoverProps> = (
             value={profile}
             onChange={handleChange}
           />
-          <Button type="primary" disabled={!isValid}>
+          <Button type="primary" disabled={!isValid} onClick={handleCreate}>
             Create
           </Button>
         </Space>

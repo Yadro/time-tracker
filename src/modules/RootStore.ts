@@ -4,12 +4,17 @@ import ProjectModel from './projects/models/ProjectModel';
 import SettingsStore from './settings/SettingsStore';
 
 export class RootStore {
-  settingsStore = new SettingsStore();
+  settingsStore = new SettingsStore(this);
   tasksStore = new TaskStore(this);
   projectStore = new ProjectStore(this);
 
   restore() {
     this.settingsStore.restore();
+    this.tasksStore.restore();
+    this.projectStore.restore();
+  }
+
+  loadTaskAndProjects() {
     this.tasksStore.restore();
     this.projectStore.restore();
   }

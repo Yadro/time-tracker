@@ -27,7 +27,7 @@ export default observer(function PlayStopButton({
       if (!task?.active) {
         tasksStore.startTimer(task);
       } else {
-        tasksStore.stopTimer(task);
+        tasksStore.stopTimer();
       }
     }
   }
