@@ -1,15 +1,13 @@
 import TaskRepository from './TaskRepository';
 import TaskFactory from './TaskFactory';
-import IService from '../../base/IService';
 import TasksByProject from './models/TasksByProject';
+import AbstractServiceWithProfile from '../../base/AbstractServiceWithProfile';
 
-export default class TaskService implements IService<TasksByProject> {
-  repository: TaskRepository = new TaskRepository();
-  factory: TaskFactory = new TaskFactory();
-
-  setProfile(profile: string) {
-    this.repository.setProfile(profile);
-  }
+export default class TaskService extends AbstractServiceWithProfile<
+  TasksByProject
+> {
+  private factory: TaskFactory = new TaskFactory();
+  protected repository: TaskRepository = new TaskRepository();
 
   getAll(): TasksByProject {
     const data: TasksByProject = this.repository.restore({});

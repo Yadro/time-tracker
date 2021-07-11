@@ -1,4 +1,4 @@
-import { autorun, makeAutoObservable, reaction } from 'mobx';
+import { autorun, makeAutoObservable } from 'mobx';
 
 import TaskService from './TaskService';
 import TaskModel, { ITimeRangeModel } from './models/TaskModel';

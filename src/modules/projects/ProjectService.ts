@@ -1,15 +1,13 @@
-import IService from '../../base/IService';
 import ProjectModel, { DEFAULT_PROJECTS } from './models/ProjectModel';
 import ProjectFactory from './ProjectFactory';
 import ProjectRepository from './ProjectRepository';
+import AbstractServiceWithProfile from '../../base/AbstractServiceWithProfile';
 
-export default class ProjectService implements IService<ProjectModel[]> {
-  factory = new ProjectFactory();
-  repository = new ProjectRepository();
-
-  setProfile(profile: string) {
-    this.repository.setProfile(profile);
-  }
+export default class ProjectService extends AbstractServiceWithProfile<
+  ProjectModel[]
+> {
+  private factory = new ProjectFactory();
+  protected repository = new ProjectRepository();
 
   getAll(): ProjectModel[] {
     const data = this.repository.restore(DEFAULT_PROJECTS);

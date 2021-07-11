@@ -11,8 +11,6 @@ export default abstract class AbstractFileRepository<T = any> {
   fileName: string = 'defaultFileName.json';
   saveInRoot: boolean = false;
 
-  private logPrefix = `Repository[${this.fileName}]:`;
-
   writeFileQueue = new PromiseQueue();
 
   private static get appDataFolder() {
@@ -31,13 +29,8 @@ export default abstract class AbstractFileRepository<T = any> {
     return path.join(this.destFolder, this.fileName);
   }
 
-  public setProfile(profile: string | null) {
-    if (profile) {
-      this.dirWithProfileData = profile;
-      console.log(`${this.logPrefix} set profile=${profile}`);
-    } else {
-      console.error(`${this.logPrefix} set profile=null`);
-    }
+  public setProfile(profile: string) {
+    this.dirWithProfileData = profile;
   }
 
   public restore(defaultValue: T): T {
