@@ -3,29 +3,34 @@ import { observer } from 'mobx-react';
 import { Space } from 'antd';
 
 import * as TaskHooks from '../../../../hooks/TaskHooks';
-import TaskTimeItemModel from '../../../../models/TaskTimeItemModel';
+import TaskTimeItemModel from '../../../../modules/tasks/models/TaskTimeItemModel';
 import {
-  EIGHT_HOURS,
   estimateWorkingTimeEnd,
   getTime,
   msToTime,
 } from '../../../../helpers/DateTime';
 import LabelWithTooltip, { ILabelWithTooltipProps } from './LabelWithTooltip';
+import rootStore from '../../../../modules/RootStore';
 
 interface TotalHoursProps {
   timeItems: TaskTimeItemModel[];
 }
 
+const { settingsStore } = rootStore;
+
 const TotalHours = observer((props: TotalHoursProps) => {
   const { timeItems } = props;
+  const { settings } = settingsStore;
+  const workingHoursMs = settings.numberOfWorkingHours;
 
   const { durationMs, restMs } = TaskHooks.useTimeItemsDuration(timeItems);
   const startWorkingTime = TaskHooks.useStartWorkingTime(timeItems);
   const estimatedWorkingTimeEnd = estimateWorkingTimeEnd(
     startWorkingTime,
-    restMs
+    restMs,
+    workingHoursMs
   );
-  const restHoursMs = EIGHT_HOURS - durationMs;
+  const restHoursMs = workingHoursMs - durationMs;
 
   if (!timeItems.length) {
     return null;

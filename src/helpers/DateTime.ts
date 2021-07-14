@@ -90,13 +90,12 @@ export function getTime(date: Date | undefined) {
   return format(date, TIME_FORMAT);
 }
 
-export const EIGHT_HOURS = 8 * 60 * 60 * 1000;
-
 export function estimateWorkingTimeEnd(
   startDate: Date | undefined,
-  restTimeMs: number
+  restTimeMs: number,
+  workingHoursMs: number
 ): Date | undefined {
   return startDate
-    ? new Date(startDate.getTime() + restTimeMs + EIGHT_HOURS)
+    ? new Date(startDate.getTime() + restTimeMs + workingHoursMs)
     : undefined;
 }
