@@ -20,8 +20,15 @@ export default class SettingsStore {
   }
 
   setSettings(newSettings: ISettings) {
-    const { currentProfile, numberOfWorkingHours } = newSettings;
+    const {
+      currentProfile,
+      numberOfWorkingHours,
+      showNotifications,
+    } = newSettings;
+
     this.settings.numberOfWorkingHours = numberOfWorkingHours;
+    this.settings.showNotifications = showNotifications;
+    this.rootStore.tasksStore.removeReminder();
     this.setActiveProfile(currentProfile);
     this.service.save(this.settings);
   }

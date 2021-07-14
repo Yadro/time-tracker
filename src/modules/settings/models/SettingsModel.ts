@@ -6,6 +6,7 @@ export const DEFAULT_SETTINGS = {
   profiles: ['profile1'],
   numberOfWorkingHours: 8 * 60 * 60 * 1000,
   isFirstLoad: true,
+  showNotifications: true,
 };
 
 export default class SettingsModel extends AbstractModel {
@@ -13,7 +14,7 @@ export default class SettingsModel extends AbstractModel {
   profiles: string[] = DEFAULT_SETTINGS.profiles;
   numberOfWorkingHours: number = DEFAULT_SETTINGS.numberOfWorkingHours;
   isFirstLoad: boolean = DEFAULT_SETTINGS.isFirstLoad;
-  // TODO showNotifications
+  showNotifications: boolean = DEFAULT_SETTINGS.showNotifications;
 
   constructor(data: any) {
     super();
@@ -23,6 +24,7 @@ export default class SettingsModel extends AbstractModel {
       profiles: observable,
       numberOfWorkingHours: observable,
       isFirstLoad: observable,
+      showNotifications: observable,
     });
   }
 }

@@ -1,5 +1,14 @@
 import React, { useCallback, useState } from 'react';
-import { Form, Modal, Select, Space, TimePicker } from 'antd';
+import {
+  Checkbox,
+  Divider,
+  Form,
+  Modal,
+  Select,
+  Space,
+  TimePicker,
+} from 'antd';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { observer } from 'mobx-react';
 // eslint-disable-next-line import/named
 import moment, { Moment } from 'moment';
@@ -24,6 +33,9 @@ const SettingsModal: React.VFC<ISettingsModalProps> = observer(
     const [showNewProfilePopover, setShowNewProfilePopover] = useState<boolean>(
       false
     );
+    const [showNotifications, setShowNotifications] = useState<boolean>(
+      settings.showNotifications
+    );
     const [profile, setProfile] = useState<string>(settings.currentProfile);
     const [workingHours, setWorkingHours] = useState<Moment | null>(
       moment(settings.numberOfWorkingHours).utcOffset(0)
@@ -35,9 +47,10 @@ const SettingsModal: React.VFC<ISettingsModalProps> = observer(
         numberOfWorkingHours: workingHours
           ? timeToMs(workingHours?.toDate())
           : DEFAULT_SETTINGS.numberOfWorkingHours,
+        showNotifications,
       });
       onClose();
-    }, [profile, workingHours, onClose]);
+    }, [profile, workingHours, showNotifications, onClose]);
 
     const handleChangeProfile = useCallback((selected: string) => {
       setProfile(selected);
@@ -52,6 +65,10 @@ const SettingsModal: React.VFC<ISettingsModalProps> = observer(
       },
       []
     );
+
+    const handleChangeNotifications = useCallback((e: CheckboxChangeEvent) => {
+      setShowNotifications(e.target.checked);
+    }, []);
 
     return (
       <Modal
@@ -81,7 +98,8 @@ const SettingsModal: React.VFC<ISettingsModalProps> = observer(
             />
           </Space>
         </Form.Item>
-        <Form.Item label="Number of working hours">
+        <Divider />
+        <Form.Item label="Number of working hours" labelCol={{ span: 10 }}>
           <TimePicker
             value={workingHours}
             onChange={(value) => setWorkingHours(value)}
@@ -89,6 +107,12 @@ const SettingsModal: React.VFC<ISettingsModalProps> = observer(
             minuteStep={5}
             showNow={false}
             allowClear={false}
+          />
+        </Form.Item>
+        <Form.Item label="Notifications" labelCol={{ span: 10 }}>
+          <Checkbox
+            checked={showNotifications}
+            onChange={handleChangeNotifications}
           />
         </Form.Item>
       </Modal>

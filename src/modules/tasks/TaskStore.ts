@@ -191,11 +191,15 @@ export default class TaskStore {
   }
 
   private setupReminder(task?: TaskModel) {
-    if (this.interval !== undefined) {
-      clearInterval(this.interval);
+    BadgeService.setBadge(!!task);
+
+    if (!this.rootStore.settingsStore.settings.showNotifications) {
+      return;
     }
+
+    this.removeReminder();
+
     if (task) {
-      BadgeService.setBadge(true);
       console.log('Setup: Task in progress');
       this.interval = setInterval(() => {
         console.log('Task in progress');
@@ -204,7 +208,6 @@ export default class TaskStore {
         });
       }, 40 * 60 * 1000);
     } else {
-      BadgeService.setBadge(false);
       console.log('Setup: No tasks in progress');
       this.interval = setInterval(() => {
         console.log('No tasks in progress');
@@ -212,6 +215,12 @@ export default class TaskStore {
           body: 'There are not task that you track',
         });
       }, 15 * 60 * 1000);
+    }
+  }
+
+  removeReminder() {
+    if (this.interval !== undefined) {
+      clearInterval(this.interval);
     }
   }
 }
