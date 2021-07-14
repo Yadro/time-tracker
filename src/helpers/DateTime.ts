@@ -45,6 +45,13 @@ export function msToTime(s: number, showSeconds: boolean = true) {
   return timeItemsToString(sign, hrs, mins, secs, showSeconds);
 }
 
+export function timeToMs(date: Date) {
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  return (hours * 60 + minutes) * 60 * 1000;
+}
+
 export function calcDuration(taskTime: ITimeRangeModel[]): number {
   return taskTime.reduce((prev, timeRange) => {
     if (!timeRange.start) {

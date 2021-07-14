@@ -3,6 +3,7 @@ import { makeAutoObservable } from 'mobx';
 import SettingsModel, { DEFAULT_SETTINGS } from './models/SettingsModel';
 import SettingsService from './SettingsService';
 import { RootStore } from '../RootStore';
+import { ISettings } from './models/ISettings';
 
 export default class SettingsStore {
   settings: SettingsModel = new SettingsModel(DEFAULT_SETTINGS);
@@ -15,6 +16,13 @@ export default class SettingsStore {
 
   addProfile(profile: string) {
     this.settings.profiles.push(profile);
+    this.service.save(this.settings);
+  }
+
+  setSettings(newSettings: ISettings) {
+    const { currentProfile, numberOfWorkingHours } = newSettings;
+    this.settings.numberOfWorkingHours = numberOfWorkingHours;
+    this.setActiveProfile(currentProfile);
     this.service.save(this.settings);
   }
 
