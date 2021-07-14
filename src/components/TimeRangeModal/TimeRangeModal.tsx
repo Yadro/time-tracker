@@ -118,6 +118,7 @@ const TimeRangeModal = observer(
               <Form.Item label="Start" labelCol={{ span: 24 }}>
                 <TimePicker
                   format="HH:mm"
+                  minuteStep={5}
                   value={timeRange?.start && moment(timeRange?.start)}
                   onChange={onChange(RangeField.start)}
                 />
@@ -127,6 +128,7 @@ const TimeRangeModal = observer(
               <Form.Item label="End" labelCol={{ span: 24 }}>
                 <TimePicker
                   format="HH:mm"
+                  minuteStep={5}
                   value={timeRange?.end && moment(timeRange?.end)}
                   onChange={onChange(RangeField.end)}
                   disabled={timeInProgress}
