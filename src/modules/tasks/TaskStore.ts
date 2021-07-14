@@ -172,8 +172,10 @@ export default class TaskStore {
 
     if (Array.isArray(this.tasks[projectId])) {
       this.checkTasksRecursive(this.tasks[projectId], taskIds, markExpanded);
+
+      this.tasks[projectId] = this.tasks[projectId].slice();
+      this.tasksService.save(this.tasks);
     }
-    this.tasksService.save(this.tasks);
   }
 
   private getTaskKeysByCondition(
