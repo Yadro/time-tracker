@@ -101,7 +101,7 @@ const SettingsModal: React.VFC<ISettingsModalProps> = observer(
           </Space>
         </Form.Item>
         <Divider />
-        <Form.Item label="Number of working hours" labelCol={{ span: 10 }}>
+        <Form.Item label="Amount of working hours" labelCol={{ span: 10 }}>
           <TimePicker
             value={workingHours}
             onChange={(value) => setWorkingHours(value)}
