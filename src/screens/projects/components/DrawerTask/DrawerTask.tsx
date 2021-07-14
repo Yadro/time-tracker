@@ -14,6 +14,8 @@ import { Undefined } from '../../../../types/CommonTypes';
 import TaskTimeItemModel from '../../../../modules/tasks/models/TaskTimeItemModel';
 import IModalProps from '../../../../types/IModalProps';
 
+const { TextArea } = Input;
+
 const { projectStore } = rootStore;
 
 interface DrawerTaskProps extends IModalProps {
@@ -69,9 +71,10 @@ export default observer(function DrawerTask({
             }
           }}
         />
-        <Input
-          value={task?.details}
+        <TextArea
           placeholder="Details"
+          rows={4}
+          value={task?.details}
           onChange={(e) => {
             const details = e.target.value;
             if (task) {
