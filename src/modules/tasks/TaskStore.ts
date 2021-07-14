@@ -142,10 +142,44 @@ export default class TaskStore {
   }
 
   getCheckedKeys(projectId: string): string[] {
-    function condition(task: TaskModel): boolean {
-      return task.checked;
+    const condition = (task: TaskModel) => task.checked;
+
+    return this.getTaskKeysByCondition(projectId, condition);
+  }
+
+  getExpandedKeys(projectId: string): string[] {
+    const condition = (task: TaskModel) => task.expanded;
+
+    return this.getTaskKeysByCondition(projectId, condition);
+  }
+
+  checkTasks(projectId: string, taskIds: string[]) {
+    function checkTaskFn(task: TaskModel, taskIds: string[]) {
+      task.checked = taskIds.includes(task.key);
     }
 
+    if (Array.isArray(this.tasks[projectId])) {
+      this.checkTasksRecursive(this.tasks[projectId], taskIds, checkTaskFn);
+    }
+    this.tasksService.save(this.tasks);
+    GaService.event(EEventCategory.Tasks, ETasksEvents.Check);
+  }
+
+  tasksMarkExpanded(projectId: string, taskIds: string[]) {
+    function markExpanded(task: TaskModel, taskIds: string[]) {
+      task.expanded = taskIds.includes(task.key);
+    }
+
+    if (Array.isArray(this.tasks[projectId])) {
+      this.checkTasksRecursive(this.tasks[projectId], taskIds, markExpanded);
+    }
+    this.tasksService.save(this.tasks);
+  }
+
+  private getTaskKeysByCondition(
+    projectId: string,
+    condition: (task: TaskModel) => boolean
+  ) {
     if (Array.isArray(this.tasks[projectId])) {
       return TreeModelStoreHelper.getFlatItemsRecursive(
         this.tasks[projectId],
@@ -153,14 +187,6 @@ export default class TaskStore {
       ).map((task) => task.key);
     }
     return [];
-  }
-
-  checkTasks(projectId: string, taskIds: string[]) {
-    if (Array.isArray(this.tasks[projectId])) {
-      this.checkTasksRecursive(this.tasks[projectId], taskIds);
-    }
-    this.tasksService.save(this.tasks);
-    GaService.event(EEventCategory.Tasks, ETasksEvents.Check);
   }
 
   private findAndSetActiveTask() {
@@ -181,11 +207,15 @@ export default class TaskStore {
     return TreeModelStoreHelper.getItemRecursive(tasks, condition);
   }
 
-  private checkTasksRecursive(tasks: TaskModel[], taskIds: string[]) {
+  private checkTasksRecursive(
+    tasks: TaskModel[],
+    taskIds: string[],
+    fn: (task: TaskModel, taskIds: string[]) => void
+  ) {
     tasks.forEach((task) => {
-      task.checked = taskIds.includes(task.key);
+      fn(task, taskIds);
       if (Array.isArray(task.children)) {
-        this.checkTasksRecursive(task.children, taskIds);
+        this.checkTasksRecursive(task.children, taskIds, fn);
       }
     });
   }
