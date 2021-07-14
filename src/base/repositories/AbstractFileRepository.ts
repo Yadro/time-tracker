@@ -13,6 +13,11 @@ export default abstract class AbstractFileRepository<T = any> {
 
   writeFileQueue = new PromiseQueue();
 
+  private get logPrefix() {
+    const filePath = !this.saveInRoot ? this.dirWithProfileData : '';
+    return `FileRepository [${filePath}/${this.fileName}]:`;
+  }
+
   private static get appDataFolder() {
     return process.env.APPDATA || '';
   }
@@ -34,8 +39,9 @@ export default abstract class AbstractFileRepository<T = any> {
   }
 
   public restore(defaultValue: T): T {
+    console.log(`${this.logPrefix} restore`);
     if (fs.existsSync(this.filePath)) {
-      const data = fs.readFileSync(this.filePath);
+      const data = fs.readFileSync(this.filePath, { encoding: 'utf-8' });
       // TODO handle parse error. Backup file with issues and return defaultValue
       return JSON.parse(data);
     }
@@ -44,13 +50,12 @@ export default abstract class AbstractFileRepository<T = any> {
 
   public save(data: T) {
     FsHelper.mkdirIfNotExists(this.destFolder);
-    this.writeFileQueue.add(() =>
-      FsHelper.writeFile(this.filePath, data).catch(() => {
-        console.error(
-          `AbstractFileRepository: can't save file ${this.fileName} ${this.filePath}`
-        );
-      })
-    );
-    this.writeFileQueue.run();
+    this.writeFileQueue.add(() => {
+      console.log(`${this.logPrefix} save`);
+      return FsHelper.writeFile(this.filePath, data).catch(() => {
+        console.error(`${this.logPrefix} can't save file '${this.filePath}'`);
+      });
+    });
+    this.writeFileQueue.execute();
   }
 }

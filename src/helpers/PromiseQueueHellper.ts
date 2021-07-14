@@ -18,7 +18,7 @@ export default class PromiseQueue {
     });
   }
 
-  run() {
+  execute() {
     if (this.pendingPromise) {
       return;
     }
@@ -40,7 +40,7 @@ export default class PromiseQueue {
       })
       .finally(() => {
         this.pendingPromise = false;
-        this.run();
+        this.execute();
       });
   }
 }
