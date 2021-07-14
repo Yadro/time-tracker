@@ -286,6 +286,6 @@ export default class MenuBuilder {
       },
     ];
 
-    return null;
+    return templateDefault;
   }
 }
