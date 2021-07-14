@@ -6,7 +6,9 @@ import format from 'date-fns/format';
 import { observer } from 'mobx-react';
 import { createUseStyles } from 'react-jss';
 
-import TaskModel, { ITimeRangeModel } from '../../../../modules/tasks/models/TaskModel';
+import TaskModel, {
+  ITimeRangeModel,
+} from '../../../../modules/tasks/models/TaskModel';
 import TaskTimeItemModel from '../../../../modules/tasks/models/TaskTimeItemModel';
 import { mapPrevCurrent } from '../../../../helpers/ArrayHelper';
 import HoursItem from './components/HoursItem';
@@ -43,6 +45,7 @@ export default observer(function HoursByTask({
         {mapPrevCurrent(task?.time || [], (prev, range, index) => {
           const hoursItem = (
             <HoursItem
+              key={index}
               range={range}
               onClick={() => {
                 if (task) {
