@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Col, Form, Input, Modal, Row, TimePicker } from 'antd';
 import { Moment } from 'moment/moment';
 import moment from 'moment';
-import { DeleteFilled } from '@ant-design/icons';
+import { DeleteFilled, SaveOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react';
 import isBefore from 'date-fns/isBefore';
 
@@ -97,10 +97,10 @@ const TimeRangeModal = observer(
       <Modal
         title="Edit time range"
         visible={visible}
-        okButtonProps={{ disabled: !valid }}
         onOk={handleOk}
         onCancel={handleCancel}
         okText="Save"
+        okButtonProps={{ icon: <SaveOutlined />, disabled: !valid }}
       >
         <Form colon>
           <Form.Item label="Task">

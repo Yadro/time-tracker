@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Modal, Space } from 'antd';
-import { DeleteFilled } from '@ant-design/icons';
+import { DeleteFilled, SaveOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react';
 
 import ProjectModel from '../../../../modules/projects/models/ProjectModel';
@@ -60,6 +60,7 @@ const EditProjectModal = observer(({ project }: EditProjectModalProps) => {
       onOk={handleOk}
       onCancel={handleCancel}
       okText="Save"
+      okButtonProps={{ icon: <SaveOutlined /> }}
     >
       <Space direction="vertical">
         <Input

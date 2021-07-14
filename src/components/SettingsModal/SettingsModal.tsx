@@ -9,6 +9,7 @@ import {
   TimePicker,
 } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { SaveOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react';
 // eslint-disable-next-line import/named
 import moment, { Moment } from 'moment';
@@ -75,6 +76,7 @@ const SettingsModal: React.VFC<ISettingsModalProps> = observer(
         title="Settings"
         visible={visible}
         // okButtonProps={{ disabled: !valid }}
+        okButtonProps={{ icon: <SaveOutlined /> }}
         okText="Save"
         onOk={handleSave}
         onCancel={onClose}
