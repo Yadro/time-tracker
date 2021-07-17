@@ -24,6 +24,7 @@ export default class ProjectModel extends AbstractModel
   key: string = '';
   title: string = '';
   color: string = '';
+  expanded: boolean = false;
   children?: ProjectModel[] = [];
 
   constructor(props: IJsonProjectItem) {

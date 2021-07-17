@@ -28,10 +28,7 @@ const TaskList = TreeList(
   {
     checkable: true,
     onExpand(keys: Key[]) {
-      tasksStore.tasksMarkExpanded(
-        projectStore.activeProject,
-        keys as string[]
-      );
+      tasksStore.markExpanded(projectStore.activeProject, keys as string[]);
     },
     getExpandedKeys() {
       return tasksStore.getExpandedKeys(projectStore.activeProject);
@@ -62,6 +59,12 @@ const ProjectList = TreeList(
           active={projectStore.activeProject === project.key}
         />
       );
+    },
+    onExpand(keys: Key[]) {
+      projectStore.markExpanded(keys as string[]);
+    },
+    getExpandedKeys() {
+      return projectStore.getExpandedKeys();
     },
   }
 );

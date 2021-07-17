@@ -2,7 +2,7 @@ import { autorun, makeAutoObservable } from 'mobx';
 
 import ProjectModel from './models/ProjectModel';
 import ProjectService from './ProjectService';
-import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
+import TreeModelHelper from '../../base/TreeModelHelper';
 import { Undefined } from '../../types/CommonTypes';
 import { RootStore } from '../RootStore';
 import GaService from '../../services/gaService/GaService';
@@ -45,7 +45,7 @@ export default class ProjectStore {
   setProjectProps(
     project: ProjectModel,
     title: string,
-    color: string | undefined,
+    color: string | undefined
   ) {
     project.title = title;
     project.color = color || '';
@@ -58,7 +58,29 @@ export default class ProjectStore {
     function compare(project: ProjectModel) {
       return project.key === projectKey;
     }
-    return TreeModelStoreHelper.getItemRecursive(this.projects, compare);
+    return TreeModelHelper.getItemRecursive(this.projects, compare);
+  }
+
+  getExpandedKeys(): string[] {
+    const condition = (project: ProjectModel) => project.expanded;
+
+    return TreeModelHelper.getFlatItemsRecursive(this.projects, condition).map(
+      (task) => task.key
+    );
+  }
+
+  markExpanded(ids: string[]) {
+    const markExpanded = (project: ProjectModel, ids: string[]) => {
+      project.expanded = ids.includes(project.key);
+    };
+
+    TreeModelHelper.modifyItemsWithIdsRecursive<ProjectModel>(
+      this.projects,
+      ids,
+      markExpanded
+    );
+
+    this.set(this.projects.slice());
   }
 
   add(project: ProjectModel) {
@@ -74,7 +96,7 @@ export default class ProjectStore {
       return _project.key === project.key;
     }
 
-    this.projects = TreeModelStoreHelper.deleteItems(this.projects, condition);
+    this.projects = TreeModelHelper.deleteItems(this.projects, condition);
     this.projectService.save(this.projects);
     GaService.event(EEventCategory.Projects, EProjectEvents.Delete);
   }

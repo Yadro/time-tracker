@@ -4,7 +4,7 @@ const path = require('path');
 import FsHelper from '../../helpers/FsHelper';
 import PromiseQueue from '../../helpers/PromiseQueueHellper';
 
-const APP_DIR = 'YadroTimeTracker';
+const APP_DIR = 'YadroTimeTracker_test';
 
 export default abstract class AbstractFileRepository<T = any> {
   dirWithProfileData: string = 'profile1';

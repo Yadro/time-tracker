@@ -3,7 +3,7 @@ import { autorun, makeAutoObservable } from 'mobx';
 import TaskService from './TaskService';
 import TaskModel, { ITimeRangeModel } from './models/TaskModel';
 import TasksByProject from '../../modules/tasks/models/TasksByProject';
-import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
+import TreeModelHelper from '../../base/TreeModelHelper';
 import BadgeService from '../BadgeService';
 import { RootStore } from '../RootStore';
 import GaService from '../../services/gaService/GaService';
@@ -29,8 +29,8 @@ export default class TaskStore {
     });
   }
 
-  set(projectId: string, tasks: TaskModel[]) {
-    this.tasks[projectId] = tasks;
+  set(projectId: string, tasksInProject: TaskModel[]) {
+    this.tasks[projectId] = tasksInProject;
     this.tasksService.save(this.tasks);
   }
 
@@ -59,7 +59,7 @@ export default class TaskStore {
     }
 
     for (const tasks of Object.values(this.tasks)) {
-      const found = TreeModelStoreHelper.getItemRecursive(tasks, condition);
+      const found = TreeModelHelper.getItemRecursive(tasks, condition);
       if (found) {
         return found;
       }
@@ -75,7 +75,7 @@ export default class TaskStore {
     }
 
     for (const tasks of Object.values(this.tasks)) {
-      TreeModelStoreHelper.getFlatItemsRecursiveBase(tasks, condition, result);
+      TreeModelHelper.getFlatItemsRecursiveBase(tasks, condition, result);
     }
     return result;
   }
@@ -100,7 +100,7 @@ export default class TaskStore {
 
     for (const projectKey in this.tasks) {
       if (this.tasks.hasOwnProperty(projectKey)) {
-        this.tasks[projectKey] = TreeModelStoreHelper.deleteItems(
+        this.tasks[projectKey] = TreeModelHelper.deleteItems(
           this.tasks[projectKey],
           condition
         );
@@ -159,22 +159,30 @@ export default class TaskStore {
     }
 
     if (Array.isArray(this.tasks[projectId])) {
-      this.checkTasksRecursive(this.tasks[projectId], taskIds, checkTaskFn);
+      TreeModelHelper.modifyItemsWithIdsRecursive<TaskModel>(
+        this.tasks[projectId],
+        taskIds,
+        checkTaskFn
+      );
+
+      this.set(projectId, this.tasks[projectId].slice());
     }
-    this.tasksService.save(this.tasks);
     GaService.event(EEventCategory.Tasks, ETasksEvents.Check);
   }
 
-  tasksMarkExpanded(projectId: string, taskIds: string[]) {
-    function markExpanded(task: TaskModel, taskIds: string[]) {
+  markExpanded(projectId: string, taskIds: string[]) {
+    const markExpanded = (task: TaskModel, taskIds: string[]) => {
       task.expanded = taskIds.includes(task.key);
-    }
+    };
 
     if (Array.isArray(this.tasks[projectId])) {
-      this.checkTasksRecursive(this.tasks[projectId], taskIds, markExpanded);
+      TreeModelHelper.modifyItemsWithIdsRecursive<TaskModel>(
+        this.tasks[projectId],
+        taskIds,
+        markExpanded
+      );
 
-      this.tasks[projectId] = this.tasks[projectId].slice();
-      this.tasksService.save(this.tasks);
+      this.set(projectId, this.tasks[projectId].slice());
     }
   }
 
@@ -183,7 +191,7 @@ export default class TaskStore {
     condition: (task: TaskModel) => boolean
   ) {
     if (Array.isArray(this.tasks[projectId])) {
-      return TreeModelStoreHelper.getFlatItemsRecursive(
+      return TreeModelHelper.getFlatItemsRecursive(
         this.tasks[projectId],
         condition
       ).map((task) => task.key);
@@ -206,20 +214,7 @@ export default class TaskStore {
       return task.active;
     }
 
-    return TreeModelStoreHelper.getItemRecursive(tasks, condition);
-  }
-
-  private checkTasksRecursive(
-    tasks: TaskModel[],
-    taskIds: string[],
-    fn: (task: TaskModel, taskIds: string[]) => void
-  ) {
-    tasks.forEach((task) => {
-      fn(task, taskIds);
-      if (Array.isArray(task.children)) {
-        this.checkTasksRecursive(task.children, taskIds, fn);
-      }
-    });
+    return TreeModelHelper.getItemRecursive(tasks, condition);
   }
 
   private setupReminder(task?: TaskModel) {
