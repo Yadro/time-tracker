@@ -1,8 +1,8 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import isSameDay from 'date-fns/isSameDay';
 
-import AbstractModel from '../base/AbstractModel';
-import { ITreeItem } from '../types/ITreeItem';
+import AbstractModel from '../../../base/AbstractModel';
+import { ITreeItem } from '../../../types/ITreeItem';
 import { startOfDay } from 'date-fns';
 
 export interface IJsonTimeRangeModel {
@@ -21,6 +21,7 @@ interface IJsonTaskModel extends ITreeItem<IJsonTaskModel> {
   projectId: string;
   checked: boolean;
   active: boolean;
+  expanded: boolean;
   time: string[][] | IJsonTimeRangeModel[];
   datesInProgress: string[];
   children: IJsonTaskModel[];
@@ -33,6 +34,7 @@ export default class TaskModel extends AbstractModel {
   children: TaskModel[] = [];
   projectId: string = '';
   checked: boolean = false;
+  expanded: boolean = true;
   active: boolean = false;
   time: ITimeRangeModel[] = [];
   datesInProgress: Date[] = [];
@@ -43,6 +45,7 @@ export default class TaskModel extends AbstractModel {
     this.load(props);
     this.children = props.children?.map((json) => new TaskModel(json)) || [];
     this.time =
+      // @ts-ignore
       props.time?.map<ITimeRangeModel>(
         (range: string[] | IJsonTimeRangeModel) => {
           if (Array.isArray(range)) {

@@ -2,15 +2,16 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Col, Form, Input, Modal, Row, TimePicker } from 'antd';
 import { Moment } from 'moment/moment';
 import moment from 'moment';
-import { DeleteFilled } from '@ant-design/icons';
+import { DeleteFilled, SaveOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react';
 import isBefore from 'date-fns/isBefore';
 
 import rootStore from '../../modules/RootStore';
-import TaskTimeItemModel from '../../models/TaskTimeItemModel';
-import { ITimeRangeModel } from '../../models/TaskModel';
+import TaskTimeItemModel from '../../modules/tasks/models/TaskTimeItemModel';
+import { ITimeRangeModel } from '../../modules/tasks/models/TaskModel';
 import { Undefined } from '../../types/CommonTypes';
 import TimeRangeDuration from './components/TimeRangeDuration';
+import IModalProps from '../../types/IModalProps';
 
 const { tasksStore } = rootStore;
 
@@ -19,10 +20,8 @@ enum RangeField {
   end = 'end',
 }
 
-interface TimeRangeModalProps {
+interface TimeRangeModalProps extends IModalProps {
   taskTime?: TaskTimeItemModel;
-  visible: boolean;
-  onClose: () => void;
 }
 
 const TimeRangeModal = observer(
@@ -98,10 +97,10 @@ const TimeRangeModal = observer(
       <Modal
         title="Edit time range"
         visible={visible}
-        okButtonProps={{ disabled: !valid }}
         onOk={handleOk}
         onCancel={handleCancel}
         okText="Save"
+        okButtonProps={{ icon: <SaveOutlined />, disabled: !valid }}
       >
         <Form colon>
           <Form.Item label="Task">
@@ -119,6 +118,7 @@ const TimeRangeModal = observer(
               <Form.Item label="Start" labelCol={{ span: 24 }}>
                 <TimePicker
                   format="HH:mm"
+                  minuteStep={5}
                   value={timeRange?.start && moment(timeRange?.start)}
                   onChange={onChange(RangeField.start)}
                 />
@@ -128,6 +128,7 @@ const TimeRangeModal = observer(
               <Form.Item label="End" labelCol={{ span: 24 }}>
                 <TimePicker
                   format="HH:mm"
+                  minuteStep={5}
                   value={timeRange?.end && moment(timeRange?.end)}
                   onChange={onChange(RangeField.end)}
                   disabled={timeInProgress}

@@ -1,10 +1,17 @@
-import { makeAutoObservable } from 'mobx';
+import { autorun, makeAutoObservable } from 'mobx';
 
 import TaskService from './TaskService';
-import TaskModel, { ITimeRangeModel } from '../../models/TaskModel';
-import TasksByProject from '../../models/TasksByProject';
-import TreeModelStoreHelper from '../../base/TreeModelStoreHelper';
+import TaskModel, { ITimeRangeModel } from './models/TaskModel';
+import TasksByProject from '../../modules/tasks/models/TasksByProject';
+import TreeModelHelper from '../../base/TreeModelHelper';
 import BadgeService from '../BadgeService';
+import { RootStore } from '../RootStore';
+import GaService from '../../services/gaService/GaService';
+import {
+  EEventCategory,
+  ETasksEvents,
+  ETimeRangeEvents,
+} from '../../services/gaService/EEvents';
 
 export default class TaskStore {
   tasks: TasksByProject = {};
@@ -12,18 +19,25 @@ export default class TaskStore {
   private tasksService = new TaskService();
   private interval: NodeJS.Timeout | undefined;
 
-  constructor() {
+  constructor(private rootStore: RootStore) {
     makeAutoObservable(this);
+    autorun(() => {
+      const profile = this.rootStore.settingsStore.settings.currentProfile;
+      if (profile) {
+        this.tasksService.setProfile(profile);
+      }
+    });
   }
 
-  set(projectId: string, tasks: TaskModel[]) {
-    this.tasks[projectId] = tasks;
+  set(projectId: string, tasksInProject: TaskModel[]) {
+    this.tasks[projectId] = tasksInProject;
     this.tasksService.save(this.tasks);
   }
 
   setTime(task: TaskModel, timeIndex: number, timeRange: ITimeRangeModel) {
     task.time[timeIndex] = timeRange;
     this.tasksService.save(this.tasks);
+    GaService.event(EEventCategory.TimeRange, ETimeRangeEvents.Update);
   }
 
   deleteTime(task: TaskModel, timeIndex: number) {
@@ -32,6 +46,7 @@ export default class TaskStore {
     }
     task.time.splice(timeIndex, 1);
     this.tasksService.save(this.tasks);
+    GaService.event(EEventCategory.TimeRange, ETimeRangeEvents.Delete);
   }
 
   getTasks(projectId: string): TaskModel[] {
@@ -44,7 +59,7 @@ export default class TaskStore {
     }
 
     for (const tasks of Object.values(this.tasks)) {
-      const found = TreeModelStoreHelper.getItemRecursive(tasks, condition);
+      const found = TreeModelHelper.getItemRecursive(tasks, condition);
       if (found) {
         return found;
       }
@@ -60,7 +75,7 @@ export default class TaskStore {
     }
 
     for (const tasks of Object.values(this.tasks)) {
-      TreeModelStoreHelper.getFlatItemsRecursiveBase(tasks, condition, result);
+      TreeModelHelper.getFlatItemsRecursiveBase(tasks, condition, result);
     }
     return result;
   }
@@ -73,6 +88,7 @@ export default class TaskStore {
     this.tasks[projectId].push(task);
     this.tasks[projectId] = this.tasks[projectId].slice();
     this.tasksService.save(this.tasks);
+    GaService.event(EEventCategory.Tasks, ETasksEvents.Create);
   }
 
   delete(task: TaskModel) {
@@ -80,19 +96,18 @@ export default class TaskStore {
       return _task.key === task.key;
     }
 
-    if (task.active) {
-      this.stopTimer(task);
-    }
+    this.stopTimer();
 
     for (const projectKey in this.tasks) {
       if (this.tasks.hasOwnProperty(projectKey)) {
-        this.tasks[projectKey] = TreeModelStoreHelper.deleteItems(
+        this.tasks[projectKey] = TreeModelHelper.deleteItems(
           this.tasks[projectKey],
           condition
         );
       }
     }
     this.tasksService.save(this.tasks);
+    GaService.event(EEventCategory.Tasks, ETasksEvents.Delete);
   }
 
   deleteProjectTasks(projectKey: string) {
@@ -101,20 +116,23 @@ export default class TaskStore {
   }
 
   startTimer(task: TaskModel) {
-    if (this.activeTask) {
-      this.stopTimer(this.activeTask);
-    }
+    this.stopTimer(true);
     this.activeTask = task;
     task.start();
     this.setupReminder(task);
     this.tasksService.save(this.tasks);
   }
 
-  stopTimer(task: TaskModel) {
-    this.activeTask = undefined;
-    task.stop();
-    this.setupReminder();
-    this.tasksService.save(this.tasks);
+  stopTimer(silent?: boolean) {
+    if (this.activeTask) {
+      this.activeTask.stop();
+      this.activeTask = undefined;
+    }
+
+    if (!silent) {
+      this.setupReminder();
+      this.tasksService.save(this.tasks);
+    }
   }
 
   restore() {
@@ -124,24 +142,61 @@ export default class TaskStore {
   }
 
   getCheckedKeys(projectId: string): string[] {
-    function condition(task: TaskModel): boolean {
-      return task.checked;
+    const condition = (task: TaskModel) => task.checked;
+
+    return this.getTaskKeysByCondition(projectId, condition);
+  }
+
+  getExpandedKeys(projectId: string): string[] {
+    const condition = (task: TaskModel) => task.expanded;
+
+    return this.getTaskKeysByCondition(projectId, condition);
+  }
+
+  checkTasks(projectId: string, taskIds: string[]) {
+    function checkTaskFn(task: TaskModel, taskIds: string[]) {
+      task.checked = taskIds.includes(task.key);
     }
 
     if (Array.isArray(this.tasks[projectId])) {
-      return TreeModelStoreHelper.getFlatItemsRecursive(
+      TreeModelHelper.modifyItemsWithIdsRecursive<TaskModel>(
+        this.tasks[projectId],
+        taskIds,
+        checkTaskFn
+      );
+
+      this.set(projectId, this.tasks[projectId].slice());
+    }
+    GaService.event(EEventCategory.Tasks, ETasksEvents.Check);
+  }
+
+  markExpanded(projectId: string, taskIds: string[]) {
+    const markExpanded = (task: TaskModel, taskIds: string[]) => {
+      task.expanded = taskIds.includes(task.key);
+    };
+
+    if (Array.isArray(this.tasks[projectId])) {
+      TreeModelHelper.modifyItemsWithIdsRecursive<TaskModel>(
+        this.tasks[projectId],
+        taskIds,
+        markExpanded
+      );
+
+      this.set(projectId, this.tasks[projectId].slice());
+    }
+  }
+
+  private getTaskKeysByCondition(
+    projectId: string,
+    condition: (task: TaskModel) => boolean
+  ) {
+    if (Array.isArray(this.tasks[projectId])) {
+      return TreeModelHelper.getFlatItemsRecursive(
         this.tasks[projectId],
         condition
       ).map((task) => task.key);
     }
     return [];
-  }
-
-  checkTasks(projectId: string, taskIds: string[]) {
-    if (Array.isArray(this.tasks[projectId])) {
-      this.checkTasksRecursive(this.tasks[projectId], taskIds);
-    }
-    this.tasksService.save(this.tasks);
   }
 
   private findAndSetActiveTask() {
@@ -159,24 +214,19 @@ export default class TaskStore {
       return task.active;
     }
 
-    return TreeModelStoreHelper.getItemRecursive(tasks, condition);
-  }
-
-  private checkTasksRecursive(tasks: TaskModel[], taskIds: string[]) {
-    tasks.forEach((task) => {
-      task.checked = taskIds.includes(task.key);
-      if (Array.isArray(task.children)) {
-        this.checkTasksRecursive(task.children, taskIds);
-      }
-    });
+    return TreeModelHelper.getItemRecursive(tasks, condition);
   }
 
   private setupReminder(task?: TaskModel) {
-    if (this.interval) {
-      clearInterval(this.interval);
+    BadgeService.setBadge(!!task);
+
+    if (!this.rootStore.settingsStore.settings.showNotifications) {
+      return;
     }
+
+    this.removeReminder();
+
     if (task) {
-      BadgeService.setBadge(true);
       console.log('Setup: Task in progress');
       this.interval = setInterval(() => {
         console.log('Task in progress');
@@ -185,7 +235,6 @@ export default class TaskStore {
         });
       }, 40 * 60 * 1000);
     } else {
-      BadgeService.setBadge(false);
       console.log('Setup: No tasks in progress');
       this.interval = setInterval(() => {
         console.log('No tasks in progress');
@@ -193,6 +242,12 @@ export default class TaskStore {
           body: 'There are not task that you track',
         });
       }, 15 * 60 * 1000);
+    }
+  }
+
+  removeReminder() {
+    if (this.interval !== undefined) {
+      clearInterval(this.interval);
     }
   }
 }

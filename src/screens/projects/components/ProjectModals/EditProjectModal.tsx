@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Modal, Space } from 'antd';
-import { DeleteFilled } from '@ant-design/icons';
+import { DeleteFilled, SaveOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react';
 
-import ProjectModel from '../../../../models/ProjectModel';
+import ProjectModel from '../../../../modules/projects/models/ProjectModel';
 import rootStore from '../../../../modules/RootStore';
 import ChooseColor from './components/ChooseColor';
 
@@ -17,6 +17,7 @@ interface EditProjectModalProps {
 const EditProjectModal = observer(({ project }: EditProjectModalProps) => {
   const [title, setTitle] = useState<string>('');
   const [color, setColor] = useState<string>('');
+  const canDelete = projectStore.projects.length > 1;
 
   useEffect(() => {
     const { editProject } = projectStore;
@@ -24,7 +25,7 @@ const EditProjectModal = observer(({ project }: EditProjectModalProps) => {
       setTitle(editProject.title);
       setColor(editProject.color);
     }
-  }, [projectStore.editProject]);
+  }, []);
 
   useEffect(() => {
     setTitle(project?.title || '');
@@ -42,7 +43,7 @@ const EditProjectModal = observer(({ project }: EditProjectModalProps) => {
   }
 
   function handleDelete() {
-    if (project) {
+    if (project && canDelete) {
       rootStore.deleteProject(project);
     }
     onClose();
@@ -59,6 +60,7 @@ const EditProjectModal = observer(({ project }: EditProjectModalProps) => {
       onOk={handleOk}
       onCancel={handleCancel}
       okText="Save"
+      okButtonProps={{ icon: <SaveOutlined /> }}
     >
       <Space direction="vertical">
         <Input
@@ -70,7 +72,11 @@ const EditProjectModal = observer(({ project }: EditProjectModalProps) => {
           activeColor={color}
           onChoose={(color) => setColor(color)}
         />
-        <Button icon={<DeleteFilled />} onClick={handleDelete}>
+        <Button
+          icon={<DeleteFilled />}
+          onClick={handleDelete}
+          disabled={!canDelete}
+        >
           Delete
         </Button>
       </Space>

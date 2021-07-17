@@ -1,4 +1,4 @@
-import { ITimeRangeModel } from '../models/TaskModel';
+import { ITimeRangeModel } from '../modules/tasks/models/TaskModel';
 import { format } from 'date-fns';
 import { iterPrevCurrent } from './ArrayHelper';
 
@@ -45,6 +45,13 @@ export function msToTime(s: number, showSeconds: boolean = true) {
   return timeItemsToString(sign, hrs, mins, secs, showSeconds);
 }
 
+export function timeToMs(date: Date) {
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  return (hours * 60 + minutes) * 60 * 1000;
+}
+
 export function calcDuration(taskTime: ITimeRangeModel[]): number {
   return taskTime.reduce((prev, timeRange) => {
     if (!timeRange.start) {
@@ -83,13 +90,12 @@ export function getTime(date: Date | undefined) {
   return format(date, TIME_FORMAT);
 }
 
-export const EIGHT_HOURS = 8 * 60 * 60 * 1000;
-
 export function estimateWorkingTimeEnd(
   startDate: Date | undefined,
-  restTimeMs: number
+  restTimeMs: number,
+  workingHoursMs: number
 ): Date | undefined {
   return startDate
-    ? new Date(startDate.getTime() + restTimeMs + EIGHT_HOURS)
+    ? new Date(startDate.getTime() + restTimeMs + workingHoursMs)
     : undefined;
 }

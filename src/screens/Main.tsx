@@ -1,17 +1,28 @@
-import React from 'react';
-import { Route, Switch, Link, Redirect } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Switch, Link, Redirect, useLocation } from 'react-router-dom';
 import { Layout } from 'antd';
-import { observer } from 'mobx-react';
 
 import ProjectsScreen from './projects/ProjectsScreen';
 import TaskControl from '../components/TaskControl/TaskControl';
 import HeaderMenu from '../components/HeaderMenu/HeaderMenu';
 import HoursScreen from './hours/HoursScreen';
 import Dashboard from './dashboard/Dashboard';
+import Profile from '../components/Profile/Profile';
+import GaService from '../services/gaService/GaService';
 
 const { Header } = Layout;
 
-export default observer(function Main() {
+const Main = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    let path = location.pathname;
+    if (path.includes('index.html')) {
+      path = '/';
+    }
+    GaService.pageView(path);
+  }, [location.pathname]);
+
   return (
     <Layout className="layout">
       <Header>
@@ -26,21 +37,16 @@ export default observer(function Main() {
         </HeaderMenu>
         <span className="flex-1" />
         <TaskControl />
+        <Profile />
       </Header>
       <Switch>
-        <Route exact path="/">
-          <Redirect to="/projects" />
-        </Route>
-        <Route path="/hours">
-          <HoursScreen />
-        </Route>
-        <Route path="/projects">
-          <ProjectsScreen />
-        </Route>
-        <Route path="/dashboard">
-          <Dashboard />
-        </Route>
+        <Route path="/hours" component={HoursScreen} />
+        <Route path="/projects" component={ProjectsScreen} />
+        <Route path="/dashboard" component={Dashboard} />
+        <Redirect from="*" to="/projects" />
       </Switch>
     </Layout>
   );
-});
+};
+
+export default Main;

@@ -1,9 +1,12 @@
 import React from 'react';
 import { render } from 'react-dom';
-require('dotenv').config();
+import dotenv from 'dotenv';
 
 import App from './App';
 import { initSentry } from './shared/initSentry';
+import './services/gaService/GaService';
+
+dotenv.config();
 
 initSentry();
 

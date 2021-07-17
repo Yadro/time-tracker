@@ -10,7 +10,7 @@
  */
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-require('dotenv').config();
+import dotenv from 'dotenv';
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
@@ -19,6 +19,8 @@ import Badge from 'electron-windows-badge';
 
 import MenuBuilder from './menu';
 import { initSentry } from './shared/initSentry';
+
+dotenv.config();
 
 initSentry();
 
@@ -33,6 +35,22 @@ export default class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) {
+        mainWindow.restore();
+      }
+      mainWindow.focus();
+    }
+  });
+}
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');

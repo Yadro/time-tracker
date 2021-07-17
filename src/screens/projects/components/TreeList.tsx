@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tree } from 'antd';
+import { Empty, Tree } from 'antd';
 import { observer } from 'mobx-react';
 import { Key } from 'rc-tree/lib/interface';
 
@@ -14,6 +14,7 @@ interface TreeListProps {
 interface TreePropsExtended<T>
   extends Omit<TreeProps, 'onDrop' | 'onSelect' | 'titleRender'> {
   getCheckedKeys?: () => Key[];
+  getExpandedKeys?: () => Key[];
   titleRender?: (item: T) => React.ReactNode;
 }
 
@@ -22,7 +23,7 @@ export default function TreeList<T extends ITreeItem<any>>(
   updateData: (items: T[]) => void,
   options: TreePropsExtended<T>
 ) {
-  const { getCheckedKeys, ...rest } = options;
+  const { getCheckedKeys, getExpandedKeys, ...rest } = options;
 
   return observer(({ onSelect }: TreeListProps) => {
     const data = getData();
@@ -96,13 +97,31 @@ export default function TreeList<T extends ITreeItem<any>>(
       updateData(dataCopy);
     }
 
+    if (!data.length) {
+      return (
+        <Empty
+          image={Empty.PRESENTED_IMAGE_DEFAULT}
+          description={
+            <>
+              There are no tasks yet.
+              <br />
+              Type a new task name below and press Enter
+            </>
+          }
+        />
+      );
+    }
+
     return (
       <Tree
         className="draggable-tree"
+        defaultExpandParent={false}
         checkedKeys={getCheckedKeys?.()}
+        expandedKeys={getExpandedKeys?.()}
         draggable
         blockNode
         treeData={data}
+        // @ts-ignore
         onDrop={onDrop}
         onSelect={onSelect}
         {...rest}

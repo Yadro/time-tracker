@@ -5,7 +5,7 @@ import { observer } from 'mobx-react';
 import { createUseStyles } from 'react-jss';
 
 import { msToTime } from '../../../../../helpers/DateTime';
-import { ITimeRangeModel } from '../../../../../models/TaskModel';
+import { ITimeRangeModel } from '../../../../../modules/tasks/models/TaskModel';
 
 function hoursFormat(date: Date) {
   return format(date, 'HH:mm');

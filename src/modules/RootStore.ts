@@ -1,12 +1,20 @@
 import TaskStore from './tasks/TaskStore';
 import ProjectStore from './projects/ProjectStore';
-import ProjectModel from '../models/ProjectModel';
+import ProjectModel from './projects/models/ProjectModel';
+import SettingsStore from './settings/SettingsStore';
 
-class RootStore {
-  tasksStore = new TaskStore();
-  projectStore = new ProjectStore();
+export class RootStore {
+  settingsStore = new SettingsStore(this);
+  tasksStore = new TaskStore(this);
+  projectStore = new ProjectStore(this);
 
   restore() {
+    this.settingsStore.restore();
+    this.tasksStore.restore();
+    this.projectStore.restore();
+  }
+
+  loadTaskAndProjects() {
     this.tasksStore.restore();
     this.projectStore.restore();
   }

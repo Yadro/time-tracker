@@ -4,21 +4,22 @@ import { observer } from 'mobx-react';
 import { ProjectOutlined } from '@ant-design/icons';
 import { createUseStyles } from 'react-jss';
 
-import TaskModel from '../../../../models/TaskModel';
+import TaskModel from '../../../../modules/tasks/models/TaskModel';
 import rootStore from '../../../../modules/RootStore';
 import HoursByTask from '../HoursByTask/HoursByTask';
 import IconTile from '../../../../components/IconTile/IconTile';
 import Duration from './components/Duration';
 import TimeRangeModal from '../../../../components/TimeRangeModal/TimeRangeModal';
 import { Undefined } from '../../../../types/CommonTypes';
-import TaskTimeItemModel from '../../../../models/TaskTimeItemModel';
+import TaskTimeItemModel from '../../../../modules/tasks/models/TaskTimeItemModel';
+import IModalProps from '../../../../types/IModalProps';
+
+const { TextArea } = Input;
 
 const { projectStore } = rootStore;
 
-interface DrawerTaskProps {
-  task: TaskModel | undefined;
-  visible: boolean;
-  onClose: () => void;
+interface DrawerTaskProps extends IModalProps {
+  task?: TaskModel;
 }
 
 export default observer(function DrawerTask({
@@ -70,9 +71,10 @@ export default observer(function DrawerTask({
             }
           }}
         />
-        <Input
-          value={task?.details}
+        <TextArea
           placeholder="Details"
+          rows={4}
+          value={task?.details}
           onChange={(e) => {
             const details = e.target.value;
             if (task) {

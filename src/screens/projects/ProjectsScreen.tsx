@@ -8,8 +8,8 @@ import { PlusOutlined } from '@ant-design/icons';
 import TaskInput from './components/TaskInput';
 import rootStore from '../../modules/RootStore';
 import TreeList from './components/TreeList';
-import TaskModel from '../../models/TaskModel';
-import ProjectModel from '../../models/ProjectModel';
+import TaskModel from '../../modules/tasks/models/TaskModel';
+import ProjectModel from '../../modules/projects/models/ProjectModel';
 import ProjectModal from './components/ProjectModals/ProjectModal';
 import TaskNode from './components/TaskNode/TaskNode';
 import DrawerTask from './components/DrawerTask/DrawerTask';
@@ -27,6 +27,12 @@ const TaskList = TreeList(
   },
   {
     checkable: true,
+    onExpand(keys: Key[]) {
+      tasksStore.markExpanded(projectStore.activeProject, keys as string[]);
+    },
+    getExpandedKeys() {
+      return tasksStore.getExpandedKeys(projectStore.activeProject);
+    },
     onCheck(keys: any) {
       tasksStore.checkTasks(projectStore.activeProject, keys as string[]);
     },
@@ -53,6 +59,12 @@ const ProjectList = TreeList(
           active={projectStore.activeProject === project.key}
         />
       );
+    },
+    onExpand(keys: Key[]) {
+      projectStore.markExpanded(keys as string[]);
+    },
+    getExpandedKeys() {
+      return projectStore.getExpandedKeys();
     },
   }
 );
@@ -88,7 +100,7 @@ export default observer(function Projects() {
           <Space direction="vertical">
             <ProjectList onSelect={handleSelectProject} />
             <Button onClick={handleCreateProject} icon={<PlusOutlined />}>
-              Create Project
+              Project
             </Button>
           </Space>
         </Layout>

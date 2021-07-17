@@ -1,19 +1,18 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Layout, Space } from 'antd';
 import { observer } from 'mobx-react';
-import * as Sentry from '@sentry/electron';
 
 import rootStore from '../../modules/RootStore';
 import HoursCard from './components/HoursCard/HoursCard';
 import { getTimeItems } from '../../helpers/TaskHelper';
 import SelectDate from '../../components/SelectDate/SelectDate';
 import TimeRangeModal from '../../components/TimeRangeModal/TimeRangeModal';
-import TaskTimeItemModel from '../../models/TaskTimeItemModel';
+import TaskTimeItemModel from '../../modules/tasks/models/TaskTimeItemModel';
 import { Undefined } from '../../types/CommonTypes';
 import TotalHours from './components/TotalHours/TotalHours';
 import { createUseStyles } from 'react-jss';
 import { mapCurrentNext } from '../../helpers/ArrayHelper';
-import { ITimeRangeModel } from '../../models/TaskModel';
+import { ITimeRangeModel } from '../../modules/tasks/models/TaskModel';
 import { msToTime } from '../../helpers/DateTime';
 
 const { tasksStore } = rootStore;
@@ -36,12 +35,11 @@ export default observer(function HoursView() {
     Undefined<TaskTimeItemModel>
   >();
 
-  const tasks = useMemo(() => tasksStore.getTasksByDate(date), [date]);
+  const tasks = useMemo(() => tasksStore.getTasksByDate(date), [
+    tasksStore.tasks,
+    date,
+  ]);
   const timeItems = getTimeItems(tasks, date);
-
-  useEffect(() => {
-    Sentry.captureException(new Error(`${process.env.NODE_ENV} exception`));
-  }, []);
 
   return (
     <Layout className={classes.hours}>
