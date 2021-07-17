@@ -115,6 +115,7 @@ export default function TreeList<T extends ITreeItem<any>>(
     return (
       <Tree
         className="draggable-tree"
+        defaultExpandParent={false}
         checkedKeys={getCheckedKeys?.()}
         expandedKeys={getExpandedKeys?.()}
         draggable
