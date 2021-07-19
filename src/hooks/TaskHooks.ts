@@ -5,7 +5,7 @@ import { calcDuration, calcDurationGaps, msToTime } from '../helpers/DateTime';
 import TaskModel, { ITimeRangeModel } from '../modules/tasks/models/TaskModel';
 import TaskTimeItemModel from '../modules/tasks/models/TaskTimeItemModel';
 
-export function useTaskDuration(model: TaskModel | undefined) {
+export function useTaskDuration(model?: TaskModel, showZero?: boolean) {
   const intervalRef = useRef<NodeJS.Timeout>();
   const [duration, setDuration] = useState<string>('');
 
@@ -14,9 +14,12 @@ export function useTaskDuration(model: TaskModel | undefined) {
       return;
     }
     const duration = model.duration;
-    if (duration !== 0) {
-      setDuration(msToTime(duration, model.active));
-    }
+
+    const durationMs =
+      duration !== 0 || showZero ? msToTime(duration, model.active) : '';
+
+    setDuration(durationMs);
+
     if (model.active) {
       intervalRef.current = setInterval(() => {
         setDuration(msToTime(model?.duration || 0));
@@ -39,12 +42,12 @@ export function useTimeItemsDuration(taskTime: TaskTimeItemModel[]) {
 
   const calcTaskDuration = useCallback(
     () => calcDuration(taskTime.map((t) => t.time)),
-    [taskTime],
+    [taskTime]
   );
 
   const calcTaskGapsDuration = useCallback(
     () => calcDurationGaps(taskTime.map((t) => t.time)),
-    [taskTime],
+    [taskTime]
   );
 
   const setTimes = useCallback(() => {
@@ -78,7 +81,7 @@ export function useTimeRangeDuration(timeRange: ITimeRangeModel | undefined) {
 
   const calcTimeRangeDuration = useCallback(
     () => msToTime(timeRange ? calcDuration([timeRange]) : 0),
-    [timeRange],
+    [timeRange]
   );
 
   useEffect(() => {
@@ -104,7 +107,7 @@ export function useTimeRangeDuration(timeRange: ITimeRangeModel | undefined) {
 }
 
 export function useStartWorkingTime(
-  timeItems: TaskTimeItemModel[],
+  timeItems: TaskTimeItemModel[]
 ): Date | undefined {
   return useMemo(() => {
     let minTime: Date | undefined;
