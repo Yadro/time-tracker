@@ -42,7 +42,7 @@ export default abstract class AbstractFileRepository<T = any> {
   }
 
   public restore(defaultValue: T): T {
-    console.log(`${this.logPrefix} restore`);
+    console.log(`${this.logPrefix} restore ${this.filePath}`);
     if (fs.existsSync(this.filePath)) {
       const data = fs.readFileSync(this.filePath, { encoding: 'utf-8' });
       // TODO handle parse error. Backup file with issues and return defaultValue
