@@ -40,6 +40,7 @@ const Main = () => {
         <Profile />
       </Header>
       <Switch>
+        {process.env.GA_UACODE}
         <Route path="/hours" component={HoursScreen} />
         <Route path="/projects" component={ProjectsScreen} />
         <Route path="/dashboard" component={Dashboard} />
