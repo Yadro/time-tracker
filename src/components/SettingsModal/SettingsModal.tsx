@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import {
+  Button,
   Checkbox,
   Divider,
   Form,
@@ -11,6 +12,7 @@ import {
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { SaveOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react';
+import * as Sentry from '@sentry/browser';
 // eslint-disable-next-line import/named
 import moment, { Moment } from 'moment';
 
@@ -117,6 +119,17 @@ const SettingsModal: React.VFC<ISettingsModalProps> = observer(
             onChange={handleChangeNotifications}
           />
         </Form.Item>
+        {process.env.DEBUG_PROD === 'true' && (
+          <Button
+            onClick={() => {
+              const message = `${process.env.NODE_ENV} exception ${Date.now()}`;
+              Sentry.captureException(new Error(message));
+              console.log('Sentry.captureException', message);
+            }}
+          >
+            Test Sentry
+          </Button>
+        )}
       </Modal>
     );
   }
