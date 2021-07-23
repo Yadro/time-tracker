@@ -1,6 +1,19 @@
 import { ITreeItem } from '../types/ITreeItem';
 
 const TreeModelHelper = {
+  walkRecursive<T extends ITreeItem<any>>(
+    fn: (t: T, p?: T) => void,
+    treeItems: T[],
+    parent?: T
+  ) {
+    treeItems.forEach((item) => {
+      fn(item, parent);
+      if (item.children?.length) {
+        TreeModelHelper.walkRecursive(fn, item.children, item);
+      }
+    });
+  },
+
   modifyItemsWithIdsRecursive<T extends ITreeItem<any>>(
     treeItems: T[],
     ids: string[],
