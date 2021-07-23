@@ -30,6 +30,9 @@ export default observer(function ProjectModal({
         key: String(Date.now()),
         title: projectName,
         color: color || '',
+        children: [],
+        expanded: true,
+        deletable: true,
       })
     );
     onClose();
