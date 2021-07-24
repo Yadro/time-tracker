@@ -29,7 +29,7 @@ const TaskList = TreeList(
   },
   {
     checkable: true,
-    get draggable() {
+    isDraggable() {
       return projectStore.activeProject !== DEFAULT_PROJECT_ID.MyDay;
     },
     onExpand(keys: Key[]) {

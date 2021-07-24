@@ -2,6 +2,7 @@ import TaskModel from './TaskModel';
 
 export class TaskModelProxy extends TaskModel {
   origin: TaskModel | null = null;
+  children: TaskModelProxy[] = [];
 }
 
 export const taskModelProxyHandler: ProxyHandler<TaskModelProxy> = {

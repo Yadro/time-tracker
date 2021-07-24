@@ -1,7 +1,8 @@
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, useCallback } from 'react';
 import {
   CaretRightFilled,
   DeleteOutlined,
+  EnterOutlined,
   PauseOutlined,
 } from '@ant-design/icons';
 import { observer } from 'mobx-react';
@@ -22,18 +23,21 @@ export default observer(function TaskNode({ task }: TaskNodeProps) {
 
   const duration = TaskHooks.useTaskDuration(task);
 
-  function preventDefault(fn: () => void) {
+  const preventDefault = useCallback((fn: () => void) => {
     return (e: SyntheticEvent) => {
       e.stopPropagation();
       fn();
     };
-  }
+  }, []);
 
   return (
     <div className={classes.taskNode}>
       <span className={classes.taskTitle}>{task.title}</span>
       <span>{duration}</span>
       <span className={classes.taskNodeActions}>
+        <EnterOutlined
+          onClick={preventDefault(() => tasksStore.addToMyDay(task))}
+        />
         {!task.active ? (
           <CaretRightFilled
             onClick={preventDefault(() => tasksStore.startTimer(task))}

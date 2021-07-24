@@ -1,6 +1,108 @@
-import { ITreeItem } from '../types/ITreeItem';
+import { ITreeItem, ITreeItemWithParent } from '../types/ITreeItem';
+import { TaskModelProxy } from '../modules/tasks/models/TaskModelProxy';
+import TaskModel from '../modules/tasks/models/TaskModel';
 
 const TreeModelHelper = {
+  getPathToNode<T extends ITreeItemWithParent>(node: T) {
+    const result: string[] = [];
+
+    let ptrNode = node;
+    while (ptrNode) {
+      result.unshift(ptrNode.key);
+      // @ts-ignore
+      ptrNode = ptrNode.parent;
+    }
+
+    return result;
+  },
+  copyItemsToTree(
+    sourceTree: TaskModel[],
+    destTree: TaskModelProxy[],
+    keysToTask: string[]
+  ) {
+    let keyIdx = 0;
+    let sourceChild = sourceTree;
+    let destChild = destTree;
+
+    if (keysToTask.length === 1) {
+      const source = sourceChild.find((node) => node.key === keysToTask[0]);
+      destChild.push(
+        // @ts-ignore
+        new TaskModelProxy({
+          ...source,
+          children: [],
+        })
+      );
+      return true;
+    }
+
+    do {
+      const nextSourceNode = sourceChild.find(
+        (task) => task.key === keysToTask[keyIdx]
+      );
+      if (!nextSourceNode) {
+        return false;
+      }
+
+      const nextDestNode = destChild.find(
+        (task) => task.key === keysToTask[keyIdx]
+      );
+
+      if (nextDestNode) {
+        keyIdx++;
+        destChild = nextDestNode.children;
+      } else {
+        const restKeysToTask = keysToTask.slice(keyIdx);
+        return TreeModelHelper.copySubItemsToTree(
+          sourceChild,
+          destChild,
+          restKeysToTask
+        );
+      }
+    } while (keyIdx >= keysToTask.length);
+
+    return true;
+  },
+
+  copySubItemsToTree(
+    sourceTree: TaskModel[],
+    destTree: TaskModelProxy[],
+    keysToTask: string[]
+  ) {
+    if (!sourceTree) {
+      return false;
+    }
+
+    let keyIdx = 0;
+    let dest = destTree;
+    let source = sourceTree.find((node) => node.key === keysToTask[keyIdx]);
+
+    if (!source) {
+      return false;
+    }
+
+    while (true) {
+      // @ts-ignore
+      let copy = new TaskModelProxy({
+        ...source,
+        children: [],
+      });
+
+      dest.push(copy);
+
+      keyIdx++;
+      if (keyIdx === keysToTask.length) {
+        return true;
+      }
+
+      dest = copy.children;
+      source = source.children.find((node) => node.key === keysToTask[keyIdx]);
+      if (!source) {
+        return false;
+      }
+    }
+  },
+
   walkRecursive<T extends ITreeItem<any>>(
     fn: (t: T, p?: T) => void,
     treeItems: T[],

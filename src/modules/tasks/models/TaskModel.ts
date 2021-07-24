@@ -17,14 +17,14 @@ export interface ITimeRangeModel {
 }
 
 interface IJsonTaskModel extends ITreeItem<IJsonTaskModel> {
-  projectId: string;
-  checked: boolean;
-  active: boolean;
-  expanded: boolean;
-  inMyDay: string;
-  time: string[][] | IJsonTimeRangeModel[];
-  datesInProgress: string[];
-  details: string[];
+  projectId?: string;
+  checked?: boolean;
+  active?: boolean;
+  expanded?: boolean;
+  inMyDay?: string;
+  time?: string[][] | IJsonTimeRangeModel[];
+  datesInProgress?: string[];
+  details?: string[];
 }
 
 const parseTimeRageItems = (

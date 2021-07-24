@@ -12,6 +12,7 @@ import {
   ETasksEvents,
   ETimeRangeEvents,
 } from '../../services/gaService/EEvents';
+import { DEFAULT_PROJECT_ID } from '../projects/models/ProjectModel';
 
 export default class TaskStore {
   tasks: TasksByProject = {};
@@ -90,6 +91,19 @@ export default class TaskStore {
     this.tasks[projectId] = this.tasks[projectId].slice();
     this.tasksService.save(this.tasks);
     GaService.event(EEventCategory.Tasks, ETasksEvents.Create);
+  }
+
+  addToMyDay(task: TaskModel) {
+    task.inMyDay = new Date();
+    // @ts-ignore
+    const pathToNode = TreeModelHelper.getPathToNode(task);
+
+    TreeModelHelper.copyItemsToTree(
+      this.tasks[task.projectId],
+      // @ts-ignore
+      this.tasks[DEFAULT_PROJECT_ID.MyDay],
+      pathToNode
+    );
   }
 
   delete(task: TaskModel) {

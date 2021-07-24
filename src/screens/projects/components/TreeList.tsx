@@ -16,6 +16,7 @@ interface TreePropsExtended<T>
   getCheckedKeys?: () => Key[];
   getExpandedKeys?: () => Key[];
   titleRender?: (item: T) => React.ReactNode;
+  isDraggable?: () => boolean;
 }
 
 export default function TreeList<T extends ITreeItem<any>>(
@@ -23,7 +24,7 @@ export default function TreeList<T extends ITreeItem<any>>(
   updateData: (items: T[]) => void,
   options: TreePropsExtended<T>
 ) {
-  const { getCheckedKeys, getExpandedKeys, ...rest } = options;
+  const { getCheckedKeys, getExpandedKeys, isDraggable, ...rest } = options;
 
   return observer(({ onSelect }: TreeListProps) => {
     const data = getData();
@@ -112,12 +113,15 @@ export default function TreeList<T extends ITreeItem<any>>(
       );
     }
 
+    const draggable = isDraggable ? isDraggable() : rest.draggable;
+
     return (
       <Tree
         className="draggable-tree"
         defaultExpandParent={false}
         checkedKeys={getCheckedKeys?.()}
         expandedKeys={getExpandedKeys?.()}
+        draggable={draggable}
         blockNode
         treeData={data}
         // @ts-ignore
