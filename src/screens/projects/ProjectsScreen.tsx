@@ -9,7 +9,9 @@ import TaskInput from './components/TaskInput';
 import rootStore from '../../modules/RootStore';
 import TreeList from './components/TreeList';
 import TaskModel from '../../modules/tasks/models/TaskModel';
-import ProjectModel from '../../modules/projects/models/ProjectModel';
+import ProjectModel, {
+  DEFAULT_PROJECT_ID,
+} from '../../modules/projects/models/ProjectModel';
 import ProjectModal from './components/ProjectModals/ProjectModal';
 import TaskNode from './components/TaskNode/TaskNode';
 import DrawerTask from './components/DrawerTask/DrawerTask';
@@ -27,6 +29,9 @@ const TaskList = TreeList(
   },
   {
     checkable: true,
+    get draggable() {
+      return projectStore.activeProject !== DEFAULT_PROJECT_ID.MyDay;
+    },
     onExpand(keys: Key[]) {
       tasksStore.markExpanded(projectStore.activeProject, keys as string[]);
     },
@@ -52,6 +57,7 @@ const ProjectList = TreeList(
   },
   {
     selectable: false,
+    draggable: true,
     titleRender(project: ProjectModel) {
       return (
         <ProjectNode

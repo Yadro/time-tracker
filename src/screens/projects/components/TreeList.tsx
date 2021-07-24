@@ -118,7 +118,6 @@ export default function TreeList<T extends ITreeItem<any>>(
         defaultExpandParent={false}
         checkedKeys={getCheckedKeys?.()}
         expandedKeys={getExpandedKeys?.()}
-        draggable
         blockNode
         treeData={data}
         // @ts-ignore
