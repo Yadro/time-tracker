@@ -21,6 +21,7 @@ interface IJsonTaskModel extends ITreeItem<IJsonTaskModel> {
   checked: boolean;
   active: boolean;
   expanded: boolean;
+  inMyDay: string;
   time: string[][] | IJsonTimeRangeModel[];
   datesInProgress: string[];
   details: string[];
@@ -57,6 +58,7 @@ export default class TaskModel extends AbstractModel {
   checked: boolean = false;
   active: boolean = false;
   expanded: boolean = true;
+  inMyDay: Date | null = null;
   time: ITimeRangeModel[] = [];
   datesInProgress: Date[] = [];
   details: string = '';
@@ -69,6 +71,7 @@ export default class TaskModel extends AbstractModel {
       time: props.time ? parseTimeRageItems(props.time) : [],
       datesInProgress:
         props.datesInProgress?.map((date) => new Date(date)) || [],
+      inMyDay: props?.inMyDay ? new Date(props?.inMyDay) : null,
     };
 
     this.load(newProps);

@@ -1,5 +1,7 @@
 import TaskModel from './TaskModel';
+import { TaskModelProxy } from './TaskModelProxy';
 
-type TasksByProject = Record<string, TaskModel[]>;
+type Task = TaskModel | TaskModelProxy;
+type TasksByProject = Record<string, Task[]>;
 
 export default TasksByProject;
