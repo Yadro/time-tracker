@@ -13,7 +13,7 @@ export class TaskModelProxy extends TaskModel {
 
 export const taskModelProxyHandler: ProxyHandler<TaskModelProxy> = {
   get(target: TaskModelProxy, prop: string | symbol): any {
-    return target?.origin?.[prop as keyof TaskModel];
+    return target?.[prop as keyof TaskModelProxy];
   },
   set(target: TaskModelProxy, prop: string | symbol, value: any): boolean {
     if (prop === 'duration') {
@@ -26,7 +26,7 @@ export const taskModelProxyHandler: ProxyHandler<TaskModelProxy> = {
     // @ts-ignore
     target[prop] = value;
 
-    if (prop !== 'expanded') {
+    if (!['expanded', 'children'].includes(prop as string)) {
       // @ts-ignore
       target.origin[prop] = value;
     }

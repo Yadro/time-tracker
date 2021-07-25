@@ -72,25 +72,27 @@ const TreeModelHelper = {
     }
 
     let keyIdx = 0;
-    let dest = destTree;
-    let source = sourceTree.find((node) => node.key === keysToTask[keyIdx]);
+    let destChildren = destTree;
+    let sourceNode = sourceTree.find((node) => node.key === keysToTask[keyIdx]);
 
-    if (!source) {
+    if (!sourceNode) {
       return false;
     }
 
     while (true) {
-      const copy = TaskFactory.createTaskModelProxy(source);
-      dest.push(copy);
+      const copy = TaskFactory.createTaskModelProxy(sourceNode);
+      destChildren.push(copy);
 
       keyIdx++;
       if (keyIdx === keysToTask.length) {
         return true;
       }
 
-      dest = copy.children;
-      source = source.children.find((node) => node.key === keysToTask[keyIdx]);
-      if (!source) {
+      destChildren = copy.children;
+      sourceNode = sourceNode.children.find(
+        (node) => node.key === keysToTask[keyIdx]
+      );
+      if (!sourceNode) {
         return false;
       }
     }
