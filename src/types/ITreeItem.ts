@@ -4,6 +4,8 @@ export interface ITreeItem<T extends ITreeItem<any> = ITreeItem<any>> {
   children?: T[];
 }
 
-export interface ITreeItemWithParent extends ITreeItem<ITreeItemWithParent> {
-  parent: ITreeItemWithParent | undefined;
+export interface ITreeItemWithParent<
+  T extends ITreeItemWithParent<any> = ITreeItemWithParent<any>
+> extends ITreeItem<T> {
+  parent: T | null;
 }

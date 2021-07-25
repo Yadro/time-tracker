@@ -2,7 +2,7 @@ import { action, computed, makeObservable, observable } from 'mobx';
 import { isSameDay, startOfDay } from 'date-fns';
 
 import AbstractModel from '../../../base/AbstractModel';
-import { ITreeItem } from '../../../types/ITreeItem';
+import { ITreeItem, ITreeItemWithParent } from '../../../types/ITreeItem';
 
 export interface IJsonTimeRangeModel {
   start: string;
@@ -16,7 +16,7 @@ export interface ITimeRangeModel {
   description?: string;
 }
 
-interface IJsonTaskModel extends ITreeItem<IJsonTaskModel> {
+export interface IJsonTaskModel extends ITreeItemWithParent {
   projectId?: string;
   checked?: boolean;
   active?: boolean;
@@ -49,11 +49,12 @@ const parseTimeRageItems = (
   );
 };
 
-export default class TaskModel extends AbstractModel {
+export default class TaskModel extends AbstractModel
+  implements ITreeItemWithParent<TaskModel> {
   key: string = '';
   title: string = '';
   children: TaskModel[] = [];
-  parent: TaskModel | null = null;
+  parent: TaskModel | null = null; // update parent on drug&drop
   projectId: string = '';
   checked: boolean = false;
   active: boolean = false;
