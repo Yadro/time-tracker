@@ -21,12 +21,12 @@ const TreeModelHelper = {
     keysToTask: string[]
   ) {
     let keyIdx = 0;
-    let sourceChild = sourceTree;
-    let destChild = destTree;
+    let sourceChildren = sourceTree;
+    let destChildren = destTree;
 
     if (keysToTask.length === 1) {
-      const source = sourceChild.find((node) => node.key === keysToTask[0]);
-      destChild.push(
+      const source = sourceChildren.find((node) => node.key === keysToTask[0]);
+      destChildren.push(
         // @ts-ignore
         new TaskModelProxy({
           ...source,
@@ -37,29 +37,30 @@ const TreeModelHelper = {
     }
 
     do {
-      const nextSourceNode = sourceChild.find(
+      const nextSourceNode = sourceChildren.find(
         (task) => task.key === keysToTask[keyIdx]
       );
       if (!nextSourceNode) {
         return false;
       }
 
-      const nextDestNode = destChild.find(
+      const nextDestNode = destChildren.find(
         (task) => task.key === keysToTask[keyIdx]
       );
 
       if (nextDestNode) {
         keyIdx++;
-        destChild = nextDestNode.children;
+        sourceChildren = nextSourceNode.children;
+        destChildren = nextDestNode.children;
       } else {
         const restKeysToTask = keysToTask.slice(keyIdx);
         return TreeModelHelper.copySubItemsToTree(
-          sourceChild,
-          destChild,
+          sourceChildren,
+          destChildren,
           restKeysToTask
         );
       }
-    } while (keyIdx >= keysToTask.length);
+    } while (keyIdx < keysToTask.length);
 
     return true;
   },
