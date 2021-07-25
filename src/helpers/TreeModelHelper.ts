@@ -16,6 +16,7 @@ const TreeModelHelper = {
 
     return result;
   },
+
   copyItemsToTree(
     sourceTree: TaskModel[],
     destTree: TaskInMyDay[],

@@ -4,7 +4,7 @@ import TaskRepository from './TaskRepository';
 import TaskFactory from './TaskFactory';
 import TasksByProject from './models/TasksByProject';
 import AbstractServiceWithProfile from '../../base/AbstractServiceWithProfile';
-import TreeModelHelper from '../../base/TreeModelHelper';
+import TreeModelHelper from '../../helpers/TreeModelHelper';
 import TaskModel from './models/TaskModel';
 
 const setParent = (item: TaskModel, parent?: TaskModel) => {

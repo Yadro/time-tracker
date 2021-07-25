@@ -3,7 +3,7 @@ import { autorun, makeAutoObservable } from 'mobx';
 import TaskService from './TaskService';
 import TaskModel, { ITimeRangeModel } from './models/TaskModel';
 import TasksByProject from '../../modules/tasks/models/TasksByProject';
-import TreeModelHelper from '../../base/TreeModelHelper';
+import TreeModelHelper from '../../helpers/TreeModelHelper';
 import BadgeService from '../BadgeService';
 import { RootStore } from '../RootStore';
 import GaService from '../../services/gaService/GaService';

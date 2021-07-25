@@ -2,7 +2,7 @@ import { autorun, makeAutoObservable } from 'mobx';
 
 import ProjectModel from './models/ProjectModel';
 import ProjectService from './ProjectService';
-import TreeModelHelper from '../../base/TreeModelHelper';
+import TreeModelHelper from '../../helpers/TreeModelHelper';
 import { Undefined } from '../../types/CommonTypes';
 import { RootStore } from '../RootStore';
 import GaService from '../../services/gaService/GaService';
