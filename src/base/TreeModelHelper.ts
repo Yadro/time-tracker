@@ -1,5 +1,5 @@
 import { ITreeItem, ITreeItemWithParent } from '../types/ITreeItem';
-import { TaskModelProxy } from '../modules/tasks/models/TaskModelProxy';
+import { TaskInMyDay } from '../modules/tasks/models/TaskInMyDay';
 import TaskModel from '../modules/tasks/models/TaskModel';
 import TaskFactory from '../modules/tasks/TaskFactory';
 
@@ -18,7 +18,7 @@ const TreeModelHelper = {
   },
   copyItemsToTree(
     sourceTree: TaskModel[],
-    destTree: TaskModelProxy[],
+    destTree: TaskInMyDay[],
     keysToTask: string[]
   ) {
     let keyIdx = 0;
@@ -64,7 +64,7 @@ const TreeModelHelper = {
 
   copySubItemsToTree(
     sourceTree: TaskModel[],
-    destTree: TaskModelProxy[],
+    destTree: TaskInMyDay[],
     keysToTask: string[]
   ) {
     if (!sourceTree) {

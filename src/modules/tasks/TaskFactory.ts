@@ -1,7 +1,7 @@
 import AbstractFactory from '../../base/AbstractFactory';
 import TasksByProject from './models/TasksByProject';
 import TaskModel from './models/TaskModel';
-import { TaskModelProxy, taskModelProxyHandler } from './models/TaskModelProxy';
+import { TaskInMyDay, taskModelProxyHandler } from './models/TaskInMyDay';
 import { DEFAULT_PROJECT_ID } from '../projects/models/ProjectModel';
 
 export default class TaskFactory extends AbstractFactory {
@@ -16,9 +16,9 @@ export default class TaskFactory extends AbstractFactory {
     return newData;
   }
 
-  static createTaskModelProxy(taskModel: TaskModel): TaskModelProxy {
-    const target = new TaskModelProxy(taskModel, []);
+  static createTaskModelProxy(taskModel: TaskModel): TaskInMyDay {
+    const target = new TaskInMyDay(taskModel, []);
 
-    return new Proxy<TaskModelProxy>(target, taskModelProxyHandler);
+    return new Proxy<TaskInMyDay>(target, taskModelProxyHandler);
   }
 }

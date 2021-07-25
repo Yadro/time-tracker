@@ -1,21 +1,21 @@
 import TaskModel from './TaskModel';
 
-export class TaskModelProxy extends TaskModel {
+export class TaskInMyDay extends TaskModel {
   origin: TaskModel | null = null;
-  children: TaskModelProxy[] = [];
+  children: TaskInMyDay[] = [];
 
-  constructor(originTaskModel: TaskModel, children: TaskModelProxy[]) {
+  constructor(originTaskModel: TaskModel, children: TaskInMyDay[]) {
     super(originTaskModel);
     this.origin = originTaskModel;
     this.children = children;
   }
 }
 
-export const taskModelProxyHandler: ProxyHandler<TaskModelProxy> = {
-  get(target: TaskModelProxy, prop: string | symbol): any {
-    return target?.[prop as keyof TaskModelProxy];
+export const taskModelProxyHandler: ProxyHandler<TaskInMyDay> = {
+  get(target: TaskInMyDay, prop: string | symbol): any {
+    return target?.[prop as keyof TaskInMyDay];
   },
-  set(target: TaskModelProxy, prop: string | symbol, value: any): boolean {
+  set(target: TaskInMyDay, prop: string | symbol, value: any): boolean {
     if (prop === 'duration') {
       console.error(
         `TaskModel: Can't set prop '${prop.toString()}' in`,
