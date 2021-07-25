@@ -1,12 +1,13 @@
 import { ITreeItem, ITreeItemWithParent } from '../types/ITreeItem';
 import { TaskModelProxy } from '../modules/tasks/models/TaskModelProxy';
 import TaskModel from '../modules/tasks/models/TaskModel';
+import TaskFactory from '../modules/tasks/TaskFactory';
 
 const TreeModelHelper = {
-  getPathToNode<T extends ITreeItemWithParent>(node: T) {
+  getPathToNode<T extends ITreeItemWithParent = ITreeItemWithParent>(node: T) {
     const result: string[] = [];
 
-    let ptrNode = node;
+    let ptrNode: T | undefined = node;
     while (ptrNode) {
       result.unshift(ptrNode.key);
       // @ts-ignore
@@ -26,14 +27,10 @@ const TreeModelHelper = {
 
     if (keysToTask.length === 1) {
       const source = sourceChildren.find((node) => node.key === keysToTask[0]);
-      destChildren.push(
-        // @ts-ignore
-        new TaskModelProxy({
-          ...source,
-          children: [],
-        })
-      );
-      return true;
+      if (source) {
+        destChildren.push(TaskFactory.createTaskModelProxy(source));
+      }
+      return !!source;
     }
 
     do {
@@ -83,12 +80,7 @@ const TreeModelHelper = {
     }
 
     while (true) {
-      // @ts-ignore
-      let copy = new TaskModelProxy({
-        ...source,
-        children: [],
-      });
-
+      const copy = TaskFactory.createTaskModelProxy(source);
       dest.push(copy);
 
       keyIdx++;

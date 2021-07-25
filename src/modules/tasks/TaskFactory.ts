@@ -16,8 +16,8 @@ export default class TaskFactory extends AbstractFactory {
     return newData;
   }
 
-  createTaskProxy(taskModel: TaskModel): TaskModelProxy {
-    const target = new TaskModelProxy(taskModel);
+  static createTaskModelProxy(taskModel: TaskModel): TaskModelProxy {
+    const target = new TaskModelProxy(taskModel, []);
 
     return new Proxy<TaskModelProxy>(target, taskModelProxyHandler);
   }

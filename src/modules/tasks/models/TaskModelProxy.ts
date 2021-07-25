@@ -3,6 +3,12 @@ import TaskModel from './TaskModel';
 export class TaskModelProxy extends TaskModel {
   origin: TaskModel | null = null;
   children: TaskModelProxy[] = [];
+
+  constructor(originTaskModel: TaskModel, children: TaskModelProxy[]) {
+    super(originTaskModel);
+    this.origin = originTaskModel;
+    this.children = children;
+  }
 }
 
 export const taskModelProxyHandler: ProxyHandler<TaskModelProxy> = {
@@ -19,8 +25,11 @@ export const taskModelProxyHandler: ProxyHandler<TaskModelProxy> = {
     }
     // @ts-ignore
     target[prop] = value;
-    // @ts-ignore
-    target.origin[prop] = value;
+
+    if (prop !== 'expanded') {
+      // @ts-ignore
+      target.origin[prop] = value;
+    }
 
     return true;
   },
