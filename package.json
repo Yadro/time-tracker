@@ -31,7 +31,7 @@
   },
   "build": {
     "productName": "TimeTracker",
-    "appId": "ru.timetracker",
+    "appId": "com.timetracker.app",
     "files": [
       "dist/",
       "node_modules/",
@@ -66,6 +66,7 @@
       ]
     },
     "win": {
+      "publisherName": "Yadro",
       "target": [
         "nsis"
       ]
