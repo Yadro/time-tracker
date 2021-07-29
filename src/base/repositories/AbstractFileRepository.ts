@@ -4,7 +4,10 @@ const path = require('path');
 import FsHelper from '../../helpers/FsHelper';
 import PromiseQueue from '../../helpers/PromiseQueueHellper';
 
-const APP_DIR = 'YadroTimeTracker';
+const APP_DIR =
+  process.env.NODE_ENV === 'development'
+    ? 'YadroTimeTracker_test'
+    : 'YadroTimeTracker';
 
 export default abstract class AbstractFileRepository<T = any> {
   dirWithProfileData: string = 'profile1';
@@ -39,7 +42,7 @@ export default abstract class AbstractFileRepository<T = any> {
   }
 
   public restore(defaultValue: T): T {
-    console.log(`${this.logPrefix} restore`);
+    console.log(`${this.logPrefix} restore ${this.filePath}`);
     if (fs.existsSync(this.filePath)) {
       const data = fs.readFileSync(this.filePath, { encoding: 'utf-8' });
       // TODO handle parse error. Backup file with issues and return defaultValue

@@ -4,7 +4,7 @@ import format from 'date-fns/format';
 import { observer } from 'mobx-react';
 import { createUseStyles } from 'react-jss';
 
-import TaskTimeItemModel from '../../../../models/TaskTimeItemModel';
+import TaskTimeItemModel from '../../../../modules/tasks/models/TaskTimeItemModel';
 import PlayStopButton from '../../../../components/PlayStopButton/PlayStopButton';
 import rootStore from '../../../../modules/RootStore';
 import { msToTime } from '../../../../helpers/DateTime';

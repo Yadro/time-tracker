@@ -1,3 +1,6 @@
+import log from 'electron-log';
+Object.assign(console, log.functions);
+
 const Sentry =
   process.type === 'browser'
     ? require('@sentry/electron/dist/main')
@@ -8,5 +11,6 @@ export function initSentry() {
     Sentry.init({
       dsn: process.env.SENTRY_DSN,
     });
+    console.log(`[process.type=${process.type}] Sentry.init succeeded`);
   }
 }

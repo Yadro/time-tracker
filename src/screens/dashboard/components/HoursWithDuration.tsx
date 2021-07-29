@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from 'antd';
 import { createUseStyles } from 'react-jss';
 
-import TaskWithDurationModel from '../../../models/TaskWithDurationModel';
+import TaskWithDurationModel from '../../../modules/tasks/models/TaskWithDurationModel';
 import { msToTime } from '../../../helpers/DateTime';
 
 interface IHoursWithDurationProps {

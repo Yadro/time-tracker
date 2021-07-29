@@ -4,6 +4,7 @@ import webpack from 'webpack';
 import chalk from 'chalk';
 import { merge } from 'webpack-merge';
 import { spawn, execSync } from 'child_process';
+import Dotenv from 'dotenv-webpack';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../scripts/CheckNodeEnv';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
@@ -255,6 +256,11 @@ export default merge(baseConfig, {
      */
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'development',
+    }),
+
+    new Dotenv({
+      path: path.join(__dirname, '../../.env'),
+      systemvars: true,
     }),
 
     new webpack.LoaderOptionsPlugin({

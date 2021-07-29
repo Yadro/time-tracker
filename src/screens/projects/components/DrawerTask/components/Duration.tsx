@@ -14,7 +14,7 @@ interface DurationProps {
 
 export default observer(function Duration({ task }: DurationProps) {
   const classes = useStyle();
-  const duration = TaskHooks.useTaskDuration(task);
+  const duration = TaskHooks.useTaskDuration(task, true);
 
   return (
     <div className={classes.root}>

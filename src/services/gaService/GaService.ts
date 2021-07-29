@@ -17,10 +17,10 @@ const executeOnCondition = (fn: () => void) => {
 
 const GaService = {
   pageView(path: string) {
-    executeOnCondition(analytics?.pageview(path).send());
+    executeOnCondition(() => analytics?.pageview(path).send());
   },
   event(category: string, action: string) {
-    executeOnCondition(analytics?.event(category, action).send());
+    executeOnCondition(() => analytics?.event(category, action).send());
   },
 };
 

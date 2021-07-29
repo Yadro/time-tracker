@@ -41,9 +41,10 @@ export default class TaskStore {
   }
 
   deleteTime(task: TaskModel, timeIndex: number) {
-    if (!task.time[timeIndex].end) {
-      task.stop();
+    if (task.active) {
+      this.stopTimer();
     }
+
     task.time.splice(timeIndex, 1);
     this.tasksService.save(this.tasks);
     GaService.event(EEventCategory.TimeRange, ETimeRangeEvents.Delete);
