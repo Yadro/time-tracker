@@ -48,6 +48,9 @@ jobs:
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
           # This is used for uploading release assets to github
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # App env
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          GA_UACODE: ${{ secrets.GA_UACODE }}
         run: |
           yarn postinstall && yarn build && yarn electron-builder --publish always --win
           # yarn postinstall && yarn build && yarn electron-builder --publish always --win --mac --linux
