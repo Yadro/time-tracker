@@ -1,5 +1,8 @@
+import { EChannels } from '../../main/EChannels';
+
 const fs = require('fs');
 const path = require('path');
+import { ipcRenderer } from 'electron';
 
 import FsHelper from '../../helpers/FsHelper';
 import PromiseQueue from '../../helpers/PromiseQueueHellper';
@@ -21,8 +24,8 @@ export default abstract class AbstractFileRepository<T = any> {
     return `FileRepository [${filePath}/${this.fileName}]:`;
   }
 
-  private static get appDataFolder() {
-    return process.env.APPDATA || '';
+  static get appDataFolder() {
+    return ipcRenderer.sendSync(EChannels.GetPathUserData);
   }
 
   private get destFolder() {
