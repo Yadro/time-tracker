@@ -130,6 +130,9 @@ const SettingsModal: React.VFC<ISettingsModalProps> = observer(
             Test Sentry
           </Button>
         )}
+        <p>{`APPDATA: ${process.env.APPDATA}`}</p>
+        <p>{`SENTRY_DSN: ${process.env.SENTRY_DSN}`}</p>
+        <p>{`GA_UACODE: ${process.env.GA_UACODE}`}</p>
       </Modal>
     );
   }
