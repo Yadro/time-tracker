@@ -12,15 +12,16 @@ import log from 'electron-log';
 Object.assign(console, log.functions);
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
+import { initSentry } from './shared/initSentry';
+initSentry();
+
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import Badge from 'electron-windows-badge';
 
+import './main/IpcMain';
 import MenuBuilder from './menu';
-import { initSentry } from './shared/initSentry';
-
-initSentry();
 
 console.log('Working path:', app.getAppPath());
 

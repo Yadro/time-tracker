@@ -21,6 +21,7 @@ import IModalProps from '../../types/IModalProps';
 import NewProfilePopover from './NewProfilePopover';
 import { timeToMs } from '../../helpers/DateTime';
 import { DEFAULT_SETTINGS } from '../../modules/settings/models/SettingsModel';
+import AbstractFileRepository from '../../base/repositories/AbstractFileRepository';
 
 const { settingsStore } = rootStore;
 
@@ -130,7 +131,7 @@ const SettingsModal: React.VFC<ISettingsModalProps> = observer(
             Test Sentry
           </Button>
         )}
-        <p>{`APPDATA: ${process.env.APPDATA}`}</p>
+        <p>{`APPDATA: ${AbstractFileRepository.appDataFolder}`}</p>
         <p>{`SENTRY_DSN: ${process.env.SENTRY_DSN}`}</p>
         <p>{`GA_UACODE: ${process.env.GA_UACODE}`}</p>
       </Modal>
