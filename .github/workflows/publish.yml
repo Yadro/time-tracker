@@ -52,4 +52,5 @@ jobs:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           GA_UACODE: ${{ secrets.GA_UACODE }}
         run: |
-          yarn postinstall && yarn build && yarn electron-builder --publish always --win --mac --linux
+          yarn postinstall && yarn build && yarn electron-builder --publish always --win --linux
+          # --mac
