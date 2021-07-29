@@ -87,7 +87,7 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "time-tracker",
+      "owner": "Yadro",
       "repo": "time-tracker"
     }
   },
