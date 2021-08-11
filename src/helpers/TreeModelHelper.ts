@@ -20,14 +20,14 @@ const TreeModelHelper = {
   copyItemsToTree(
     sourceTree: TaskModel[],
     destTree: TaskInMyDay[],
-    keysToTask: string[]
+    keysToNode: string[]
   ) {
     let keyIdx = 0;
     let sourceChildren = sourceTree;
     let destChildren = destTree;
 
-    if (keysToTask.length === 1) {
-      const source = sourceChildren.find((node) => node.key === keysToTask[0]);
+    if (keysToNode.length === 1) {
+      const source = sourceChildren.find((node) => node.key === keysToNode[0]);
       if (source) {
         destChildren.push(TaskFactory.createTaskModelProxy(source));
       }
@@ -36,29 +36,31 @@ const TreeModelHelper = {
 
     do {
       const nextSourceNode = sourceChildren.find(
-        (task) => task.key === keysToTask[keyIdx]
+        (task) => task.key === keysToNode[keyIdx]
       );
       if (!nextSourceNode) {
         return false;
       }
 
       const nextDestNode = destChildren.find(
-        (task) => task.key === keysToTask[keyIdx]
+        (task) => task.key === keysToNode[keyIdx]
       );
 
       if (nextDestNode) {
+        // We already have a copy of node, go on
         keyIdx++;
         sourceChildren = nextSourceNode.children;
         destChildren = nextDestNode.children;
       } else {
-        const restKeysToTask = keysToTask.slice(keyIdx);
+        // Make a copy from this node
+        const restKeysToNode = keysToNode.slice(keyIdx);
         return TreeModelHelper.copySubItemsToTree(
           sourceChildren,
           destChildren,
-          restKeysToTask
+          restKeysToNode
         );
       }
-    } while (keyIdx < keysToTask.length);
+    } while (keyIdx < keysToNode.length);
 
     return true;
   },
@@ -66,7 +68,7 @@ const TreeModelHelper = {
   copySubItemsToTree(
     sourceTree: TaskModel[],
     destTree: TaskInMyDay[],
-    keysToTask: string[]
+    keysToNode: string[]
   ) {
     if (!sourceTree) {
       return false;
@@ -74,24 +76,24 @@ const TreeModelHelper = {
 
     let keyIdx = 0;
     let destChildren = destTree;
-    let sourceNode = sourceTree.find((node) => node.key === keysToTask[keyIdx]);
+    let sourceNode = sourceTree.find((node) => node.key === keysToNode[keyIdx]);
 
     if (!sourceNode) {
       return false;
     }
 
     while (true) {
-      const copy = TaskFactory.createTaskModelProxy(sourceNode);
-      destChildren.push(copy);
+      const copyNode = TaskFactory.createTaskModelProxy(sourceNode);
+      destChildren.push(copyNode);
 
       keyIdx++;
-      if (keyIdx === keysToTask.length) {
+      if (keyIdx === keysToNode.length) {
         return true;
       }
 
-      destChildren = copy.children;
+      destChildren = copyNode.children;
       sourceNode = sourceNode.children.find(
-        (node) => node.key === keysToTask[keyIdx]
+        (node) => node.key === keysToNode[keyIdx]
       );
       if (!sourceNode) {
         return false;

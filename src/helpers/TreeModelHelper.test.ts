@@ -8,6 +8,14 @@ describe('TreeModelHelper', () => {
   let testTasks: TasksByProject | undefined;
   beforeEach(() => {
     const factory = new TaskFactory();
+    /* Structure:
+    -task1
+    --task1-1
+    ---task-1-1-1
+    -task2
+    --task21
+    --task22
+    */
     const task111: Partial<IJsonTaskModel> = {
       key: '111',
       title: 'task1-1-1',
@@ -67,6 +75,7 @@ describe('TreeModelHelper', () => {
       '111',
     ]);
   });
+
   test('getPathToNode #2', () => {
     if (!testTasks) {
       throw new Error();
