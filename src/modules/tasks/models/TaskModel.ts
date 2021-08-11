@@ -63,6 +63,7 @@ export default class TaskModel extends AbstractModel
   time: ITimeRangeModel[] = [];
   datesInProgress: Date[] = [];
   details: string = '';
+  withoutActions: boolean = false; // TODO make a new class
 
   constructor(props: IJsonTaskModel | TaskModel) {
     super();

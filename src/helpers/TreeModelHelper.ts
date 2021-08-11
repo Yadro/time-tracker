@@ -1,7 +1,13 @@
+import { toJS } from 'mobx';
+
 import { ITreeItem, ITreeItemWithParent } from '../types/ITreeItem';
 import { TaskInMyDay } from '../modules/tasks/models/TaskInMyDay';
 import TaskModel from '../modules/tasks/models/TaskModel';
 import TaskFactory from '../modules/tasks/TaskFactory';
+import ProjectModel from '../modules/projects/models/ProjectModel';
+
+// @ts-ignore TODO remove
+window.toJS = toJS;
 
 const TreeModelHelper = {
   getPathToNode<T extends ITreeItemWithParent = ITreeItemWithParent>(node: T) {
@@ -17,6 +23,48 @@ const TreeModelHelper = {
     return result;
   },
 
+  copyItemsToTreeUnderProject(
+    project: ProjectModel | undefined,
+    sourceTree: TaskModel[],
+    destTree: TaskInMyDay[],
+    keysToNode: string[]
+  ): boolean {
+    if (!project) {
+      return false;
+    }
+
+    let destProject = destTree.find((node) => node.key === project.key);
+    if (!destProject) {
+      destProject = TaskFactory.createTaskModelProxy(
+        new TaskModel({
+          key: project.key,
+          projectId: project.key,
+          title: project.title,
+          active: false,
+          checked: false,
+          children: [],
+          datesInProgress: [],
+          details: [],
+          expanded: true,
+          inMyDay: new Date().toString(),
+          parent: null,
+          time: [],
+          withoutActions: true,
+        })
+      );
+      destTree.push(destProject);
+    }
+
+    return TreeModelHelper.copyItemsToTree(
+      sourceTree,
+      destProject.children,
+      keysToNode
+    );
+  },
+
+  /**
+   * Make a copy of tasks to 'My Day'
+   */
   copyItemsToTree(
     sourceTree: TaskModel[],
     destTree: TaskInMyDay[],

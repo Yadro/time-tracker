@@ -5,7 +5,7 @@ import TaskModel, { ITimeRangeModel } from './models/TaskModel';
 import TasksByProject from '../../modules/tasks/models/TasksByProject';
 import TreeModelHelper from '../../helpers/TreeModelHelper';
 import BadgeService from '../BadgeService';
-import { RootStore } from '../RootStore';
+import rootStore, { RootStore } from '../RootStore';
 import GaService from '../../services/gaService/GaService';
 import {
   EEventCategory,
@@ -98,7 +98,8 @@ export default class TaskStore {
     // @ts-ignore
     const pathToNode = TreeModelHelper.getPathToNode(task);
 
-    TreeModelHelper.copyItemsToTree(
+    TreeModelHelper.copyItemsToTreeUnderProject(
+      rootStore.projectStore.get(task.projectId),
       this.tasks[task.projectId],
       // @ts-ignore
       this.tasks[DEFAULT_PROJECT_ID.MyDay],
