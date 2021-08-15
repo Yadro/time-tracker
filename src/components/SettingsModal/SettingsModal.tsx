@@ -131,9 +131,14 @@ const SettingsModal: React.VFC<ISettingsModalProps> = observer(
             Test Sentry
           </Button>
         )}
-        <p>{`APPDATA: ${AbstractFileRepository.appDataFolder}`}</p>
-        <p>{`SENTRY_DSN: ${process.env.SENTRY_DSN}`}</p>
-        <p>{`GA_UACODE: ${process.env.GA_UACODE}`}</p>
+        {(process.env.NODE_ENV === 'development' ||
+          process.env.DEBUG_PROD === 'true') && (
+          <>
+            <p>{`APPDATA: ${AbstractFileRepository.appDataFolder}`}</p>
+            <p>{`SENTRY_DSN: ${process.env.SENTRY_DSN}`}</p>
+            <p>{`GA_UACODE: ${process.env.GA_UACODE}`}</p>
+          </>
+        )}
       </Modal>
     );
   }

@@ -12,6 +12,8 @@ const APP_DIR =
     ? 'YadroTimeTracker_test'
     : 'YadroTimeTracker';
 
+let _appDataPath: string = '';
+
 export default abstract class AbstractFileRepository<T = any> {
   dirWithProfileData: string = 'profile1';
   fileName: string = 'defaultFileName.json';
@@ -25,7 +27,11 @@ export default abstract class AbstractFileRepository<T = any> {
   }
 
   static get appDataFolder() {
-    return ipcRenderer.sendSync(EChannels.GetPathUserData);
+    if (_appDataPath) {
+      return _appDataPath;
+    }
+    _appDataPath = ipcRenderer.sendSync(EChannels.GetPathUserData);
+    return _appDataPath;
   }
 
   private get destFolder() {
