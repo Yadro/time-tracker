@@ -3,7 +3,7 @@ export default abstract class AbstractModel {
     return Object.keys(this);
   }
 
-  protected load<T extends any = any>(data: T) {
+  protected load<T extends Object = Object>(data: T) {
     if (data) {
       this.getAttributes().forEach((attribute) => {
         if (data.hasOwnProperty(attribute)) {

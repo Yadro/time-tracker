@@ -1,5 +1,5 @@
 import AbstractFactory from '../../base/AbstractFactory';
-import TasksByProject from './models/TasksByProject';
+import { TasksByProject } from './models/TasksByProject';
 import TaskModel from './models/TaskModel';
 import { TaskInMyDay, taskModelProxyHandler } from './models/TaskInMyDay';
 import { DEFAULT_PROJECT_ID } from '../projects/models/ProjectModel';

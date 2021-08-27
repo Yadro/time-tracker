@@ -2,7 +2,7 @@ import { action, computed, makeObservable, observable } from 'mobx';
 import { isSameDay, startOfDay } from 'date-fns';
 
 import AbstractModel from '../../../base/AbstractModel';
-import { ITreeItem, ITreeItemWithParent } from '../../../types/ITreeItem';
+import { ITreeItemWithParent } from '../../../types/ITreeItem';
 
 export interface IJsonTimeRangeModel {
   start: string;

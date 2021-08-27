@@ -1,7 +1,6 @@
 import TaskModel from './TaskModel';
 import { TaskInMyDay } from './TaskInMyDay';
+import { TaskWithProjectNameModel } from './TaskWithProjectNameModel';
 
-type Task = TaskModel | TaskInMyDay;
-type TasksByProject = Record<string, Task[]>;
-
-export default TasksByProject;
+export type Task = TaskModel | TaskInMyDay | TaskWithProjectNameModel;
+export type TasksByProject = Record<string, Task[]>;

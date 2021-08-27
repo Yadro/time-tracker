@@ -1,7 +1,7 @@
 import TreeModelHelper from './TreeModelHelper';
 import TaskFactory from '../modules/tasks/TaskFactory';
 import { IJsonTaskModel } from '../modules/tasks/models/TaskModel';
-import TasksByProject from '../modules/tasks/models/TasksByProject';
+import { TasksByProject } from '../modules/tasks/models/TasksByProject';
 import { ITreeItemWithParent } from '../types/ITreeItem';
 
 describe('TreeModelHelper', () => {
