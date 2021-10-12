@@ -23,6 +23,8 @@ export default observer(function TaskInput() {
           children: [],
           datesInProgress: [],
           details: [],
+          parent: null, // Add into root
+          expanded: true,
         })
       );
       setText('');

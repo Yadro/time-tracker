@@ -11,7 +11,8 @@ export default class ProjectService extends AbstractServiceWithProfile<
 
   getAll(): ProjectModel[] {
     const data = this.repository.restore(DEFAULT_PROJECTS);
-    return this.factory.createList(ProjectModel, data);
+
+    return this.factory.createProjects(data);
   }
 
   save(data: ProjectModel[]): void {

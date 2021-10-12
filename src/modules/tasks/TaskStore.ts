@@ -2,16 +2,21 @@ import { autorun, makeAutoObservable } from 'mobx';
 
 import TaskService from './TaskService';
 import TaskModel, { ITimeRangeModel } from './models/TaskModel';
-import TasksByProject from '../../modules/tasks/models/TasksByProject';
-import TreeModelHelper from '../../base/TreeModelHelper';
+import {
+  Task,
+  TasksByProject,
+} from '../../modules/tasks/models/TasksByProject';
+import TreeModelHelper from '../../helpers/TreeModelHelper';
 import BadgeService from '../BadgeService';
-import { RootStore } from '../RootStore';
+import rootStore, { RootStore } from '../RootStore';
 import GaService from '../../services/gaService/GaService';
 import {
   EEventCategory,
   ETasksEvents,
   ETimeRangeEvents,
 } from '../../services/gaService/EEvents';
+import { DEFAULT_PROJECT_ID } from '../projects/models/ProjectModel';
+import { ITreeItemWithParent } from '../../types/ITreeItem';
 
 export default class TaskStore {
   tasks: TasksByProject = {};
@@ -50,7 +55,7 @@ export default class TaskStore {
     GaService.event(EEventCategory.TimeRange, ETimeRangeEvents.Delete);
   }
 
-  getTasks(projectId: string): TaskModel[] {
+  getTasks(projectId: string): Task[] {
     return this.tasks[projectId] || [];
   }
 
@@ -90,6 +95,20 @@ export default class TaskStore {
     this.tasks[projectId] = this.tasks[projectId].slice();
     this.tasksService.save(this.tasks);
     GaService.event(EEventCategory.Tasks, ETasksEvents.Create);
+  }
+
+  addToMyDay(task: TaskModel) {
+    task.inMyDay = new Date();
+
+    const pathToNode = TreeModelHelper.getPathToNode(task);
+
+    TreeModelHelper.copyItemsToTreeUnderProject(
+      rootStore.projectStore.get(task.projectId),
+      this.tasks[task.projectId],
+      // @ts-ignore
+      this.tasks[DEFAULT_PROJECT_ID.MyDay],
+      pathToNode
+    );
   }
 
   delete(task: TaskModel) {
@@ -172,12 +191,14 @@ export default class TaskStore {
   }
 
   markExpanded(projectId: string, taskIds: string[]) {
-    const markExpanded = (task: TaskModel, taskIds: string[]) => {
-      task.expanded = taskIds.includes(task.key);
+    const markExpanded = (task: Task, taskIds: string[]) => {
+      if (task instanceof TaskModel) {
+        task.expanded = taskIds.includes(task.key);
+      }
     };
 
     if (Array.isArray(this.tasks[projectId])) {
-      TreeModelHelper.modifyItemsWithIdsRecursive<TaskModel>(
+      TreeModelHelper.modifyItemsWithIdsRecursive<Task>(
         this.tasks[projectId],
         taskIds,
         markExpanded
@@ -192,7 +213,7 @@ export default class TaskStore {
     condition: (task: TaskModel) => boolean
   ) {
     if (Array.isArray(this.tasks[projectId])) {
-      return TreeModelHelper.getFlatItemsRecursive(
+      return TreeModelHelper.getFlatItemsRecursive<ITreeItemWithParent>(
         this.tasks[projectId],
         condition
       ).map((task) => task.key);
