@@ -11,6 +11,7 @@ import { createUseStyles } from 'react-jss';
 import TaskModel from '../../../../modules/tasks/models/TaskModel';
 import rootStore from '../../../../modules/RootStore';
 import * as TaskHooks from '../../../../hooks/TaskHooks';
+import { Features } from '../../../../config';
 
 const { tasksStore } = rootStore;
 
@@ -35,9 +36,11 @@ export default observer(function TaskNode({ task }: TaskNodeProps) {
       <span className={classes.taskTitle}>{task.title}</span>
       <span>{duration}</span>
       <span className={classes.taskNodeActions}>
-        <EnterOutlined
-          onClick={preventDefault(() => tasksStore.addToMyDay(task))}
-        />
+        {Features.myDay && (
+          <EnterOutlined
+            onClick={preventDefault(() => tasksStore.addToMyDay(task))}
+          />
+        )}
         {!task.active ? (
           <CaretRightFilled
             onClick={preventDefault(() => tasksStore.startTimer(task))}

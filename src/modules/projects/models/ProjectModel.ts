@@ -9,13 +9,13 @@ export enum DEFAULT_PROJECT_ID {
 }
 
 export const DEFAULT_PROJECTS: IJsonProjectItem[] = [
-  {
-    key: DEFAULT_PROJECT_ID.MyDay,
-    title: 'My Day',
-    color: colors.yellow.primary || '',
-    deletable: false,
-    expanded: false,
-  },
+  // {
+  //   key: DEFAULT_PROJECT_ID.MyDay,
+  //   title: 'My Day',
+  //   color: colors.yellow.primary || '',
+  //   deletable: false,
+  //   expanded: false,
+  // },
   {
     key: DEFAULT_PROJECT_ID.Inbox,
     title: 'Inbox',
@@ -51,7 +51,7 @@ export default class ProjectModel extends AbstractModel
 
     const newProps = {
       ...props,
-      children: props.children?.map((json) => new ProjectModel(json))
+      children: props.children?.map((json) => new ProjectModel(json)),
     };
 
     this.load(newProps);
