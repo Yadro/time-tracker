@@ -154,7 +154,7 @@ export default class TaskModel extends AbstractModel
     const normalDate = startOfDay(date);
     const found = this.datesInProgress.find((d) => isSameDay(d, normalDate));
     if (!found) {
-      this.datesInProgress.push(normalDate);
+      this.datesInProgress = [...this.datesInProgress, normalDate];
     }
   }
 }

@@ -10,6 +10,11 @@
   "javascript.format.enable": false,
   "typescript.format.enable": false,
 
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+
   "search.exclude": {
     ".git": true,
     ".eslintcache": true,

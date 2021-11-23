@@ -1,13 +1,8 @@
-import { toJS } from 'mobx';
-
 import { ITreeItem, ITreeItemWithParent } from '../types/ITreeItem';
 import { TaskInMyDay } from '../modules/tasks/models/TaskInMyDay';
 import TaskModel from '../modules/tasks/models/TaskModel';
 import TaskFactory from '../modules/tasks/TaskFactory';
 import ProjectModel from '../modules/projects/models/ProjectModel';
-
-// @ts-ignore TODO remove
-window.toJS = toJS;
 
 const TreeModelHelper = {
   getPathToNode<T extends ITreeItemWithParent = ITreeItemWithParent>(node: T) {

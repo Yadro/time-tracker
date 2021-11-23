@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useCallback } from 'react';
+import React, { SyntheticEvent, useCallback, useMemo } from 'react';
 import {
   CaretRightFilled,
   DeleteOutlined,
@@ -12,6 +12,8 @@ import TaskModel from '../../../../modules/tasks/models/TaskModel';
 import rootStore from '../../../../modules/RootStore';
 import * as TaskHooks from '../../../../hooks/TaskHooks';
 import { Features } from '../../../../config';
+import { last } from '../../../../helpers/ArrayHelper';
+import { taskLastActiveDateFormat } from '../../../../helpers/DateTime';
 
 const { tasksStore } = rootStore;
 
@@ -24,6 +26,14 @@ export default observer(function TaskNode({ task }: TaskNodeProps) {
 
   const duration = TaskHooks.useTaskDuration(task);
 
+  const lastDateInProgress = useMemo(() => {
+    const lastDate = last(task.datesInProgress);
+    if (lastDate) {
+      return taskLastActiveDateFormat(lastDate)
+    }
+    return undefined;
+  }, [task.datesInProgress]);
+
   const preventDefault = useCallback((fn: () => void) => {
     return (e: SyntheticEvent) => {
       e.stopPropagation();
@@ -34,6 +44,7 @@ export default observer(function TaskNode({ task }: TaskNodeProps) {
   return (
     <div className={classes.taskNode}>
       <span className={classes.taskTitle}>{task.title}</span>
+      <span className={classes.date}>{lastDateInProgress}</span>
       <span>{duration}</span>
       <span className={classes.taskNodeActions}>
         {Features.myDay && (
@@ -72,4 +83,7 @@ const useStyle = createUseStyles({
   taskTitle: {
     flex: 1,
   },
+  date: {
+    marginRight: 5,
+  }
 });

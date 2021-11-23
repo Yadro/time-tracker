@@ -1,5 +1,6 @@
 import { ITimeRangeModel } from '../modules/tasks/models/TaskModel';
-import { format } from 'date-fns';
+import { format, isSameMonth, isSameYear } from 'date-fns';
+
 import { iterPrevCurrent } from './ArrayHelper';
 
 function timePad(time: number): string {
@@ -43,6 +44,17 @@ export function msToTime(s: number, showSeconds: boolean = true) {
   const hrs = (s - mins) / 60;
 
   return timeItemsToString(sign, hrs, mins, secs, showSeconds);
+}
+
+export function taskLastActiveDateFormat(date: Date) {
+  const now = new Date();
+  if (isSameMonth(date, now)) {
+    return format(date, 'E dd');
+  }
+  if (isSameYear(date, now)) {
+    return format(date, 'dd/MM');
+  }
+  return format(date, 'dd/MM/yy');
 }
 
 export function timeToMs(date: Date) {
