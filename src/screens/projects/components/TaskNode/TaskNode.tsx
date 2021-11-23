@@ -29,7 +29,7 @@ export default observer(function TaskNode({ task }: TaskNodeProps) {
   const lastDateInProgress = useMemo(() => {
     const lastDate = last(task.datesInProgress);
     if (lastDate) {
-      return taskLastActiveDateFormat(lastDate)
+      return taskLastActiveDateFormat(lastDate);
     }
     return undefined;
   }, [task.datesInProgress]);
@@ -44,7 +44,9 @@ export default observer(function TaskNode({ task }: TaskNodeProps) {
   return (
     <div className={classes.taskNode}>
       <span className={classes.taskTitle}>{task.title}</span>
-      <span className={classes.date}>{lastDateInProgress}</span>
+      {lastDateInProgress && (
+        <span className={classes.date}>{`${lastDateInProgress} /`}</span>
+      )}
       <span>{duration}</span>
       <span className={classes.taskNodeActions}>
         {Features.myDay && (
@@ -85,5 +87,5 @@ const useStyle = createUseStyles({
   },
   date: {
     marginRight: 5,
-  }
+  },
 });
