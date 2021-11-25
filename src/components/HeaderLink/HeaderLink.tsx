@@ -6,7 +6,7 @@ interface HeaderMenuProps {
   children: React.ReactNode;
 }
 
-export default observer(function HeaderMenu({ children }: HeaderMenuProps) {
+export default observer(function HeaderLink({ children }: HeaderMenuProps) {
   const classes = useStyles();
 
   return <span className={classes.root}>{children}</span>;
