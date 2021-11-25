@@ -18,6 +18,8 @@ import {
 import { DEFAULT_PROJECT_ID } from '../projects/models/ProjectModel';
 import { ITreeItemWithParent } from '../../types/ITreeItem';
 
+// FIXME ts errors
+
 export default class TaskStore {
   tasks: TasksByProject = {};
   activeTask: TaskModel | undefined;
@@ -83,6 +85,7 @@ export default class TaskStore {
     for (const tasks of Object.values(this.tasks)) {
       TreeModelHelper.getFlatItemsRecursiveBase(tasks, condition, result);
     }
+    console.log('getTasksByDate', result.length);
     return result;
   }
 

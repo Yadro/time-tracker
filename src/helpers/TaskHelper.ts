@@ -1,4 +1,4 @@
-import { isSameDay, compareAsc } from 'date-fns';
+import { isSameDay, compareAsc, isBefore } from 'date-fns';
 
 import TaskModel from '../modules/tasks/models/TaskModel';
 import TaskTimeItemModel from '../modules/tasks/models/TaskTimeItemModel';
@@ -21,7 +21,7 @@ export function getTimeItems(
   tasks: TaskModel[],
   date: Date
 ): TaskTimeItemModel[] {
-  let taskTime: TaskTimeItemModel[] = [];
+  const taskTime: TaskTimeItemModel[] = [];
   tasks.forEach((task) => {
     const taskTimeItems: TaskTimeItemModel[] = [];
     for (let i = 0; i < task.time.length; i++) {
@@ -33,9 +33,12 @@ export function getTimeItems(
         taskTimeItems.push(new TaskTimeItemModel(task, range, i));
       }
     }
-    taskTime = taskTime.concat(taskTimeItems);
+    taskTime.push(...taskTimeItems);
   });
-  taskTime = taskTime.sort((a, b) => compareAsc(a.time.start, b.time.start));
+  taskTime.sort((a, b) => compareAsc(a.time.start, b.time.start));
+
+  console.log('getTimeItems', taskTime.length);
+
   return taskTime;
 }
 
@@ -70,4 +73,18 @@ export function getTaskTitlesPath(task: TaskModel) {
     titlePathStr += ' →';
   }
   return titlePathStr;
+}
+
+export function getStartWorkingTime(
+  timeItems: TaskTimeItemModel[]
+): Date | undefined {
+  let minTime: Date | undefined;
+  let tmpStartTime: Date | undefined;
+  timeItems.forEach((item) => {
+    tmpStartTime = item.time.start;
+    if (!minTime || isBefore(tmpStartTime, minTime)) {
+      minTime = tmpStartTime;
+    }
+  });
+  return minTime;
 }

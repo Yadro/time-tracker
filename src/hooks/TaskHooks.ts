@@ -105,17 +105,3 @@ export function useTimeRangeDuration(timeRange: ITimeRangeModel | undefined) {
 
   return duration;
 }
-
-export function useStartWorkingTime(
-  timeItems: TaskTimeItemModel[]
-): Date | undefined {
-  return useMemo(() => {
-    let minTime: Date | undefined;
-    timeItems.forEach((time) => {
-      if (!minTime || isBefore(time.time.start, minTime)) {
-        minTime = time.time.start;
-      }
-    });
-    return minTime;
-  }, [timeItems]);
-}

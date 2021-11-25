@@ -111,3 +111,7 @@ export function estimateWorkingTimeEnd(
     ? new Date(startDate.getTime() + restTimeMs + workingHoursMs)
     : undefined;
 }
+
+export function getRestHoursMs(workingHoursMs: number, durationMs: number) {
+  return workingHoursMs - durationMs;
+}

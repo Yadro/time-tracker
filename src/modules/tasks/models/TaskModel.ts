@@ -54,7 +54,7 @@ export default class TaskModel extends AbstractModel
   key: string = '';
   title: string = '';
   children: TaskModel[] = [];
-  parent: TaskModel | null = null; // update parent on drug&drop
+  parent: TaskModel | undefined = undefined;
   projectId: string = '';
   checked: boolean = false;
   active: boolean = false;

@@ -6,6 +6,7 @@ import { observer } from 'mobx-react';
 import HeaderLink from '../HeaderLink/HeaderLink';
 import Profile from '../Profile/Profile';
 import TaskControl from '../TaskControl/TaskControl';
+import ProgressBar from '../ProgressBar/ProgressBar';
 
 const { Header: HeaderBase } = Layout;
 
@@ -21,7 +22,9 @@ function Header() {
       <HeaderLink>
         <Link to="/dashboard">Dashboard</Link>
       </HeaderLink>
-      <span className="flex-1" />
+      <span className="flex-1">
+        <ProgressBar />
+      </span>
       <TaskControl />
       <Profile />
     </HeaderBase>
