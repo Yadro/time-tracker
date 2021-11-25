@@ -1,7 +1,7 @@
 {
   "name": "time-tracker",
   "productName": "TimeTracker",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Start and stop time, jump between tasks, and add details on how time was spent.",
   "main": "./main.prod.js",
   "author": {

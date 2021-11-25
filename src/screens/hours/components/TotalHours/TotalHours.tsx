@@ -6,7 +6,7 @@ import * as TaskHooks from '../../../../hooks/TaskHooks';
 import TaskTimeItemModel from '../../../../modules/tasks/models/TaskTimeItemModel';
 import {
   estimateWorkingTimeEnd,
-  getTime,
+  toTimeFormat,
   msToTime,
 } from '../../../../helpers/DateTime';
 import LabelWithTooltip, { ILabelWithTooltipProps } from './LabelWithTooltip';
@@ -38,7 +38,7 @@ const TotalHours = observer((props: TotalHoursProps) => {
 
   const items: ILabelWithTooltipProps[] = [
     {
-      label: getTime(startWorkingTime),
+      label: toTimeFormat(startWorkingTime),
       tooltip: 'Start time',
     },
     {
@@ -53,7 +53,7 @@ const TotalHours = observer((props: TotalHoursProps) => {
     },
     {
       icon: 'mi-notifications',
-      label: getTime(estimatedWorkingTimeEnd),
+      label: toTimeFormat(estimatedWorkingTimeEnd),
       tooltip: 'Estimated end time',
     },
     {

@@ -145,7 +145,7 @@ const TreeModelHelper = {
   },
 
   walkRecursive<T extends ITreeItem<any>>(
-    fn: (t: T, p?: T) => void,
+    fn: (item: T, parent?: T) => void,
     treeItems: T[],
     parent?: T
   ) {
@@ -155,6 +155,16 @@ const TreeModelHelper = {
         TreeModelHelper.walkRecursive(fn, item.children, item);
       }
     });
+  },
+
+  walkToParent<T extends ITreeItemWithParent<any>>(
+    fn: (nParent: T) => void,
+    treeItem: T
+  ) {
+    if (treeItem.parent) {
+      fn(treeItem.parent);
+      TreeModelHelper.walkToParent(fn, treeItem.parent);
+    }
   },
 
   modifyItemsWithIdsRecursive<T extends ITreeItem<any>>(

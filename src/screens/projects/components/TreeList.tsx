@@ -1,11 +1,11 @@
 import React from 'react';
 import { Empty, Tree } from 'antd';
+import { TreeProps } from 'antd/lib/tree/Tree';
 import { observer } from 'mobx-react';
 import { Key } from 'rc-tree/lib/interface';
 
 import { IDragInfo } from '../../../types/IDragInfo';
-import { ITreeItem } from '../../../types/ITreeItem';
-import { TreeProps } from 'antd/lib/tree/Tree';
+import { ITreeItemWithParent } from '../../../types/ITreeItem';
 
 interface TreeListProps {
   onSelect?: (selectedKeys: Key[]) => void;
@@ -19,7 +19,7 @@ interface TreePropsExtended<T>
   isDraggable?: () => boolean;
 }
 
-export default function TreeList<T extends ITreeItem<any>>(
+export default function TreeList<T extends ITreeItemWithParent<any>>(
   getData: () => T[],
   updateData: (items: T[]) => void,
   options: TreePropsExtended<T>
@@ -37,16 +37,16 @@ export default function TreeList<T extends ITreeItem<any>>(
         info.dropPosition - Number(dropPos[dropPos.length - 1]);
 
       const loop = (
-        items: ITreeItem[],
+        items: T[],
         key: string | number,
-        callback: (item: ITreeItem, key: number, items: ITreeItem[]) => void
+        callback: (item: T, key: number, items: T[]) => void
       ) => {
         for (let i = 0; i < items.length; i++) {
           if (items[i].key === key) {
             return callback(items[i], i, items);
           }
           if (items[i].children) {
-            loop(items[i].children as ITreeItem[], key, callback);
+            loop(items[i].children || [], key, callback);
           }
         }
         return undefined;
@@ -54,7 +54,7 @@ export default function TreeList<T extends ITreeItem<any>>(
       const dataCopy = [...data];
 
       // Find dragObject
-      let dragObj: ITreeItem;
+      let dragObj: T;
       loop(dataCopy, dragKey, (item, index, arr) => {
         arr.splice(index, 1);
         dragObj = item;
@@ -64,6 +64,7 @@ export default function TreeList<T extends ITreeItem<any>>(
         // Drop on the content
         loop(dataCopy, dropKey, (item) => {
           item.children = item.children || [];
+          dragObj.parent = item;
           // where to insert
           item.children.unshift(dragObj);
         });
@@ -74,17 +75,19 @@ export default function TreeList<T extends ITreeItem<any>>(
       ) {
         loop(dataCopy, dropKey, (item) => {
           item.children = item.children || [];
+          dragObj.parent = item;
           // where to insert
           item.children.unshift(dragObj);
           // in previous version, we use item.children.push(dragObj) to insert the
           // item to the tail of the children
         });
       } else {
-        let ar: ITreeItem[];
+        let ar: T[];
         let i: number;
         loop(dataCopy, dropKey, (_item, index, arr) => {
           ar = arr;
           i = index;
+          dragObj.parent = undefined;
         });
         if (dropPosition === -1) {
           // @ts-ignore

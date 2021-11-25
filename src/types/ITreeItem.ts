@@ -7,5 +7,5 @@ export interface ITreeItem<T extends ITreeItem<any> = ITreeItem<any>> {
 export interface ITreeItemWithParent<
   T extends ITreeItemWithParent<any> = ITreeItemWithParent<any>
 > extends ITreeItem<T> {
-  parent: T | null;
+  parent: T | undefined;
 }

@@ -95,7 +95,7 @@ export function calcDurationGaps(taskTime: ITimeRangeModel[]): number {
 const TIME_FORMAT = 'HH:mm';
 const NO_TIME = '--:--';
 
-export function getTime(date: Date | undefined) {
+export function toTimeFormat(date: Date | undefined) {
   if (!date) {
     return NO_TIME;
   }

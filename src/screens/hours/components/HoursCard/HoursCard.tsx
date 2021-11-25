@@ -1,23 +1,15 @@
 import React, { useMemo } from 'react';
 import { Card } from 'antd';
-import format from 'date-fns/format';
 import { observer } from 'mobx-react';
 import { createUseStyles } from 'react-jss';
 
 import TaskTimeItemModel from '../../../../modules/tasks/models/TaskTimeItemModel';
 import PlayStopButton from '../../../../components/PlayStopButton/PlayStopButton';
 import rootStore from '../../../../modules/RootStore';
-import { msToTime } from '../../../../helpers/DateTime';
+import { msToTime, toTimeFormat } from '../../../../helpers/DateTime';
+import { getTaskTitlesPath } from '../../../../helpers/TaskHelper';
 
 const { projectStore } = rootStore;
-
-const formatStr = 'HH:mm';
-function timeFormat(date: Date | undefined) {
-  if (date) {
-    return format(date, formatStr);
-  }
-  return '';
-}
 
 interface HoursCardProps {
   taskTime: TaskTimeItemModel;
@@ -31,9 +23,11 @@ export default observer(function HoursCard({
   const { task, time } = taskTime;
   const classes = useStyle();
   const project = useMemo(() => projectStore.get(task.projectId), [task]);
-  const duration = time.end
-    ? msToTime(time.end.getTime() - time.start.getTime())
-    : '';
+  const duration = useMemo(
+    () => (time.end ? msToTime(time.end.getTime() - time.start.getTime()) : ''),
+    [time.end, time.start]
+  );
+  const titlePath = useMemo(() => getTaskTitlesPath(task), [task]);
 
   return (
     <Card
@@ -45,12 +39,13 @@ export default observer(function HoursCard({
     >
       <div className={classes.hoursCard}>
         <div className={classes.projectTitle}>{project?.title}</div>
+        <div className={classes.taskTitlePath}>{titlePath}</div>
         <div className={classes.taskTitle}>{task.title}</div>
         <div className={classes.description}>{time.description}</div>
         <div className={classes.timeContainer}>
-          <div className={classes.time}>{`${timeFormat(
-            time.start
-          )} - ${timeFormat(time.end)}`}</div>
+          <div className={classes.time}>
+            {`${toTimeFormat(time.start)} - ${toTimeFormat(time.end)}`}
+          </div>
           <div className={classes.time}>{duration}</div>
         </div>
       </div>
@@ -78,6 +73,9 @@ const useStyle = createUseStyles({
     flex: 1,
   },
   projectTitle: {
+    fontSize: 12,
+  },
+  taskTitlePath: {
     fontSize: 12,
   },
   taskTitle: {

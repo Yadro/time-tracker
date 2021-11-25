@@ -3,6 +3,7 @@ import { isSameDay, compareAsc } from 'date-fns';
 import TaskModel from '../modules/tasks/models/TaskModel';
 import TaskTimeItemModel from '../modules/tasks/models/TaskTimeItemModel';
 import TaskWithDurationModel from '../modules/tasks/models/TaskWithDurationModel';
+import TreeModelHelper from './TreeModelHelper';
 
 /**
  * Returns TaskTimeItemModel contains time range
@@ -18,7 +19,7 @@ import TaskWithDurationModel from '../modules/tasks/models/TaskWithDurationModel
  */
 export function getTimeItems(
   tasks: TaskModel[],
-  date: Date,
+  date: Date
 ): TaskTimeItemModel[] {
   let taskTime: TaskTimeItemModel[] = [];
   tasks.forEach((task) => {
@@ -45,9 +46,28 @@ export function getTimeItems(
  */
 export function getTasksWithTotalTimeForDay(
   tasks: TaskModel[],
-  date: Date,
+  date: Date
 ): TaskWithDurationModel[] {
   return tasks.map(
-    (task) => new TaskWithDurationModel(task, task.getDurationByDate(date)),
+    (task) => new TaskWithDurationModel(task, task.getDurationByDate(date))
   );
+}
+
+/**
+ * @example task1 → task2 → task
+ * @param task
+ */
+export function getTaskTitlesPath(task: TaskModel) {
+  const titlePath: string[] = [];
+
+  function processParent(nParent: TaskModel) {
+    titlePath.push(nParent.title);
+  }
+
+  TreeModelHelper.walkToParent(processParent, task);
+  let titlePathStr = titlePath.reverse().join(' → ');
+  if (titlePath.length > 0) {
+    titlePathStr += ' →';
+  }
+  return titlePathStr;
 }
