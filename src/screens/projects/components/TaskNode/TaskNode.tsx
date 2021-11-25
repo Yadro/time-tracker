@@ -34,6 +34,11 @@ export default observer(function TaskNode({ task }: TaskNodeProps) {
     return undefined;
   }, [task.datesInProgress]);
 
+  const timeData = useMemo(
+    () => [lastDateInProgress, duration].filter(Boolean).join(' / '),
+    [lastDateInProgress, duration]
+  );
+
   const preventDefault = useCallback((fn: () => void) => {
     return (e: SyntheticEvent) => {
       e.stopPropagation();
@@ -44,10 +49,7 @@ export default observer(function TaskNode({ task }: TaskNodeProps) {
   return (
     <div className={classes.taskNode}>
       <span className={classes.taskTitle}>{task.title}</span>
-      {lastDateInProgress && (
-        <span className={classes.date}>{`${lastDateInProgress} /`}</span>
-      )}
-      <span>{duration}</span>
+      <span>{timeData}</span>
       <span className={classes.taskNodeActions}>
         {Features.myDay && (
           <EnterOutlined
