@@ -19,26 +19,30 @@ function ProgressBar() {
   const style = useStyle();
 
   const [dayUpdateEveryDay, setDayUpdateEveryDay] = useState(new Date());
-  const [timer, setTimer] = useState(new Date());
+  const [_tick, setTick] = useState(new Date());
 
   const shouldDayUpdate = useCallback(() => {
     const now = new Date();
-    setTimer(now);
+    setTick(now);
     if (!isSameDay(dayUpdateEveryDay, now)) {
       setDayUpdateEveryDay(now);
     }
   }, [dayUpdateEveryDay]);
 
   useInterval(shouldDayUpdate);
-  1 + 1;
-  const tasks = useMemo(() => tasksStore.getTasksByDate(dayUpdateEveryDay), [
+
+  const tasksByProject = useMemo(() => Object.values(tasksStore.tasks), [
     tasksStore.tasks,
+    tasksStore.versionHash,
+  ]);
+
+  const tasks = useMemo(() => tasksStore.getTasksByDate(dayUpdateEveryDay), [
+    tasksByProject,
     dayUpdateEveryDay,
   ]);
 
   const timeItems = useMemo(() => getTimeItems(tasks, dayUpdateEveryDay), [
     tasks,
-    dayUpdateEveryDay,
   ]);
 
   const workingTimeStart = useMemo(() => getStartWorkingTime(timeItems), [
@@ -49,25 +53,36 @@ function ProgressBar() {
     timeItems,
   ]);
 
-  const { estimatedWorkingTimeEnd, progress } = useMemo(
-    () =>
-      TaskTimeService.getDayProgress(
-        timeRangeItems,
-        workingTimeStart,
-        workingHoursMs
-      ),
-    [timer, timeRangeItems, workingTimeStart, workingHoursMs]
+  const { estimatedWorkingTimeEnd, progress } = TaskTimeService.getDayProgress(
+    timeRangeItems,
+    workingTimeStart,
+    workingHoursMs
   );
 
-  const marks = useMemo(
-    () => ({
-      0: toTimeFormat(workingTimeStart),
-      100: toTimeFormat(estimatedWorkingTimeEnd),
-    }),
-    [timer, workingTimeStart, estimatedWorkingTimeEnd]
-  );
+  const progressRound = Math.round(progress);
+  const marks: Record<number, string> = {
+    0: toTimeFormat(workingTimeStart),
+    100: toTimeFormat(estimatedWorkingTimeEnd),
+  };
+  if (progressRound > 10 && progressRound < 90) {
+    marks[progressRound] = `${progressRound}%`;
+  }
 
-  return <Slider marks={marks} value={progress} className={style.slider} />;
+  const tipFormatter = useMemo(() => {
+    if (progressRound <= 10 || progressRound >= 90) {
+      return (value?: number) => `${value}%`;
+    }
+    return null;
+  }, [progressRound]);
+
+  return (
+    <Slider
+      marks={marks}
+      value={progress}
+      className={style.slider}
+      tipFormatter={tipFormatter}
+    />
+  );
 }
 
 const useStyle = createUseStyles({

@@ -83,6 +83,4 @@ describe('TreeModelHelper', () => {
     const task22 = testTasks.proj[1].children[0];
     expect(TreeModelHelper.getPathToNode(task22)).toStrictEqual(['2', '21']);
   });
-
-  test('');
 });

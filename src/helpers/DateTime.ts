@@ -84,11 +84,6 @@ export function calcDurationGaps(taskTime: ITimeRangeModel[]): number {
     }
   });
 
-  const lastTask = taskTime[taskTime.length - 1];
-  if (lastTask && lastTask.end) {
-    result += new Date().getTime() - lastTask.end.getTime();
-  }
-
   return result;
 }
 

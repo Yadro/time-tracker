@@ -1,5 +1,5 @@
-import { autorun, makeAutoObservable } from 'mobx';
-
+import { autorun, makeAutoObservable, observable } from 'mobx';
+import { v4 as uuid } from 'uuid';
 import TaskService from './TaskService';
 import TaskModel, { ITimeRangeModel } from './models/TaskModel';
 import {
@@ -23,6 +23,7 @@ import { ITreeItemWithParent } from '../../types/ITreeItem';
 export default class TaskStore {
   tasks: TasksByProject = {};
   activeTask: TaskModel | undefined;
+  versionHash = uuid();
   private tasksService = new TaskService();
   private interval: NodeJS.Timeout | undefined;
 
@@ -37,13 +38,14 @@ export default class TaskStore {
   }
 
   set(projectId: string, tasksInProject: TaskModel[]) {
-    this.tasks[projectId] = tasksInProject;
+    this.tasks[projectId] = observable.array(tasksInProject);
     this.tasksService.save(this.tasks);
   }
 
   setTime(task: TaskModel, timeIndex: number, timeRange: ITimeRangeModel) {
     task.time[timeIndex] = timeRange;
     this.tasksService.save(this.tasks);
+    this.updateVersion();
     GaService.event(EEventCategory.TimeRange, ETimeRangeEvents.Update);
   }
 
@@ -54,6 +56,7 @@ export default class TaskStore {
 
     task.time.splice(timeIndex, 1);
     this.tasksService.save(this.tasks);
+    this.updateVersion();
     GaService.event(EEventCategory.TimeRange, ETimeRangeEvents.Delete);
   }
 
@@ -92,10 +95,10 @@ export default class TaskStore {
   add(task: TaskModel) {
     const { projectId } = task;
     if (!Array.isArray(this.tasks[projectId])) {
-      this.tasks[projectId] = [];
+      this.tasks[projectId] = observable.array(); // TODO this.set()
     }
     this.tasks[projectId].push(task);
-    this.tasks[projectId] = this.tasks[projectId].slice();
+    this.updateVersion();
     this.tasksService.save(this.tasks);
     GaService.event(EEventCategory.Tasks, ETasksEvents.Create);
   }
@@ -130,12 +133,14 @@ export default class TaskStore {
       }
     }
     this.tasksService.save(this.tasks);
+    this.updateVersion();
     GaService.event(EEventCategory.Tasks, ETasksEvents.Delete);
   }
 
   deleteProjectTasks(projectKey: string) {
     delete this.tasks[projectKey];
     this.tasksService.save(this.tasks);
+    this.updateVersion();
   }
 
   startTimer(task: TaskModel) {
@@ -144,6 +149,7 @@ export default class TaskStore {
     task.start();
     this.setupReminder(task);
     this.tasksService.save(this.tasks);
+    this.updateVersion();
   }
 
   stopTimer(silent?: boolean) {
@@ -155,6 +161,7 @@ export default class TaskStore {
     if (!silent) {
       this.setupReminder();
       this.tasksService.save(this.tasks);
+      this.updateVersion();
     }
   }
 
@@ -188,7 +195,7 @@ export default class TaskStore {
         checkTaskFn
       );
 
-      this.set(projectId, this.tasks[projectId].slice());
+      this.set(projectId, this.tasks[projectId]);
     }
     GaService.event(EEventCategory.Tasks, ETasksEvents.Check);
   }
@@ -207,7 +214,7 @@ export default class TaskStore {
         markExpanded
       );
 
-      this.set(projectId, this.tasks[projectId].slice());
+      this.set(projectId, this.tasks[projectId]);
     }
   }
 
@@ -274,5 +281,9 @@ export default class TaskStore {
     if (this.interval !== undefined) {
       clearInterval(this.interval);
     }
+  }
+
+  private updateVersion() {
+    this.versionHash = uuid();
   }
 }

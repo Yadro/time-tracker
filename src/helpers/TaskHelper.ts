@@ -23,17 +23,15 @@ export function getTimeItems(
 ): TaskTimeItemModel[] {
   const taskTime: TaskTimeItemModel[] = [];
   tasks.forEach((task) => {
-    const taskTimeItems: TaskTimeItemModel[] = [];
     for (let i = 0; i < task.time.length; i++) {
       const range = task.time[i];
       if (
         isSameDay(range.start, date) ||
         (range.end && isSameDay(range.end, date))
       ) {
-        taskTimeItems.push(new TaskTimeItemModel(task, range, i));
+        taskTime.push(new TaskTimeItemModel(task, range, i));
       }
     }
-    taskTime.push(...taskTimeItems);
   });
   taskTime.sort((a, b) => compareAsc(a.time.start, b.time.start));
 

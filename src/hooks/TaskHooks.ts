@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { isBefore } from 'date-fns';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { calcDuration, calcDurationGaps, msToTime } from '../helpers/DateTime';
 import TaskModel, { ITimeRangeModel } from '../modules/tasks/models/TaskModel';

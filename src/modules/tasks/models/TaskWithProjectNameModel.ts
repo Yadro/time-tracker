@@ -13,7 +13,7 @@ export class TaskWithProjectNameModel extends AbstractModel
   implements ITreeItemWithParent<TaskModel> {
   key: string = '';
   title: string = '';
-  parent: TaskModel | null = null;
+  parent: TaskModel | undefined = undefined;
   children: TaskModel[] = [];
 
   constructor(props: ITaskWithProjectName) {

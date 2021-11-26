@@ -42,7 +42,7 @@ const TreeModelHelper = {
           details: [],
           expanded: true,
           inMyDay: new Date().toString(),
-          parent: null,
+          parent: undefined,
           time: [],
           withoutActions: true,
         })

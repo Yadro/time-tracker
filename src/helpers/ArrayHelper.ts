@@ -1,8 +1,8 @@
 type CallbackPrev<T, R> = (prev: T | undefined, cur: T, index: number) => R;
 
-export function iterPrevCurrent<T, R = any>(
+export function iterPrevCurrent<T>(
   items: T[],
-  callback: CallbackPrev<T, R>
+  callback: CallbackPrev<T, void>
 ) {
   for (let i = 0; i < items.length; i++) {
     if (i === 0) {
@@ -13,11 +13,11 @@ export function iterPrevCurrent<T, R = any>(
   }
 }
 
-export function mapPrevCurrent<T, R = any>(
+export function mapPrevCurrent<T, Result = any>(
   items: T[],
-  callback: CallbackPrev<T, R>
-): R[] {
-  const result: R[] = [];
+  callback: CallbackPrev<T, Result>
+): Result[] {
+  const result: Result[] = [];
   for (let i = 0; i < items.length; i++) {
     if (i === 0) {
       result.push(callback(undefined, items[i], i));
@@ -30,11 +30,11 @@ export function mapPrevCurrent<T, R = any>(
 
 type CallbackNext<T, R> = (cur: T, next: T | undefined, index: number) => R;
 
-export function mapCurrentNext<T, R = any>(
+export function mapCurrentNext<T, Result = any>(
   items: T[],
-  callback: CallbackNext<T, R>
-): R[] {
-  const result: R[] = [];
+  callback: CallbackNext<T, Result>
+): Result[] {
+  const result: Result[] = [];
   for (let i = 0; i < items.length; i++) {
     if (i === items.length - 1) {
       result.push(callback(items[i], undefined, i));

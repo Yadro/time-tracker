@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import { Input, Modal, Space } from 'antd';
+import { v4 as uuid } from 'uuid';
 
 import rootStore from '../../../../modules/RootStore';
 import ProjectModel from '../../../../modules/projects/models/ProjectModel';
@@ -27,7 +28,7 @@ export default observer(function ProjectModal({
   function handleOk() {
     projectStore.add(
       new ProjectModel({
-        key: String(Date.now()),
+        key: uuid(),
         title: projectName,
         color: color || '',
         children: [],
