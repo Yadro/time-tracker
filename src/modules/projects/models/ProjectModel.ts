@@ -1,7 +1,8 @@
 import * as colors from '@ant-design/colors';
+import { makeObservable, observable } from 'mobx';
 
 import AbstractModel from '../../../base/AbstractModel';
-import { ITreeItem, ITreeItemWithParent } from '../../../types/ITreeItem';
+import { ITreeItemWithParent } from '../../../types/ITreeItem';
 
 export enum DEFAULT_PROJECT_ID {
   MyDay = '0',
@@ -22,10 +23,11 @@ export const DEFAULT_PROJECTS: IJsonProjectItem[] = [
     color: colors.blue.primary || '',
     deletable: false,
     expanded: false,
+    parent: undefined,
   },
 ];
 
-export interface IJsonProjectItem extends ITreeItem {
+export interface IJsonProjectItem extends ITreeItemWithParent {
   color: string;
   expanded: boolean;
   deletable: boolean;
@@ -58,5 +60,15 @@ export default class ProjectModel extends AbstractModel
     };
 
     this.load(newProps);
+
+    makeObservable(this, {
+      key: observable,
+      title: observable,
+      color: observable,
+      expanded: observable,
+      deletable: observable,
+      children: observable,
+      // parent: none,
+    });
   }
 }

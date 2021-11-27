@@ -237,6 +237,22 @@ const TreeModelHelper = {
     });
     return result;
   },
+
+  fillParent<T extends ITreeItemWithParent>(items: T[]) {
+    TreeModelHelper.walkRecursive(setParent, items);
+  },
+
+  clearParent<T extends ITreeItemWithParent>(items: T[]) {
+    TreeModelHelper.walkRecursive(clearParent, items);
+  },
+};
+
+const setParent = <T extends ITreeItemWithParent>(item: T, parent?: T) => {
+  item.parent = parent;
+};
+
+const clearParent = <T extends ITreeItemWithParent>(item: T) => {
+  item.parent = undefined;
 };
 
 export default TreeModelHelper;

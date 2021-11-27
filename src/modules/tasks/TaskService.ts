@@ -5,15 +5,6 @@ import TaskFactory from './TaskFactory';
 import { TasksByProject } from './models/TasksByProject';
 import AbstractServiceWithProfile from '../../base/AbstractServiceWithProfile';
 import TreeModelHelper from '../../helpers/TreeModelHelper';
-import { ITreeItemWithParent } from '../../types/ITreeItem';
-
-const setParent = <T extends ITreeItemWithParent>(item: T, parent?: T) => {
-  item.parent = parent;
-};
-
-const clearParent = <T extends ITreeItemWithParent>(item: T) => {
-  item.parent = undefined;
-};
 
 export default class TaskService extends AbstractServiceWithProfile<
   TasksByProject
@@ -33,16 +24,15 @@ export default class TaskService extends AbstractServiceWithProfile<
     this.repository.save(copyData);
   }
 
-  // TODO ProjectService fill and remove parent
   private static fillParent(data: TasksByProject) {
     Object.values(data).forEach((projectTasks) => {
-      TreeModelHelper.walkRecursive(setParent, projectTasks);
+      TreeModelHelper.fillParent(projectTasks);
     });
   }
 
   private static clearParent(data: TasksByProject) {
     Object.values(data).forEach((projectTasks) => {
-      TreeModelHelper.walkRecursive(clearParent, projectTasks);
+      TreeModelHelper.clearParent(projectTasks);
     });
   }
 }
