@@ -20,7 +20,7 @@ export class RootStore {
   }
 
   deleteProject(project: ProjectModel) {
-    this.tasksStore.deleteProjectTasks(project.key);
+    this.tasksStore.removeProjectTasks(project.key);
     this.projectStore.delete(project);
   }
 }

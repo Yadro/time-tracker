@@ -68,7 +68,7 @@ export default observer(function TaskNode({ task }: TaskNodeProps) {
         )}
         <Popconfirm
           title="Are you sure to delete this task?"
-          onConfirm={stopPropagationAndRun(() => tasksStore.delete(task))}
+          onConfirm={stopPropagationAndRun(() => tasksStore.remove(task))}
           onCancel={stopPropagation}
           okText="Yes"
           cancelText="No"

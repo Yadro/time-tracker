@@ -114,12 +114,14 @@ export default class TaskStore {
     );
   }
 
-  delete(task: TaskModel) {
+  remove(task: TaskModel) {
     function condition(_task: TaskModel) {
       return _task.key === task.key;
     }
 
-    this.stopTimer();
+    if (task.active) {
+      this.stopTimer();
+    }
 
     for (const projectKey in this.tasks) {
       if (this.tasks.hasOwnProperty(projectKey)) {
@@ -134,7 +136,7 @@ export default class TaskStore {
     GaService.event(EEventCategory.Tasks, ETasksEvents.Delete);
   }
 
-  deleteProjectTasks(projectKey: string) {
+  removeProjectTasks(projectKey: string) {
     delete this.tasks[projectKey];
     this.tasksService.save(this.tasks);
     this.updateVersion();
