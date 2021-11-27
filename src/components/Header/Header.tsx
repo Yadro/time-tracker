@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Layout } from 'antd';
 import { observer } from 'mobx-react';
+import useMediaQuery from 'react-hook-media-query';
 
 import HeaderLink from '../HeaderLink/HeaderLink';
 import Profile from '../Profile/Profile';
@@ -10,7 +11,10 @@ import ProgressBar from '../ProgressBar/ProgressBar';
 
 const { Header: HeaderBase } = Layout;
 
+const query = '(min-width: 950px)';
 function Header() {
+  const isBigScreen = useMediaQuery(query);
+
   return (
     <HeaderBase>
       <HeaderLink>
@@ -22,9 +26,7 @@ function Header() {
       <HeaderLink>
         <Link to="/dashboard">Dashboard</Link>
       </HeaderLink>
-      <span className="flex-1">
-        <ProgressBar />
-      </span>
+      <span className="flex-1">{isBigScreen && <ProgressBar />}</span>
       <TaskControl />
       <Profile />
     </HeaderBase>
