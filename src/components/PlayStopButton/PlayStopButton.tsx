@@ -1,7 +1,6 @@
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, useCallback } from 'react';
 import { CaretRightFilled, PauseOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react';
-import clsx from 'clsx';
 import { createUseStyles } from 'react-jss';
 
 import CircleButton from '../CircleButton/CircleButton';
@@ -15,28 +14,25 @@ interface PlayStopButtonProps {
   className?: string;
 }
 
-export default observer(function PlayStopButton({
-  task,
-  className,
-}: PlayStopButtonProps) {
+function PlayStopButton({ task, className }: PlayStopButtonProps) {
   const classes = useStyles();
 
-  function handleClick(e: SyntheticEvent) {
-    e.stopPropagation();
-    if (task) {
-      if (!task?.active) {
-        tasksStore.startTimer(task);
-      } else {
-        tasksStore.stopTimer();
+  const toggleTask = useCallback(
+    (e: SyntheticEvent) => {
+      e.stopPropagation();
+      if (task) {
+        if (!task?.active) {
+          tasksStore.startTimer(task);
+        } else {
+          tasksStore.stopTimer();
+        }
       }
-    }
-  }
+    },
+    [task]
+  );
 
   return (
-    <CircleButton
-      onClick={handleClick}
-      className={clsx('play-stop-button', className)}
-    >
+    <CircleButton onClick={toggleTask} className={className}>
       {!task?.active ? (
         <CaretRightFilled className={classes.icon} />
       ) : (
@@ -44,7 +40,9 @@ export default observer(function PlayStopButton({
       )}
     </CircleButton>
   );
-});
+}
+
+export default observer(PlayStopButton);
 
 const useStyles = createUseStyles({
   icon: {

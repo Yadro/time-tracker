@@ -46,7 +46,7 @@ export default class TaskStore {
     GaService.event(EEventCategory.TimeRange, ETimeRangeEvents.Update);
   }
 
-  deleteTime(task: TaskModel, timeIndex: number) {
+  removeTime(task: TaskModel, timeIndex: number) {
     if (task.active) {
       this.stopTimer();
     }
@@ -85,7 +85,6 @@ export default class TaskStore {
     for (const tasks of Object.values(this.tasks)) {
       TreeModelHelper.getFlatItemsRecursiveBase(tasks, condition, result);
     }
-    console.log('getTasksByDate', result.length);
     return result;
   }
 
@@ -154,7 +153,7 @@ export default class TaskStore {
   stopTimer(silent?: boolean) {
     if (this.activeTask) {
       this.activeTask.stop();
-      this.activeTask = undefined;
+      // this.activeTask = undefined;
     }
 
     if (!silent) {

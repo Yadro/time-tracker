@@ -7,26 +7,28 @@ import IconTile from '../../../../../components/IconTile/IconTile';
 import PlayStopButton from '../../../../../components/PlayStopButton/PlayStopButton';
 import TaskModel from '../../../../../modules/tasks/models/TaskModel';
 import * as TaskHooks from '../../../../../hooks/TaskHooks';
+import { PURPLE_COLOR } from '../../../../../consts';
 
 interface DurationProps {
   task?: TaskModel;
 }
-
-export default observer(function Duration({ task }: DurationProps) {
+function Duration({ task }: DurationProps) {
   const classes = useStyle();
   const duration = TaskHooks.useTaskDuration(task, true);
 
   return (
     <div className={classes.root}>
-      <IconTile backgroundColor="#713A91">
+      <IconTile backgroundColor={PURPLE_COLOR}>
         <ClockCircleOutlined style={{ color: 'white ' }} />
       </IconTile>
       <span className={classes.duration}>{duration}</span>
-      <span className="flex-1" />
+      <span className={classes.flex1} />
       <PlayStopButton task={task} />
     </div>
   );
-});
+}
+
+export default observer(Duration);
 
 const useStyle = createUseStyles({
   root: {
@@ -36,5 +38,8 @@ const useStyle = createUseStyles({
   },
   duration: {
     paddingLeft: 8,
+  },
+  flex1: {
+    flex: 1,
   },
 });

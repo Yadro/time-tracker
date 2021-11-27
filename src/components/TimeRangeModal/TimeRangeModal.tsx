@@ -74,7 +74,7 @@ const TimeRangeModal = observer(
 
     function handleDelete() {
       if (taskTime) {
-        tasksStore.deleteTime(taskTime.task, taskTime.index);
+        tasksStore.removeTime(taskTime.task, taskTime.index);
       }
       onClose();
     }

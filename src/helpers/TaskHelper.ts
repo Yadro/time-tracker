@@ -35,8 +35,6 @@ export function getTimeItems(
   });
   taskTime.sort((a, b) => compareAsc(a.time.start, b.time.start));
 
-  console.log('getTimeItems', taskTime.length);
-
   return taskTime;
 }
 

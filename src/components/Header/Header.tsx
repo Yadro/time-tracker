@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Layout } from 'antd';
 import { observer } from 'mobx-react';
 import useMediaQuery from 'react-hook-media-query';
+import { createUseStyles } from 'react-jss';
 
 import HeaderLink from '../HeaderLink/HeaderLink';
 import Profile from '../Profile/Profile';
@@ -13,6 +14,7 @@ const { Header: HeaderBase } = Layout;
 
 const query = '(min-width: 950px)';
 function Header() {
+  const style = useStyle();
   const isBigScreen = useMediaQuery(query);
 
   return (
@@ -26,7 +28,7 @@ function Header() {
       <HeaderLink>
         <Link to="/dashboard">Dashboard</Link>
       </HeaderLink>
-      <span className="flex-1">{isBigScreen && <ProgressBar />}</span>
+      <span className={style.flex1}>{isBigScreen && <ProgressBar />}</span>
       <TaskControl />
       <Profile />
     </HeaderBase>
@@ -34,3 +36,9 @@ function Header() {
 }
 
 export default observer(Header);
+
+const useStyle = createUseStyles({
+  flex1: {
+    flex: 1,
+  },
+});
