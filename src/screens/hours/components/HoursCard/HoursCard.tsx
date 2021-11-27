@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { createUseStyles } from 'react-jss';
 
 import TaskTimeItemModel from '../../../../modules/tasks/models/TaskTimeItemModel';
-import PlayStopButton from '../../../../components/PlayStopButton/PlayStopButton';
+import PlayStopButton from '../../../../components/PlayStopButton';
 import rootStore from '../../../../modules/RootStore';
 import { msToTime, toTimeFormat } from '../../../../helpers/DateTime';
 import { getTaskTitlesPath } from '../../../../helpers/TaskHelper';

@@ -6,7 +6,7 @@ import ProjectsScreen from './projects/ProjectsScreen';
 import HoursScreen from './hours/HoursScreen';
 import Dashboard from './dashboard/Dashboard';
 import GaService from '../services/gaService/GaService';
-import Header from '../components/Header/Header';
+import Header from '../components/Header';
 
 const Main = () => {
   const location = useLocation();

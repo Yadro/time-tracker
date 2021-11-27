@@ -7,7 +7,7 @@ import { createUseStyles } from 'react-jss';
 import TaskModel from '../../../../modules/tasks/models/TaskModel';
 import rootStore from '../../../../modules/RootStore';
 import HoursByTask from '../HoursByTask/HoursByTask';
-import IconTile from '../../../../components/IconTile/IconTile';
+import IconTile from '../../../../components/IconTile';
 import Duration from './components/Duration';
 import TimeRangeModal from '../../../../components/TimeRangeModal/TimeRangeModal';
 import { Undefined } from '../../../../types/CommonTypes';

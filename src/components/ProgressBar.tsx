@@ -4,11 +4,11 @@ import { Slider } from 'antd';
 import { isSameDay } from 'date-fns';
 import { createUseStyles } from 'react-jss';
 
-import rootStore from '../../modules/RootStore';
-import { useInterval } from '../../hooks/UseInterval';
-import { getStartWorkingTime, getTimeItems } from '../../helpers/TaskHelper';
-import TaskTimeService from '../../services/TaskTimeService';
-import { toTimeFormat } from '../../helpers/DateTime';
+import rootStore from '../modules/RootStore';
+import { useInterval } from '../hooks/UseInterval';
+import { getStartWorkingTime, getTimeItems } from '../helpers/TaskHelper';
+import TaskTimeService from '../services/TaskTimeService';
+import { toTimeFormat } from '../helpers/DateTime';
 
 const { tasksStore, settingsStore } = rootStore;
 

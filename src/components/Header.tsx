@@ -5,10 +5,10 @@ import { observer } from 'mobx-react';
 import useMediaQuery from 'react-hook-media-query';
 import { createUseStyles } from 'react-jss';
 
-import HeaderLink from '../HeaderLink/HeaderLink';
-import Profile from '../Profile/Profile';
-import TaskControl from '../TaskControl/TaskControl';
-import ProgressBar from '../ProgressBar/ProgressBar';
+import HeaderLink from './HeaderLink';
+import Profile from './Profile';
+import TaskControl from './TaskControl';
+import ProgressBar from './ProgressBar';
 
 const { Header: HeaderBase } = Layout;
 

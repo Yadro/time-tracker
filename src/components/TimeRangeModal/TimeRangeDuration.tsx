@@ -1,7 +1,7 @@
 import React from 'react';
 
-import * as TaskHooks from '../../../hooks/TaskHooks';
-import { ITimeRangeModel } from '../../../modules/tasks/models/TaskModel';
+import * as TaskHooks from '../../hooks/TaskHooks';
+import { ITimeRangeModel } from '../../modules/tasks/models/TaskModel';
 
 interface TimeRangeDurationProps {
   timeRange?: ITimeRangeModel;

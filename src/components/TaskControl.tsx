@@ -2,10 +2,10 @@ import React, { useMemo } from 'react';
 import { observer } from 'mobx-react';
 import { createUseStyles } from 'react-jss';
 
-import rootStore from '../../modules/RootStore';
-import * as TaskHooks from '../../hooks/TaskHooks';
-import PlayStopButton from '../PlayStopButton/PlayStopButton';
-import { PURPLE_COLOR } from '../../consts';
+import rootStore from '../modules/RootStore';
+import * as TaskHooks from '../hooks/TaskHooks';
+import PlayStopButton from './PlayStopButton';
+import { PURPLE_COLOR } from '../consts';
 
 const { tasksStore, projectStore } = rootStore;
 

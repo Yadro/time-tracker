@@ -34,6 +34,7 @@ export default observer(function ProjectModal({
         children: [],
         expanded: true,
         deletable: true,
+        parent: undefined,
       })
     );
     onClose();

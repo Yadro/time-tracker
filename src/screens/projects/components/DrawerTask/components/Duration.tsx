@@ -3,8 +3,8 @@ import { ClockCircleOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react';
 import { createUseStyles } from 'react-jss';
 
-import IconTile from '../../../../../components/IconTile/IconTile';
-import PlayStopButton from '../../../../../components/PlayStopButton/PlayStopButton';
+import IconTile from '../../../../../components/IconTile';
+import PlayStopButton from '../../../../../components/PlayStopButton';
 import TaskModel from '../../../../../modules/tasks/models/TaskModel';
 import * as TaskHooks from '../../../../../hooks/TaskHooks';
 import { PURPLE_COLOR } from '../../../../../consts';
