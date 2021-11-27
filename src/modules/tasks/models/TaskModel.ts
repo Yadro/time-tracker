@@ -17,6 +17,7 @@ export interface ITimeRangeModel {
 }
 
 export interface IJsonTaskModel extends ITreeItemWithParent {
+  children?: IJsonTaskModel[];
   projectId?: string;
   checked?: boolean;
   active?: boolean;
@@ -50,10 +51,10 @@ const parseTimeRageItems = (
 };
 
 export default class TaskModel extends AbstractModel
-  implements ITreeItemWithParent<TaskModel> {
+  implements ITreeItemWithParent {
   key: string = '';
   title: string = '';
-  children: TaskModel[] = [];
+  children?: TaskModel[] = [];
   parent: TaskModel | undefined = undefined;
   projectId: string = '';
   checked: boolean = false;

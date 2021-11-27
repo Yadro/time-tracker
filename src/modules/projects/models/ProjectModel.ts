@@ -1,7 +1,7 @@
 import * as colors from '@ant-design/colors';
 
 import AbstractModel from '../../../base/AbstractModel';
-import { ITreeItem } from '../../../types/ITreeItem';
+import { ITreeItem, ITreeItemWithParent } from '../../../types/ITreeItem';
 
 export enum DEFAULT_PROJECT_ID {
   MyDay = '0',
@@ -25,16 +25,18 @@ export const DEFAULT_PROJECTS: IJsonProjectItem[] = [
   },
 ];
 
-export interface IJsonProjectItem extends ITreeItem<IJsonProjectItem> {
+export interface IJsonProjectItem extends ITreeItem {
   color: string;
   expanded: boolean;
   deletable: boolean;
+  children?: IJsonProjectItem[];
 }
 
-interface IProjectModel extends ITreeItem<IProjectModel> {
+interface IProjectModel extends ITreeItemWithParent {
   color: string;
   expanded: boolean;
   deletable: boolean;
+  children?: IProjectModel[];
 }
 
 export default class ProjectModel extends AbstractModel
@@ -45,6 +47,7 @@ export default class ProjectModel extends AbstractModel
   expanded: boolean = false;
   deletable: boolean = true;
   children?: ProjectModel[] = [];
+  parent: ProjectModel | undefined;
 
   constructor(props: IJsonProjectItem) {
     super();

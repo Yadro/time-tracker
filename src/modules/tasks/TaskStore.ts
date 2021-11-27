@@ -16,9 +16,6 @@ import {
   ETimeRangeEvents,
 } from '../../services/gaService/EEvents';
 import { DEFAULT_PROJECT_ID } from '../projects/models/ProjectModel';
-import { ITreeItemWithParent } from '../../types/ITreeItem';
-
-// FIXME ts errors
 
 export default class TaskStore {
   tasks: TasksByProject = {};
@@ -223,7 +220,7 @@ export default class TaskStore {
     condition: (task: TaskModel) => boolean
   ) {
     if (Array.isArray(this.tasks[projectId])) {
-      return TreeModelHelper.getFlatItemsRecursive<ITreeItemWithParent>(
+      return TreeModelHelper.getFlatItemsRecursive(
         this.tasks[projectId],
         condition
       ).map((task) => task.key);

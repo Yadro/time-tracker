@@ -19,7 +19,7 @@ interface TreePropsExtended<T>
   isDraggable?: () => boolean;
 }
 
-export default function TreeList<T extends ITreeItemWithParent<any>>(
+export default function TreeList<T extends ITreeItemWithParent>(
   getData: () => T[],
   updateData: (items: T[]) => void,
   options: TreePropsExtended<T>
@@ -46,7 +46,7 @@ export default function TreeList<T extends ITreeItemWithParent<any>>(
             return callback(items[i], i, items);
           }
           if (items[i].children) {
-            loop(items[i].children || [], key, callback);
+            loop((items[i].children || []) as T[], key, callback);
           }
         }
         return undefined;

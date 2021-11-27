@@ -52,7 +52,7 @@ const TreeModelHelper = {
 
     return TreeModelHelper.copyItemsToTree(
       sourceTree,
-      destProject.children,
+      destProject.children || [],
       keysToNode
     );
   },
@@ -92,8 +92,8 @@ const TreeModelHelper = {
       if (nextDestNode) {
         // We already have a copy of node, go on
         keyIdx++;
-        sourceChildren = nextSourceNode.children;
-        destChildren = nextDestNode.children;
+        sourceChildren = nextSourceNode.children || [];
+        destChildren = nextDestNode.children || [];
       } else {
         // Make a copy from this node
         const restKeysToNode = keysToNode.slice(keyIdx);
@@ -134,8 +134,8 @@ const TreeModelHelper = {
         return true;
       }
 
-      destChildren = copyNode.children;
-      sourceNode = sourceNode.children.find(
+      destChildren = copyNode.children || [];
+      sourceNode = sourceNode.children?.find(
         (node) => node.key === keysToNode[keyIdx]
       );
       if (!sourceNode) {
@@ -144,7 +144,7 @@ const TreeModelHelper = {
     }
   },
 
-  walkRecursive<T extends ITreeItem<any>>(
+  walkRecursive<T extends ITreeItem>(
     fn: (item: T, parent?: T) => void,
     treeItems: T[],
     parent?: T
@@ -152,22 +152,22 @@ const TreeModelHelper = {
     treeItems.forEach((item) => {
       fn(item, parent);
       if (item.children?.length) {
-        TreeModelHelper.walkRecursive(fn, item.children, item);
+        this.walkRecursive(fn, item.children as T[], item);
       }
     });
   },
 
-  walkToParent<T extends ITreeItemWithParent<any>>(
+  walkToParent<T extends ITreeItemWithParent>(
     fn: (nParent: T) => void,
     treeItem: T
   ) {
     if (treeItem.parent) {
-      fn(treeItem.parent);
-      TreeModelHelper.walkToParent(fn, treeItem.parent);
+      fn(treeItem.parent as T);
+      this.walkToParent(fn, treeItem.parent as T);
     }
   },
 
-  modifyItemsWithIdsRecursive<T extends ITreeItem<any>>(
+  modifyItemsWithIdsRecursive<T extends ITreeItem>(
     treeItems: T[],
     ids: string[],
     fn: (treeItem: T, ids: string[]) => void
@@ -175,21 +175,21 @@ const TreeModelHelper = {
     treeItems.forEach((item) => {
       fn(item, ids);
       if (Array.isArray(item.children) && item.children.length) {
-        TreeModelHelper.modifyItemsWithIdsRecursive(item.children, ids, fn);
+        this.modifyItemsWithIdsRecursive(item.children as T[], ids, fn);
       }
     });
   },
 
-  getItemRecursive<T extends ITreeItem<any>>(
-    tasks: T[],
+  getItemRecursive<T extends ITreeItem>(
+    items: T[],
     condition: (task: T) => boolean
   ): T | undefined {
-    for (const task of tasks) {
-      if (condition(task)) {
-        return task;
+    for (const item of items) {
+      if (condition(item)) {
+        return item;
       }
-      if (Array.isArray(task.children)) {
-        const found = this.getItemRecursive(task.children, condition);
+      if (item.children?.length) {
+        const found = this.getItemRecursive(item.children as T[], condition);
         if (found) {
           return found;
         }
@@ -198,7 +198,7 @@ const TreeModelHelper = {
     return undefined;
   },
 
-  getFlatItemsRecursive<T extends ITreeItem<any>>(
+  getFlatItemsRecursive<T extends ITreeItem>(
     tree: T[],
     condition: (task: T) => boolean
   ): T[] {
@@ -209,33 +209,32 @@ const TreeModelHelper = {
     return result;
   },
 
-  getFlatItemsRecursiveBase<T extends ITreeItem<any>>(
+  getFlatItemsRecursiveBase<T extends ITreeItem>(
     treeItems: T[],
     condition: (item: T) => boolean,
     result: T[]
   ): T[] {
-    for (const item of treeItems) {
+    treeItems.forEach((item) => {
       if (condition(item)) {
         result.push(item);
       }
-      if (Array.isArray(item.children)) {
-        this.getFlatItemsRecursiveBase(item.children, condition, result);
+      if (item.children?.length) {
+        this.getFlatItemsRecursiveBase(item.children as T[], condition, result);
       }
-    }
+    });
     return result;
   },
 
-  deleteItems<T extends ITreeItem<any>>(
+  deleteItems<T extends ITreeItem>(
     treeItems: T[],
-    condition: (task: T) => boolean
+    condition: (item: T) => boolean
   ): T[] {
     const result = treeItems.filter((t) => !condition(t));
-    for (let i = 0; i < result.length; i++) {
-      const task = treeItems[i];
-      if (Array.isArray(task.children)) {
-        treeItems[i].children = this.deleteItems(task.children, condition);
+    result.forEach((item) => {
+      if (item.children?.length) {
+        item.children = this.deleteItems(item.children as T[], condition);
       }
-    }
+    });
     return result;
   },
 };

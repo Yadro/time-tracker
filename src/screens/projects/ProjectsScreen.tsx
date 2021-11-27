@@ -50,7 +50,7 @@ const TaskList = TreeList(
   }
 );
 
-const ProjectList = TreeList(
+const ProjectList = TreeList<ProjectModel>(
   () => projectStore.projects,
   (list: ProjectModel[]) => {
     projectStore.set(list);
