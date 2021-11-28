@@ -10,11 +10,11 @@ interface ITaskWithProjectName {
 }
 
 export class TaskWithProjectNameModel extends AbstractModel
-  implements ITreeItemWithParent<TaskModel> {
+  implements ITreeItemWithParent {
   key: string = '';
   title: string = '';
-  parent: TaskModel | null = null;
-  children: TaskModel[] = [];
+  parent: TaskModel | undefined = undefined;
+  children?: TaskModel[] = [];
 
   constructor(props: ITaskWithProjectName) {
     super();

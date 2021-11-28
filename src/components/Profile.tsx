@@ -3,9 +3,9 @@ import { Space } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { createUseStyles } from 'react-jss';
 
-import rootStore from '../../modules/RootStore';
-import useModal from '../../hooks/ModalHook';
-import SettingsModal from '../SettingsModal/SettingsModal';
+import rootStore from '../modules/RootStore';
+import useModal from '../hooks/ModalHook';
+import SettingsModal from './SettingsModal/SettingsModal';
 
 const { settingsStore } = rootStore;
 

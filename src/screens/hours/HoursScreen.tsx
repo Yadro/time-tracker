@@ -5,7 +5,7 @@ import { observer } from 'mobx-react';
 import rootStore from '../../modules/RootStore';
 import HoursCard from './components/HoursCard/HoursCard';
 import { getTimeItems } from '../../helpers/TaskHelper';
-import SelectDate from '../../components/SelectDate/SelectDate';
+import SelectDate from '../../components/SelectDate';
 import TimeRangeModal from '../../components/TimeRangeModal/TimeRangeModal';
 import TaskTimeItemModel from '../../modules/tasks/models/TaskTimeItemModel';
 import { Undefined } from '../../types/CommonTypes';

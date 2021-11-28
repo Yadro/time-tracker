@@ -2,7 +2,7 @@ import TaskModel from './TaskModel';
 
 export class TaskInMyDay extends TaskModel {
   origin: TaskModel | null = null;
-  children: TaskInMyDay[] = [];
+  children?: TaskInMyDay[] = [];
 
   constructor(originTaskModel: TaskModel, children: TaskInMyDay[]) {
     super(originTaskModel);

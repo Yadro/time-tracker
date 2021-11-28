@@ -1,5 +1,6 @@
 import { ITimeRangeModel } from '../modules/tasks/models/TaskModel';
-import { format } from 'date-fns';
+import { format, isSameMonth, isSameYear } from 'date-fns';
+
 import { iterPrevCurrent } from './ArrayHelper';
 
 function timePad(time: number): string {
@@ -45,6 +46,17 @@ export function msToTime(s: number, showSeconds: boolean = true) {
   return timeItemsToString(sign, hrs, mins, secs, showSeconds);
 }
 
+export function taskLastActiveDateFormat(date: Date) {
+  const now = new Date();
+  if (isSameMonth(date, now)) {
+    return format(date, 'E dd');
+  }
+  if (isSameYear(date, now)) {
+    return format(date, 'dd/MM');
+  }
+  return format(date, 'dd/MM/yy');
+}
+
 export function timeToMs(date: Date) {
   const hours = date.getHours();
   const minutes = date.getMinutes();
@@ -72,18 +84,13 @@ export function calcDurationGaps(taskTime: ITimeRangeModel[]): number {
     }
   });
 
-  const lastTask = taskTime[taskTime.length - 1];
-  if (lastTask && lastTask.end) {
-    result += new Date().getTime() - lastTask.end.getTime();
-  }
-
   return result;
 }
 
 const TIME_FORMAT = 'HH:mm';
 const NO_TIME = '--:--';
 
-export function getTime(date: Date | undefined) {
+export function toTimeFormat(date: Date | undefined) {
   if (!date) {
     return NO_TIME;
   }
@@ -98,4 +105,8 @@ export function estimateWorkingTimeEnd(
   return startDate
     ? new Date(startDate.getTime() + restTimeMs + workingHoursMs)
     : undefined;
+}
+
+export function getRestHoursMs(workingHoursMs: number, durationMs: number) {
+  return workingHoursMs - durationMs;
 }

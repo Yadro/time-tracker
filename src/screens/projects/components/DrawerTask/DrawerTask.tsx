@@ -7,12 +7,13 @@ import { createUseStyles } from 'react-jss';
 import TaskModel from '../../../../modules/tasks/models/TaskModel';
 import rootStore from '../../../../modules/RootStore';
 import HoursByTask from '../HoursByTask/HoursByTask';
-import IconTile from '../../../../components/IconTile/IconTile';
+import IconTile from '../../../../components/IconTile';
 import Duration from './components/Duration';
 import TimeRangeModal from '../../../../components/TimeRangeModal/TimeRangeModal';
 import { Undefined } from '../../../../types/CommonTypes';
 import TaskTimeItemModel from '../../../../modules/tasks/models/TaskTimeItemModel';
 import IModalProps from '../../../../types/IModalProps';
+import { PURPLE_COLOR } from '../../../../consts';
 
 const { TextArea } = Input;
 
@@ -56,7 +57,7 @@ export default observer(function DrawerTask({
           Mark as done
         </Checkbox>
         <div className={classes.iconWithValue}>
-          <IconTile backgroundColor="#713A91">
+          <IconTile backgroundColor={PURPLE_COLOR}>
             <ProjectOutlined style={{ color: 'white ' }} />
           </IconTile>
           <span className={classes.projectTitle}>{project?.title}</span>

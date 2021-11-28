@@ -12,7 +12,7 @@ import TaskModel, {
 import TaskTimeItemModel from '../../../../modules/tasks/models/TaskTimeItemModel';
 import { mapPrevCurrent } from '../../../../helpers/ArrayHelper';
 import HoursItem from './components/HoursItem';
-import IconTile from '../../../../components/IconTile/IconTile';
+import IconTile from '../../../../components/IconTile';
 import { calcDuration, msToTime } from '../../../../helpers/DateTime';
 
 function dateFormat(date: Date) {

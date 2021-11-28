@@ -17,6 +17,7 @@ export interface ITimeRangeModel {
 }
 
 export interface IJsonTaskModel extends ITreeItemWithParent {
+  children?: IJsonTaskModel[];
   projectId?: string;
   checked?: boolean;
   active?: boolean;
@@ -50,11 +51,11 @@ const parseTimeRageItems = (
 };
 
 export default class TaskModel extends AbstractModel
-  implements ITreeItemWithParent<TaskModel> {
+  implements ITreeItemWithParent {
   key: string = '';
   title: string = '';
-  children: TaskModel[] = [];
-  parent: TaskModel | null = null; // update parent on drug&drop
+  children?: TaskModel[] = [];
+  parent: TaskModel | undefined = undefined;
   projectId: string = '';
   checked: boolean = false;
   active: boolean = false;
@@ -82,12 +83,16 @@ export default class TaskModel extends AbstractModel
       key: observable,
       title: observable,
       children: observable,
+      // parent: none
       projectId: observable,
       checked: observable,
       active: observable,
+      expanded: observable,
+      inMyDay: observable,
       time: observable,
       datesInProgress: observable,
       details: observable,
+      withoutActions: observable,
       duration: computed,
       setTitle: action,
       setDetails: action,
@@ -154,7 +159,7 @@ export default class TaskModel extends AbstractModel
     const normalDate = startOfDay(date);
     const found = this.datesInProgress.find((d) => isSameDay(d, normalDate));
     if (!found) {
-      this.datesInProgress.push(normalDate);
+      this.datesInProgress = [...this.datesInProgress, normalDate];
     }
   }
 }

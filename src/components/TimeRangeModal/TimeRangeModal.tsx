@@ -10,7 +10,7 @@ import rootStore from '../../modules/RootStore';
 import TaskTimeItemModel from '../../modules/tasks/models/TaskTimeItemModel';
 import { ITimeRangeModel } from '../../modules/tasks/models/TaskModel';
 import { Undefined } from '../../types/CommonTypes';
-import TimeRangeDuration from './components/TimeRangeDuration';
+import TimeRangeDuration from './TimeRangeDuration';
 import IModalProps from '../../types/IModalProps';
 
 const { tasksStore } = rootStore;
@@ -74,7 +74,7 @@ const TimeRangeModal = observer(
 
     function handleDelete() {
       if (taskTime) {
-        tasksStore.deleteTime(taskTime.task, taskTime.index);
+        tasksStore.removeTime(taskTime.task, taskTime.index);
       }
       onClose();
     }

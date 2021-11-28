@@ -14,7 +14,8 @@
     "start": "node -r @babel/register ./.erb/scripts/CheckPortInUse.js && cross-env yarn start:renderer",
     "start:main": "cross-env NODE_ENV=development electron -r ./.erb/scripts/BabelRegister ./src/main.dev.ts",
     "start:renderer": "cross-env NODE_ENV=development webpack serve --config ./.erb/configs/webpack.config.renderer.dev.babel.js",
-    "test": "jest"
+    "test": "jest",
+    "tsc": "tsc"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -166,6 +167,7 @@
     "@types/react": "^16.9.44",
     "@types/react-dom": "^16.9.9",
     "@types/react-router-dom": "^5.1.6",
+    "@types/uuid": "^8.3.3",
     "@types/webpack-env": "^1.15.2",
     "@typescript-eslint/eslint-plugin": "^4.8.1",
     "@typescript-eslint/parser": "^4.8.1",
@@ -229,7 +231,7 @@
     "@ant-design/colors": "6.0.0",
     "@ant-design/icons": "4.6.2",
     "@sentry/electron": "2.5.0",
-    "antd": "4.16.7",
+    "antd": "4.17.2",
     "caniuse-lite": "1.0.30001214",
     "clsx": "^1.1.1",
     "date-fns": "2.20.1",
@@ -246,11 +248,13 @@
     "moment": "2.29.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-hook-media-query": "^1.0.5",
     "react-jss": "^10.6.0",
     "react-router-dom": "^5.2.0",
     "regenerator-runtime": "^0.13.5",
     "source-map-support": "^0.5.19",
-    "universal-analytics": "^0.4.23"
+    "universal-analytics": "^0.4.23",
+    "uuid": "^8.3.2"
   },
   "devEngines": {
     "node": ">=14.x",

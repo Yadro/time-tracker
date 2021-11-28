@@ -1,5 +1,5 @@
 import { autorun, makeAutoObservable } from 'mobx';
-
+import { v4 as uuid } from 'uuid';
 import TaskService from './TaskService';
 import TaskModel, { ITimeRangeModel } from './models/TaskModel';
 import {
@@ -16,13 +16,19 @@ import {
   ETimeRangeEvents,
 } from '../../services/gaService/EEvents';
 import { DEFAULT_PROJECT_ID } from '../projects/models/ProjectModel';
-import { ITreeItemWithParent } from '../../types/ITreeItem';
+import throttle from '../../helpers/Throttle';
+import { THROTTLE_SAVE_JSON_MS } from '../../config';
 
 export default class TaskStore {
   tasks: TasksByProject = {};
   activeTask: TaskModel | undefined;
+  versionHash = uuid();
   private tasksService = new TaskService();
   private interval: NodeJS.Timeout | undefined;
+  private saveInStorage = throttle(() => {
+    this.tasksService.save(this.tasks);
+    this.updateVersion();
+  }, THROTTLE_SAVE_JSON_MS);
 
   constructor(private rootStore: RootStore) {
     makeAutoObservable(this);
@@ -36,22 +42,22 @@ export default class TaskStore {
 
   set(projectId: string, tasksInProject: TaskModel[]) {
     this.tasks[projectId] = tasksInProject;
-    this.tasksService.save(this.tasks);
+    this.saveInStorage();
   }
 
   setTime(task: TaskModel, timeIndex: number, timeRange: ITimeRangeModel) {
     task.time[timeIndex] = timeRange;
-    this.tasksService.save(this.tasks);
+    this.saveInStorage();
     GaService.event(EEventCategory.TimeRange, ETimeRangeEvents.Update);
   }
 
-  deleteTime(task: TaskModel, timeIndex: number) {
+  removeTime(task: TaskModel, timeIndex: number) {
     if (task.active) {
       this.stopTimer();
     }
 
-    task.time.splice(timeIndex, 1);
-    this.tasksService.save(this.tasks);
+    task.time.splice(timeIndex, 1); // TODO move to task
+    this.saveInStorage();
     GaService.event(EEventCategory.TimeRange, ETimeRangeEvents.Delete);
   }
 
@@ -91,9 +97,8 @@ export default class TaskStore {
     if (!Array.isArray(this.tasks[projectId])) {
       this.tasks[projectId] = [];
     }
-    this.tasks[projectId].push(task);
-    this.tasks[projectId] = this.tasks[projectId].slice();
-    this.tasksService.save(this.tasks);
+    this.tasks[projectId] = [...this.tasks[projectId], task];
+    this.saveInStorage();
     GaService.event(EEventCategory.Tasks, ETasksEvents.Create);
   }
 
@@ -111,12 +116,14 @@ export default class TaskStore {
     );
   }
 
-  delete(task: TaskModel) {
+  remove(task: TaskModel) {
     function condition(_task: TaskModel) {
       return _task.key === task.key;
     }
 
-    this.stopTimer();
+    if (task.active) {
+      this.stopTimer();
+    }
 
     for (const projectKey in this.tasks) {
       if (this.tasks.hasOwnProperty(projectKey)) {
@@ -126,13 +133,13 @@ export default class TaskStore {
         );
       }
     }
-    this.tasksService.save(this.tasks);
+    this.saveInStorage();
     GaService.event(EEventCategory.Tasks, ETasksEvents.Delete);
   }
 
-  deleteProjectTasks(projectKey: string) {
+  removeProjectTasks(projectKey: string) {
     delete this.tasks[projectKey];
-    this.tasksService.save(this.tasks);
+    this.saveInStorage();
   }
 
   startTimer(task: TaskModel) {
@@ -140,18 +147,17 @@ export default class TaskStore {
     this.activeTask = task;
     task.start();
     this.setupReminder(task);
-    this.tasksService.save(this.tasks);
+    this.saveInStorage();
   }
 
   stopTimer(silent?: boolean) {
     if (this.activeTask) {
       this.activeTask.stop();
-      this.activeTask = undefined;
     }
 
     if (!silent) {
       this.setupReminder();
-      this.tasksService.save(this.tasks);
+      this.saveInStorage();
     }
   }
 
@@ -185,7 +191,7 @@ export default class TaskStore {
         checkTaskFn
       );
 
-      this.set(projectId, this.tasks[projectId].slice());
+      this.saveInStorage();
     }
     GaService.event(EEventCategory.Tasks, ETasksEvents.Check);
   }
@@ -204,7 +210,7 @@ export default class TaskStore {
         markExpanded
       );
 
-      this.set(projectId, this.tasks[projectId].slice());
+      this.saveInStorage();
     }
   }
 
@@ -213,7 +219,7 @@ export default class TaskStore {
     condition: (task: TaskModel) => boolean
   ) {
     if (Array.isArray(this.tasks[projectId])) {
-      return TreeModelHelper.getFlatItemsRecursive<ITreeItemWithParent>(
+      return TreeModelHelper.getFlatItemsRecursive(
         this.tasks[projectId],
         condition
       ).map((task) => task.key);
@@ -271,5 +277,9 @@ export default class TaskStore {
     if (this.interval !== undefined) {
       clearInterval(this.interval);
     }
+  }
+
+  private updateVersion() {
+    this.versionHash = uuid();
   }
 }

@@ -2,7 +2,6 @@ import TreeModelHelper from './TreeModelHelper';
 import TaskFactory from '../modules/tasks/TaskFactory';
 import { IJsonTaskModel } from '../modules/tasks/models/TaskModel';
 import { TasksByProject } from '../modules/tasks/models/TasksByProject';
-import { ITreeItemWithParent } from '../types/ITreeItem';
 
 describe('TreeModelHelper', () => {
   let testTasks: TasksByProject | undefined;
@@ -19,19 +18,19 @@ describe('TreeModelHelper', () => {
     const task111: Partial<IJsonTaskModel> = {
       key: '111',
       title: 'task1-1-1',
-      parent: null,
+      parent: undefined,
       children: [],
     };
     const task11: Partial<IJsonTaskModel> = {
       key: '11',
       title: 'task1-1',
-      parent: null,
+      parent: undefined,
       children: [task111 as IJsonTaskModel],
     };
     const task1: Partial<IJsonTaskModel> = {
       key: '1',
       title: 'task1',
-      parent: null,
+      parent: undefined,
       children: [task11 as IJsonTaskModel],
     };
 
@@ -41,19 +40,19 @@ describe('TreeModelHelper', () => {
     const task21: Partial<IJsonTaskModel> = {
       key: '21',
       title: 'task21',
-      parent: null,
+      parent: undefined,
       children: [],
     };
     const task22: Partial<IJsonTaskModel> = {
       key: '22',
       title: 'task22',
-      parent: null,
+      parent: undefined,
       children: [],
     };
     const task2: Partial<IJsonTaskModel> = {
       key: '2',
       title: 'task2',
-      parent: null,
+      parent: undefined,
       children: [task21, task22] as IJsonTaskModel[],
     };
     task21.parent = task2 as IJsonTaskModel;
@@ -68,21 +67,17 @@ describe('TreeModelHelper', () => {
     if (!testTasks) {
       throw new Error();
     }
-    const task111 = testTasks.proj[0].children[0].children[0];
-    expect(TreeModelHelper.getPathToNode(task111)).toStrictEqual([
-      '1',
-      '11',
-      '111',
-    ]);
+    const task111 = testTasks?.proj?.[0]?.children?.[0]?.children?.[0];
+    const result = task111 ? TreeModelHelper.getPathToNode(task111) : undefined;
+    expect(result).toStrictEqual(['1', '11', '111']);
   });
 
   test('getPathToNode #2', () => {
     if (!testTasks) {
       throw new Error();
     }
-    const task22 = testTasks.proj[1].children[0];
-    expect(TreeModelHelper.getPathToNode(task22)).toStrictEqual(['2', '21']);
+    const task22 = testTasks?.proj?.[1]?.children?.[0];
+    const result = task22 ? TreeModelHelper.getPathToNode(task22) : undefined;
+    expect(result).toStrictEqual(['2', '21']);
   });
-
-  test('');
 });
