@@ -39,7 +39,7 @@ const TaskTimeService = {
     if (estimatedWorkingTimeEnd) {
       const durationWorkDayMs =
         estimatedWorkingTimeEnd.getTime() - workingTimeStart.getTime() || 1;
-      progress = (durationMs * 100) / durationWorkDayMs;
+      progress = ((durationMs + restMs) * 100) / durationWorkDayMs;
       progress = Math.min(progress, 100);
     }
 
