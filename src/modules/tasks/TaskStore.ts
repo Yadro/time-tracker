@@ -1,4 +1,4 @@
-import { autorun, makeAutoObservable, observable } from 'mobx';
+import { autorun, makeAutoObservable } from 'mobx';
 import { v4 as uuid } from 'uuid';
 import TaskService from './TaskService';
 import TaskModel, { ITimeRangeModel } from './models/TaskModel';
@@ -16,6 +16,8 @@ import {
   ETimeRangeEvents,
 } from '../../services/gaService/EEvents';
 import { DEFAULT_PROJECT_ID } from '../projects/models/ProjectModel';
+import throttle from '../../helpers/Throttle';
+import { THROTTLE_SAVE_JSON_MS } from '../../config';
 
 export default class TaskStore {
   tasks: TasksByProject = {};
@@ -23,6 +25,10 @@ export default class TaskStore {
   versionHash = uuid();
   private tasksService = new TaskService();
   private interval: NodeJS.Timeout | undefined;
+  private saveInStorage = throttle(() => {
+    this.tasksService.save(this.tasks);
+    this.updateVersion();
+  }, THROTTLE_SAVE_JSON_MS);
 
   constructor(private rootStore: RootStore) {
     makeAutoObservable(this);
@@ -36,13 +42,12 @@ export default class TaskStore {
 
   set(projectId: string, tasksInProject: TaskModel[]) {
     this.tasks[projectId] = tasksInProject;
-    this.tasksService.save(this.tasks);
+    this.saveInStorage();
   }
 
   setTime(task: TaskModel, timeIndex: number, timeRange: ITimeRangeModel) {
     task.time[timeIndex] = timeRange;
-    this.tasksService.save(this.tasks);
-    this.updateVersion();
+    this.saveInStorage();
     GaService.event(EEventCategory.TimeRange, ETimeRangeEvents.Update);
   }
 
@@ -51,9 +56,8 @@ export default class TaskStore {
       this.stopTimer();
     }
 
-    task.time.splice(timeIndex, 1);
-    this.tasksService.save(this.tasks);
-    this.updateVersion();
+    task.time.splice(timeIndex, 1); // TODO move to task
+    this.saveInStorage();
     GaService.event(EEventCategory.TimeRange, ETimeRangeEvents.Delete);
   }
 
@@ -94,8 +98,7 @@ export default class TaskStore {
       this.tasks[projectId] = [];
     }
     this.tasks[projectId] = [...this.tasks[projectId], task];
-    this.updateVersion();
-    this.tasksService.save(this.tasks);
+    this.saveInStorage();
     GaService.event(EEventCategory.Tasks, ETasksEvents.Create);
   }
 
@@ -130,15 +133,13 @@ export default class TaskStore {
         );
       }
     }
-    this.tasksService.save(this.tasks);
-    this.updateVersion();
+    this.saveInStorage();
     GaService.event(EEventCategory.Tasks, ETasksEvents.Delete);
   }
 
   removeProjectTasks(projectKey: string) {
     delete this.tasks[projectKey];
-    this.tasksService.save(this.tasks);
-    this.updateVersion();
+    this.saveInStorage();
   }
 
   startTimer(task: TaskModel) {
@@ -146,20 +147,17 @@ export default class TaskStore {
     this.activeTask = task;
     task.start();
     this.setupReminder(task);
-    this.tasksService.save(this.tasks);
-    this.updateVersion();
+    this.saveInStorage();
   }
 
   stopTimer(silent?: boolean) {
     if (this.activeTask) {
       this.activeTask.stop();
-      // this.activeTask = undefined;
     }
 
     if (!silent) {
       this.setupReminder();
-      this.tasksService.save(this.tasks);
-      this.updateVersion();
+      this.saveInStorage();
     }
   }
 
@@ -193,7 +191,7 @@ export default class TaskStore {
         checkTaskFn
       );
 
-      this.set(projectId, this.tasks[projectId]);
+      this.saveInStorage();
     }
     GaService.event(EEventCategory.Tasks, ETasksEvents.Check);
   }
@@ -212,7 +210,7 @@ export default class TaskStore {
         markExpanded
       );
 
-      this.set(projectId, this.tasks[projectId]);
+      this.saveInStorage();
     }
   }
 
