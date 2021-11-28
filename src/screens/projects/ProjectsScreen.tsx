@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button, Layout, Space } from 'antd';
 import { observer } from 'mobx-react';
 import { Key } from 'rc-tree/lib/interface';
@@ -17,6 +17,8 @@ import TaskNode from './components/TaskNode/TaskNode';
 import DrawerTask from './components/DrawerTask/DrawerTask';
 import ProjectNode from './components/ProjectNode/ProjectNode';
 import EditProjectModal from './components/ProjectModals/EditProjectModal';
+import { first } from '../../helpers/ArrayHelper';
+import clsx from 'clsx';
 
 const { Sider } = Layout;
 
@@ -75,6 +77,16 @@ const ProjectList = TreeList<ProjectModel>(
   }
 );
 
+function handleSelectProject(items: Key[]) {
+  if (items.length > 0) {
+    projectStore.setActiveProject(first(items) as string);
+  }
+}
+
+function clearEditableProject() {
+  projectStore.setEditableProject(undefined);
+}
+
 export default observer(function Projects() {
   const classes = useStyles();
   const [showProjectModal, setShowProjectModal] = useState<boolean>(false);
@@ -85,24 +97,26 @@ export default observer(function Projects() {
     setShowProjectModal(true);
   }
 
-  function handleSelectProject(items: Key[]) {
-    if (items.length > 0) {
-      projectStore.setActiveProject(items[0] as string);
-    }
-  }
-
-  function handleSelectTask(items: Key[]) {
+  const handleSelectTask = useCallback((items: Key[]) => {
     if (items.length > 0) {
       setDrawerVisible(true);
-      const task = tasksStore.getTaskByKey(items[0] as string);
+      const task = tasksStore.getTaskByKey(first(items) as string);
       setSelectedTask(task);
     }
-  }
+  }, []);
+  '';
+  const handleCloseDrawer = useCallback(() => {
+    setDrawerVisible(false);
+  }, []);
+
+  const handleHideProjectModal = useCallback(() => {
+    setShowProjectModal(false);
+  }, []);
 
   return (
     <Layout>
       <Sider width={250} className={classes.sider}>
-        <Layout style={{ padding: '12px' }}>
+        <Layout className={classes.padding}>
           <Space direction="vertical">
             <ProjectList onSelect={handleSelectProject} />
             <Button onClick={handleCreateProject} icon={<PlusOutlined />}>
@@ -111,23 +125,21 @@ export default observer(function Projects() {
           </Space>
         </Layout>
       </Sider>
-      <Layout style={{ padding: '24px' }} className={classes.tasks}>
+      <Layout className={clsx(classes.padding, classes.tasks)}>
         <Space className="root" direction="vertical">
           <TaskList onSelect={handleSelectTask} />
           <TaskInput />
         </Space>
       </Layout>
-      {showProjectModal && (
-        <ProjectModal onClose={() => setShowProjectModal(false)} />
-      )}
+      {showProjectModal && <ProjectModal onClose={handleHideProjectModal} />}
       <EditProjectModal
         project={projectStore.editProject}
-        onClose={() => projectStore.setEditableProject(undefined)}
+        onClose={clearEditableProject}
       />
       <DrawerTask
         task={selectedTask}
         visible={drawerVisible}
-        onClose={() => setDrawerVisible(false)}
+        onClose={handleCloseDrawer}
       />
     </Layout>
   );
@@ -140,5 +152,8 @@ const useStyles = createUseStyles({
   },
   tasks: {
     overflowY: 'auto',
+  },
+  padding: {
+    padding: 12,
   },
 });
