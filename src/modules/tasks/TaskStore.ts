@@ -35,7 +35,7 @@ export default class TaskStore {
   }
 
   set(projectId: string, tasksInProject: TaskModel[]) {
-    this.tasks[projectId] = observable.array(tasksInProject);
+    this.tasks[projectId] = tasksInProject;
     this.tasksService.save(this.tasks);
   }
 
@@ -91,9 +91,9 @@ export default class TaskStore {
   add(task: TaskModel) {
     const { projectId } = task;
     if (!Array.isArray(this.tasks[projectId])) {
-      this.tasks[projectId] = observable.array(); // TODO this.set()
+      this.tasks[projectId] = [];
     }
-    this.tasks[projectId].push(task);
+    this.tasks[projectId] = [...this.tasks[projectId], task];
     this.updateVersion();
     this.tasksService.save(this.tasks);
     GaService.event(EEventCategory.Tasks, ETasksEvents.Create);
