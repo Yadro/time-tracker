@@ -34,5 +34,5 @@
     "*.{css,sass,scss}.d.ts": true
   },
 
-  "cSpell.words": ["Popconfirm"]
+  "cSpell.words": ["Popconfirm", "Sider"]
 }

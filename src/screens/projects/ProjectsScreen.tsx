@@ -87,8 +87,8 @@ function clearEditableProject() {
   projectStore.setEditableProject(undefined);
 }
 
-export default observer(function Projects() {
-  const classes = useStyles();
+function Projects() {
+  const style = useStyles();
   const [showProjectModal, setShowProjectModal] = useState<boolean>(false);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
   const [selectedTask, setSelectedTask] = useState<TaskModel | undefined>();
@@ -115,8 +115,8 @@ export default observer(function Projects() {
 
   return (
     <Layout>
-      <Sider width={250} className={classes.sider}>
-        <Layout className={classes.padding}>
+      <Sider width={250} className={style.sider}>
+        <Layout className={style.padding}>
           <Space direction="vertical">
             <ProjectList onSelect={handleSelectProject} />
             <Button onClick={handleCreateProject} icon={<PlusOutlined />}>
@@ -125,11 +125,13 @@ export default observer(function Projects() {
           </Space>
         </Layout>
       </Sider>
-      <Layout className={clsx(classes.padding, classes.tasks)}>
-        <Space className="root" direction="vertical">
+      <Layout className={style.taskList}>
+        <div className={style.root}>
           <TaskList onSelect={handleSelectTask} />
-          <TaskInput />
-        </Space>
+          <div className={style.stickyTaskInput}>
+            <TaskInput />
+          </div>
+        </div>
       </Layout>
       {showProjectModal && <ProjectModal onClose={handleHideProjectModal} />}
       <EditProjectModal
@@ -143,17 +145,32 @@ export default observer(function Projects() {
       />
     </Layout>
   );
-});
+}
+
+export default observer(Projects);
 
 const useStyles = createUseStyles({
   sider: {
     backgroundColor: '#f0f2f5',
     borderRight: '1px solid #d9d9d9',
   },
-  tasks: {
+  taskList: {
     overflowY: 'auto',
+    padding: '12px 12px 0 12px',
   },
   padding: {
     padding: 12,
+  },
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    height: '100%',
+  },
+  stickyTaskInput: {
+    position: 'sticky',
+    bottom: 0,
+    padding: '12px 0',
+    backgroundColor: '#f0f2f5',
   },
 });
