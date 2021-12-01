@@ -53,27 +53,30 @@ function ProgressBar() {
     timeItems,
   ]);
 
-  const { estimatedWorkingTimeEnd, progress } = TaskTimeService.getDayProgress(
+  const {
+    estimatedWorkingTimeEnd,
+    progress,
+    realProgress,
+  } = TaskTimeService.getDayProgress(
     timeRangeItems,
     workingTimeStart,
     workingHoursMs
   );
 
-  const progressRound = Math.round(progress);
   const marks: Record<number, string> = {
     0: toTimeFormat(workingTimeStart),
     100: toTimeFormat(estimatedWorkingTimeEnd),
   };
-  if (progressRound > 10 && progressRound < 90) {
-    marks[progressRound] = `${progressRound}%`;
+  if (progress > 10 && progress < 90) {
+    marks[progress] = `${realProgress}%`;
   }
 
   const tipFormatter = useMemo(() => {
-    if (progressRound <= 10 || progressRound >= 90) {
-      return (value?: number) => `${value}%`;
+    if (progress <= 10 || progress >= 90) {
+      return () => `${realProgress}%`;
     }
     return null;
-  }, [progressRound]);
+  }, [progress, realProgress]);
 
   return (
     <Slider
