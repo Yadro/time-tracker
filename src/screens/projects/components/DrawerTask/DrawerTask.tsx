@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Checkbox, Drawer, Input, Space } from 'antd';
 import { observer } from 'mobx-react';
 import { ProjectOutlined } from '@ant-design/icons';
@@ -37,6 +37,22 @@ export default observer(function DrawerTask({
     task,
   ]);
 
+  const handleTitleChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const title = e.target.value;
+      task?.setTitle(title);
+    },
+    [task]
+  );
+
+  const handleDetailsChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const details = e.target.value;
+      task?.setDetails(details);
+    },
+    [task]
+  );
+
   return (
     <Drawer
       placement="right"
@@ -62,26 +78,17 @@ export default observer(function DrawerTask({
           </IconTile>
           <span className={classes.projectTitle}>{project?.title}</span>
         </div>
-        <Input
+        <TextArea
           value={task?.title}
+          rows={3}
           placeholder="Task description"
-          onChange={(e) => {
-            const title = e.target.value;
-            if (task) {
-              task.setTitle(title);
-            }
-          }}
+          onChange={handleTitleChange}
         />
         <TextArea
           placeholder="Details"
           rows={4}
           value={task?.details}
-          onChange={(e) => {
-            const details = e.target.value;
-            if (task) {
-              task.setDetails(details);
-            }
-          }}
+          onChange={handleDetailsChange}
         />
 
         <Duration task={task} />

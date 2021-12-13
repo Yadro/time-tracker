@@ -42,10 +42,10 @@ const TaskTimeService = {
     if (estimatedWorkingTimeEnd) {
       const durationWorkDayMs =
         estimatedWorkingTimeEnd.getTime() - workingTimeStart.getTime() || 1;
-      progress = ((durationMs + restMs) * 100) / durationWorkDayMs;
-      progress = Math.min(Math.round(progress), 100);
-      realProgress = (durationMs * 100) / workingHoursMs;
-      realProgress = Math.min(Math.round(realProgress), 100);
+      progress = max100(
+        Math.round(((durationMs + restMs) * 100) / durationWorkDayMs)
+      );
+      realProgress = max100(Math.round((durationMs * 100) / workingHoursMs));
     }
 
     return {
@@ -57,5 +57,9 @@ const TaskTimeService = {
     };
   },
 };
+
+function max100(num: number) {
+  return Math.min(num, 100);
+}
 
 export default TaskTimeService;
