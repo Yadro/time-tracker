@@ -18,7 +18,6 @@ import DrawerTask from './components/DrawerTask/DrawerTask';
 import ProjectNode from './components/ProjectNode/ProjectNode';
 import EditProjectModal from './components/ProjectModals/EditProjectModal';
 import { first } from '../../helpers/ArrayHelper';
-import clsx from 'clsx';
 
 const { Sider } = Layout;
 
@@ -104,7 +103,7 @@ function Projects() {
       setSelectedTask(task);
     }
   }, []);
-  '';
+
   const handleCloseDrawer = useCallback(() => {
     setDrawerVisible(false);
   }, []);
