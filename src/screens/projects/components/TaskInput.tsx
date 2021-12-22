@@ -6,7 +6,11 @@ import { v4 as uuid } from 'uuid';
 import rootStore from '../../../modules/RootStore';
 import TaskModel from '../../../modules/tasks/models/TaskModel';
 
-export default observer(function TaskInput() {
+interface Props {
+  className?: string;
+}
+
+export default observer(function TaskInput({ className }: Props) {
   const [text, setText] = useState('');
 
   const handleKeyPress = useCallback(
@@ -39,6 +43,7 @@ export default observer(function TaskInput() {
 
   return (
     <Input
+      className={className}
       placeholder="Create task..."
       onKeyPress={handleKeyPress}
       value={text}
