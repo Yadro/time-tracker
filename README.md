@@ -1,4 +1,4 @@
-[![wakatime](https://wakatime.com/badge/user/6a4a8cef-48cb-4dec-ad67-3a1ad1e01f61/project/b200ce19-1cb9-410e-96f0-afc28a3d428c.svg)](https://wakatime.com/badge/user/6a4a8cef-48cb-4dec-ad67-3a1ad1e01f61/project/b200ce19-1cb9-410e-96f0-afc28a3d428c)
+[![wakatime](https://wakatime.com/badge/user/6a4a8cef-48cb-4dec-ad67-3a1ad1e01f61/project/b200ce19-1cb9-410e-96f0-afc28a3d428c.svg)](https://wakatime.com/)
 
 # 🕘 TimeTracker
 Track time, add notes, view reports of your time, and more.
