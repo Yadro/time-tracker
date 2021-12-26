@@ -1,5 +1,6 @@
 import IService from '../../base/IService';
-import SettingsModel, { DEFAULT_SETTINGS } from './models/SettingsModel';
+import { DEFAULT_SETTINGS } from './consts';
+import SettingsModel from './models/SettingsModel';
 import SettingsFactory from './SettingsFactory';
 import SettingsRepository from './SettingsRepository';
 

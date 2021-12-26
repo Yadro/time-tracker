@@ -18,6 +18,8 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
+  "jest.autoRun": {},
+
   "search.exclude": {
     ".git": true,
     ".eslintcache": true,

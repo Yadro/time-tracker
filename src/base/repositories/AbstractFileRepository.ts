@@ -5,7 +5,8 @@ const path = require('path');
 import { ipcRenderer } from 'electron';
 
 import FsHelper from '../../helpers/FsHelper';
-import PromiseQueue from '../../helpers/PromiseQueueHellper';
+import PromiseQueue from '../../helpers/PromiseQueueHelper';
+import { SchemaMigration } from '../../types/SchemaMigration';
 
 const APP_DIR =
   process.env.NODE_ENV === 'development'
@@ -18,8 +19,9 @@ export default abstract class AbstractFileRepository<T = any> {
   dirWithProfileData: string = 'profile1';
   fileName: string = 'defaultFileName.json';
   saveInRoot: boolean = false;
+  schemaMigrations: SchemaMigration[] = [];
 
-  writeFileQueue = new PromiseQueue();
+  private writeFileQueue = new PromiseQueue();
 
   private get logPrefix() {
     const filePath = !this.saveInRoot ? this.dirWithProfileData : '';
@@ -55,7 +57,7 @@ export default abstract class AbstractFileRepository<T = any> {
     if (fs.existsSync(this.filePath)) {
       const data = fs.readFileSync(this.filePath, { encoding: 'utf-8' });
       // TODO handle parse error. Backup file with issues and return defaultValue
-      return JSON.parse(data);
+      const parsedData = JSON.parse(data);
     }
     return defaultValue;
   }
