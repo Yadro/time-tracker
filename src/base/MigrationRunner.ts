@@ -1,17 +1,31 @@
+import Ajv from 'ajv';
 import { SchemaMigration } from '../types/SchemaMigration';
 import { SchemaType } from '../types/SchemaType';
 import { last } from '../helpers/ArrayHelper';
 
+enum ErrorCodes {
+  NoMigrations,
+  NoZeroMigration,
+  IncorrectMigrationsOrder,
+}
+
 export default class MigrationRunner {
   private schemaMigrations: SchemaMigration[] = [];
-  private genErrorMsg = (message: string) => `[MigrationRunner] ${message}`;
+  private ajv: Ajv;
+  private genErrorMsg = (error: ErrorCodes | undefined, message: string) =>
+    `[MigrationRunner] ${error ?? -1} ${message}`;
 
   constructor(schemaMigrations: SchemaMigration[]) {
     const schemaMigrationsSorted = schemaMigrations.slice();
     schemaMigrationsSorted.sort((a, b) => a.version - b.version);
 
     if (!schemaMigrationsSorted.length) {
-      throw new Error(this.genErrorMsg('schemaMigrations can`t be empty'));
+      throw new Error(
+        this.genErrorMsg(
+          ErrorCodes.NoMigrations,
+          'schemaMigrations can`t be empty'
+        )
+      );
     }
 
     if (!schemaMigrationsSorted.find((i) => i.version === 0)) {
@@ -32,6 +46,7 @@ export default class MigrationRunner {
     }
 
     this.schemaMigrations = schemaMigrationsSorted;
+    this.ajv = new Ajv({ allErrors: true });
   }
 
   runMigration<T extends SchemaType>(data: T) {
@@ -42,19 +57,24 @@ export default class MigrationRunner {
       throw new Error('There are no migrations');
     }
 
-    // if (!('__version' in data)) {
-    //   const migration = this.schemaMigrations.find((i) => i.version === 1);
-    //   if (!migration) {
-    //     throw new Error();
-    //   }
-    //   newData = migration.migration?.(data);
-    // } else {
-    //   newData = data;
-    // }
-
-    // if (newData === undefined || newData.__version === undefined) {
-    //   throw new Error();
-    // }
+    const firstMigration = this.schemaMigrations.find((i) => i.version === 0);
+    if (!firstMigration) {
+      throw new Error();
+    }
+    const validate = this.ajv.compile(firstMigration.schema);
+    const validateResult = validate(newData);
+    if (!validateResult) {
+      throw new Error(
+        this.genErrorMsg(
+          `Schema validation error "version=0". Found next errors:\n${validate.errors
+            ?.map(
+              (e) =>
+                `"${e.instancePath ? e.instancePath : '/'}": "${e.message}"`
+            )
+            ?.join('\n')}`
+        )
+      );
+    }
 
     let nextVersion =
       newData.__version !== undefined ? newData.__version + 1 : 1;
@@ -70,7 +90,9 @@ export default class MigrationRunner {
 
       if (!migration) {
         throw new Error(
-          `Migration from ${newData.__version} to ${nextVersion} not found`
+          this.genErrorMsg(
+            `Migration from ${newData.__version} to ${nextVersion} not found`
+          )
         );
       }
 
@@ -82,6 +104,18 @@ export default class MigrationRunner {
         }
         if (nextData.__version === undefined) {
           throw new Error();
+        }
+
+        const validate = this.ajv.compile(migration.schema);
+        const validateObj = validate(nextData);
+        if (!validateObj) {
+          throw new Error(
+            this.genErrorMsg(
+              `Schema validation error. version=${nextVersion}: ${validate.errors?.join(
+                ', '
+              )}`
+            )
+          );
         }
 
         newData = nextData;

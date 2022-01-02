@@ -96,5 +96,35 @@ describe('MigrationRunner tests', () => {
       const resultData = mr.runMigration(dataV0);
       expect(resultData).toStrictEqual(expectedData);
     });
+
+    test('Test when there is schema validation error', () => {
+      type TypeV0 = { data: number; text: string; prop: { test: 1 } };
+      const schemaV0: JSONSchemaType<TypeV0> = {
+        type: 'object',
+        properties: {
+          data: { type: 'number' },
+          text: { type: 'string' },
+          prop: {
+            type: 'object',
+            properties: { test: { type: 'number' } },
+            required: ['test'],
+          },
+        },
+        required: ['data', 'text'],
+      };
+      const migrations: SchemaMigration[] = [{ version: 0, schema: schemaV0 }];
+
+      const dataV0 = { fakeData: 77, text: 123, prop: { testFail: 1 } };
+      const mr = new MigrationRunner(migrations);
+
+      expect(() => mr.runMigration(dataV0)).toThrow(
+        [
+          '[MigrationRunner] Schema validation error "version=0". Found next errors:',
+          '"/": "must have required property \'data\'"',
+          '"/text": "must be string"',
+          '"/prop": "must have required property \'test\'"',
+        ].join('\n')
+      );
+    });
   });
 });
