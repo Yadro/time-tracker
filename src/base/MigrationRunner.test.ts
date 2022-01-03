@@ -99,6 +99,7 @@ describe('MigrationRunner tests', () => {
 
     test('Test when there is schema validation error', () => {
       type TypeV0 = { data: number; text: string; prop: { test: 1 } };
+
       const schemaV0: JSONSchemaType<TypeV0> = {
         type: 'object',
         properties: {
@@ -112,14 +113,16 @@ describe('MigrationRunner tests', () => {
         },
         required: ['data', 'text'],
       };
+
       const migrations: SchemaMigration[] = [{ version: 0, schema: schemaV0 }];
 
       const dataV0 = { fakeData: 77, text: 123, prop: { testFail: 1 } };
+
       const mr = new MigrationRunner(migrations);
 
       expect(() => mr.runMigration(dataV0)).toThrow(
         [
-          '[MigrationRunner] Schema validation error "version=0". Found next errors:',
+          'Migration to version=0. Schema validation error. Found next errors:',
           '"/": "must have required property \'data\'"',
           '"/text": "must be string"',
           '"/prop": "must have required property \'test\'"',
