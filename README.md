@@ -25,6 +25,10 @@ Start and stop time, jump between tasks, and add details on how time was spent.
 <img src="https://github.com/Yadro/time-tracker/blob/41786ef0484da6809e39fa47e17474806c0d47b2/.github/tt-hours.png" />
 <img src="https://github.com/Yadro/time-tracker/blob/1e8861dbebddb0230e09812c8e41813143aee0fa/.github/tt-edit-project.png" />
 
+## Download
+Windows / Linux / MacOS  
+**<a href="https://github.com/Yadro/time-tracker/releases/latest">Open latest release</a>**
+
 
 ## Starting Development
 
