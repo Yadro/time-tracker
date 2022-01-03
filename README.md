@@ -1,4 +1,9 @@
-[![wakatime](https://wakatime.com/badge/user/6a4a8cef-48cb-4dec-ad67-3a1ad1e01f61/project/b200ce19-1cb9-410e-96f0-afc28a3d428c.svg)](https://wakatime.com/)
+<p align="center">
+  <img src="https://github.com/Yadro/time-tracker/blob/41786ef0484da6809e39fa47e17474806c0d47b2/assets/icons/512x512.png" />
+</p>
+<p align="center">
+  <img src="https://wakatime.com/badge/user/6a4a8cef-48cb-4dec-ad67-3a1ad1e01f61/project/b200ce19-1cb9-410e-96f0-afc28a3d428c.svg" />
+</p>
 
 # 🕘 TimeTracker
 Track time, add notes, view reports of your time, and more.
@@ -15,9 +20,9 @@ Start and stop time, jump between tasks, and add details on how time was spent.
 - receive notifications when a task is in progress or when you are idle
 
 ## Screenshots
-<img src=".github/hours-screenshot.png" />
-<img src=".github/projects-screenshot.png" />
-<img src=".github/projects-drawer-screenshot.png" />
+<img src="https://github.com/Yadro/time-tracker/blob/41786ef0484da6809e39fa47e17474806c0d47b2/.github/tt-projects.png" />
+<img src="https://github.com/Yadro/time-tracker/blob/41786ef0484da6809e39fa47e17474806c0d47b2/.github/tt-hours.png" />
+<img src="https://github.com/Yadro/time-tracker/blob/1e8861dbebddb0230e09812c8e41813143aee0fa/.github/tt-edit-project.png" />
 
 
 ## Starting Development
