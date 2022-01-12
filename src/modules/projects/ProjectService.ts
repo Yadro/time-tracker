@@ -1,15 +1,14 @@
-import ProjectModel, {
-  DEFAULT_PROJECTS,
-  IJsonProjectItem,
-} from './models/ProjectModel';
+import { toJS } from 'mobx';
+import ProjectModel, { IJsonProjectItem } from './models/ProjectModel';
 import ProjectFactory from './ProjectFactory';
 import ProjectRepository from './ProjectRepository';
 import AbstractServiceWithProfile from '../../base/AbstractServiceWithProfile';
 import TreeModelHelper from '../../helpers/TreeModelHelper';
-import { toJS } from 'mobx';
+import DEFAULT_PROJECTS from './models/DefaultProjects';
+import { ProjectDataV0, ProjectDataV1 } from './types';
 
 export default class ProjectService extends AbstractServiceWithProfile<
-  ProjectModel[]
+  ProjectDataV0
 > {
   private factory = new ProjectFactory();
   protected repository = new ProjectRepository();
@@ -17,7 +16,7 @@ export default class ProjectService extends AbstractServiceWithProfile<
   getAll(): ProjectModel[] {
     const data = this.repository.restore(DEFAULT_PROJECTS);
     ProjectService.fillParent(data);
-    return this.factory.createProjects(data);
+    return this.factory.createProjects(data.data);
   }
 
   save(data: ProjectModel[]): void {
@@ -26,8 +25,8 @@ export default class ProjectService extends AbstractServiceWithProfile<
     this.repository.save(copyData);
   }
 
-  private static fillParent(data: IJsonProjectItem[]) {
-    TreeModelHelper.fillParent(data);
+  private static fillParent(data: ProjectDataV1) {
+    TreeModelHelper.fillParent(data.data);
   }
 
   private static clearParent(data: ProjectModel[]) {

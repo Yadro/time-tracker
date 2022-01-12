@@ -1,7 +1,7 @@
 import { JSONSchemaType } from 'ajv';
-import { SettingsV0 } from '../types/SettingsV0';
+import { SettingsV0 } from '../types/SettingsTypeV0';
 
-const SettingsSchemaV0: JSONSchemaType<SettingsV0> = {
+export const SettingsSchemaV0: JSONSchemaType<SettingsV0> = {
   type: 'object',
   properties: {
     currentProfile: { type: 'string' },
@@ -21,5 +21,3 @@ const SettingsSchemaV0: JSONSchemaType<SettingsV0> = {
     'showNotifications',
   ],
 };
-
-export default SettingsSchemaV0;

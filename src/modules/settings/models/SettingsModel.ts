@@ -1,7 +1,7 @@
 import { makeObservable, observable } from 'mobx';
 
 import AbstractModel from '../../../base/AbstractModel';
-import { SettingsV1 } from '../types/SettingsV1';
+import { SettingsV1 } from '../types/SettingsTypeV1';
 import { DEFAULT_SETTINGS } from '../consts';
 
 export default class SettingsModel extends AbstractModel implements SettingsV1 {

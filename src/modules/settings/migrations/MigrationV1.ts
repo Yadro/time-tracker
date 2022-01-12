@@ -1,5 +1,4 @@
-import { SettingsV0 } from '../types/SettingsV0';
-import { SettingsV1 } from '../types/SettingsV1';
+import { SettingsV0, SettingsV1 } from '../types';
 
 export default function migration(data: SettingsV0): SettingsV1 {
   return Object.assign({}, data, {

@@ -1,7 +1,7 @@
 import { JSONSchemaType } from 'ajv';
-import { SettingsV1 } from '../types/SettingsV1';
+import { SettingsV1 } from '../types/SettingsTypeV1';
 
-const SettingsSchemaV1: JSONSchemaType<SettingsV1> = {
+export const SettingsSchemaV1: JSONSchemaType<SettingsV1> = {
   type: 'object',
   properties: {
     __version: { type: 'number' },
@@ -23,5 +23,3 @@ const SettingsSchemaV1: JSONSchemaType<SettingsV1> = {
     'showNotifications',
   ],
 };
-
-export default SettingsSchemaV1;

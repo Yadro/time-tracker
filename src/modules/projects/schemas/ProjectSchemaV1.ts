@@ -1,7 +1,7 @@
 import { JSONSchemaType } from 'ajv';
-import { ProjectTypeV0, ProjectDataV0 } from '../types';
+import { ProjectTypeV1, ProjectDataV1 } from '../types';
 
-export const ProjectSchemaV0: JSONSchemaType<ProjectTypeV0> = {
+export const ProjectSchemaV1: JSONSchemaType<ProjectTypeV1> = {
   type: 'object',
   properties: {
     key: { type: 'string' },
@@ -20,10 +20,17 @@ export const ProjectSchemaV0: JSONSchemaType<ProjectTypeV0> = {
     },
     parent: { type: 'object', $ref: '#', nullable: true },
   },
-  required: [],
+  required: ['key', 'title', 'color'],
 };
 
-export const ProjectDataSchemaV0: JSONSchemaType<ProjectDataV0> = {
-  type: 'array',
-  items: ProjectSchemaV0,
+export const ProjectDataSchemaV1: JSONSchemaType<ProjectDataV1> = {
+  type: 'object',
+  properties: {
+    __version: { type: 'number' },
+    data: {
+      type: 'array',
+      items: ProjectSchemaV1,
+    },
+  },
+  required: ['__version', 'data'],
 };

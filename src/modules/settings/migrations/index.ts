@@ -1,6 +1,5 @@
 import migrationV1 from './MigrationV1';
-import SettingsSchemaV0 from '../schemas/SettingsSchemaV0';
-import SettingsSchemaV1 from '../schemas/SettingsSchemaV1';
+import { SettingsSchemaV0, SettingsSchemaV1 } from '../schemas';
 import { SchemaMigration } from '../../../types/SchemaMigration';
 
 export const schemaMigrations: SchemaMigration[] = [

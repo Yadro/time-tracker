@@ -1,4 +1,4 @@
-import { SettingsV1 } from './types/SettingsV1';
+import { SettingsV1 } from './types/SettingsTypeV1';
 
 export const DEFAULT_SETTINGS: SettingsV1 = {
   __version: 1,

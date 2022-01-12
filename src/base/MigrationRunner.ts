@@ -29,7 +29,7 @@ function migrationAssertShowValidationErrors(
   );
 }
 
-export default class MigrationRunner {
+export default class MigrationRunner<TRes extends SchemaType> {
   private schemaMigrations: SchemaMigration[] = [];
   private ajv: Ajv;
 
@@ -63,7 +63,7 @@ export default class MigrationRunner {
     this.ajv = new Ajv({ allErrors: true });
   }
 
-  runMigration<T extends SchemaType>(data: T) {
+  runMigration<T extends SchemaType>(data: T): TRes {
     let newData: T = data;
     let fromVersion = newData.__version || 0;
     let toVersion = fromVersion !== undefined ? fromVersion + 1 : 1;
@@ -92,7 +92,7 @@ export default class MigrationRunner {
 
     while (true) {
       if (toVersion > latestVersion) {
-        return newData;
+        return newData as TRes;
       }
 
       const migration = this.schemaMigrations.find(

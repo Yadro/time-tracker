@@ -30,7 +30,10 @@ export default class ProjectStore {
 
   set(projects: ProjectModel[]) {
     this.projects = projects;
-    this.projectService.save(this.projects);
+    this.projectService.save({
+      __version: 1,
+      data: this.projects,
+    });
   }
 
   setEditableProject(project?: ProjectModel) {
