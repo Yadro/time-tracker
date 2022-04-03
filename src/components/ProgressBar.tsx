@@ -29,7 +29,7 @@ function ProgressBar() {
     }
   }, [dayUpdateEveryDay]);
 
-  useInterval(shouldDayUpdate);
+  useInterval(shouldDayUpdate, 1000);
 
   const tasksByProject = useMemo(() => Object.values(tasksStore.tasks), [
     tasksStore.tasks,
@@ -43,6 +43,7 @@ function ProgressBar() {
 
   const timeItems = useMemo(() => getTimeItems(tasks, dayUpdateEveryDay), [
     tasks,
+    dayUpdateEveryDay,
   ]);
 
   const workingTimeStart = useMemo(() => getStartWorkingTime(timeItems), [
