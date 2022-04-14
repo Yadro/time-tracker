@@ -2,7 +2,6 @@
   <img src="https://github.com/Yadro/time-tracker/blob/41786ef0484da6809e39fa47e17474806c0d47b2/assets/icons/512x512.png" />
 </p>
 <p align="center">
-  <img src="https://wakatime.com/badge/user/6a4a8cef-48cb-4dec-ad67-3a1ad1e01f61/project/b200ce19-1cb9-410e-96f0-afc28a3d428c.svg" />
   <a href="https://github.com/Yadro/time-tracker/releases/latest"><img src="https://img.shields.io/badge/Download-latest-brightgreen"/></a>
 </p>
 
