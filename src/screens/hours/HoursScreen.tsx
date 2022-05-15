@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Layout, Space } from 'antd';
 import { observer } from 'mobx-react';
+import { createUseStyles } from 'react-jss';
 
 import rootStore from '../../modules/RootStore';
 import HoursCard from './components/HoursCard/HoursCard';
@@ -10,7 +11,6 @@ import TimeRangeModal from '../../components/TimeRangeModal/TimeRangeModal';
 import TaskTimeItemModel from '../../modules/tasks/models/TaskTimeItemModel';
 import { Undefined } from '../../types/CommonTypes';
 import TotalHours from './components/TotalHours/TotalHours';
-import { createUseStyles } from 'react-jss';
 import { mapCurrentNext } from '../../helpers/ArrayHelper';
 import { ITimeRangeModel } from '../../modules/tasks/models/TaskModel';
 import { msToTime } from '../../helpers/DateTime';

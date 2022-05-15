@@ -28,6 +28,9 @@ function Header() {
       <HeaderLink>
         <Link to="/dashboard">Dashboard</Link>
       </HeaderLink>
+      <HeaderLink>
+        <Link to="/timeline">TL</Link>
+      </HeaderLink>
       <span className={style.flex1}>{isBigScreen && <ProgressBar />}</span>
       <TaskControl />
       <Profile />
