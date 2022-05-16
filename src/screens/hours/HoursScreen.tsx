@@ -6,7 +6,6 @@ import { createUseStyles } from 'react-jss';
 import rootStore from '../../modules/RootStore';
 import HoursCard from './components/HoursCard/HoursCard';
 import { getTimeItems } from '../../helpers/TaskHelper';
-import SelectDate from '../../components/SelectDate';
 import TimeRangeModal from '../../components/TimeRangeModal/TimeRangeModal';
 import TaskTimeItemModel from '../../modules/tasks/models/TaskTimeItemModel';
 import { Undefined } from '../../types/CommonTypes';
@@ -14,6 +13,7 @@ import TotalHours from './components/TotalHours/TotalHours';
 import { mapCurrentNext } from '../../helpers/ArrayHelper';
 import { ITimeRangeModel } from '../../modules/tasks/models/TaskModel';
 import { msToTime } from '../../helpers/DateTime';
+import Header from './components/Header';
 
 const { tasksStore } = rootStore;
 
@@ -28,7 +28,7 @@ function getDiff(
   return '';
 }
 
-export default observer(function HoursView() {
+export default observer(function HoursScreen() {
   const classes = useStyles();
   const [date, setDate] = useState<Date>(new Date());
   const [currentTaskTime, setCurrentTaskTime] = useState<
@@ -44,7 +44,7 @@ export default observer(function HoursView() {
   return (
     <Layout className={classes.hours}>
       <Space direction="vertical">
-        <SelectDate date={date} onChange={setDate} />
+        <Header date={date} setDate={setDate} />
         <TotalHours timeItems={timeItems} />
         <div className={classes.cards}>
           {mapCurrentNext(timeItems, (item, next, index) => (
