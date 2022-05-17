@@ -5,7 +5,6 @@ import { Layout } from 'antd';
 import ProjectsScreen from './projects/ProjectsScreen';
 import HoursScreen from './hours/HoursScreen';
 import DashboardScreen from './dashboard/Dashboard';
-import TimelineScreen from './timeline/TimelineScreen';
 import GaService from '../services/gaService/GaService';
 import Header from '../components/Header';
 
@@ -27,7 +26,6 @@ const Main = () => {
         <Route path="/hours" component={HoursScreen} />
         <Route path="/projects" component={ProjectsScreen} />
         <Route path="/dashboard" component={DashboardScreen} />
-        <Route path="/timeline" component={TimelineScreen} />
         <Redirect from="*" to="/projects" />
       </Switch>
     </Layout>

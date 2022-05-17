@@ -5,13 +5,16 @@ import { createUseStyles } from 'react-jss';
 
 import SelectDate from '../../../components/SelectDate';
 import RadioGroupChangeHoursView from './RadioGroupChangeHoursView';
+import { HoursTabView } from '../types';
 
 type Props = {
   date: Date;
   setDate(date: Date): void;
+  tab: HoursTabView;
+  setTab(tab: HoursTabView): void;
 };
 
-const Header: FC<Props> = ({ date, setDate }: Props) => {
+const Header: FC<Props> = ({ date, setDate, tab, setTab }: Props) => {
   const classes = useStyles();
 
   return (
@@ -20,7 +23,7 @@ const Header: FC<Props> = ({ date, setDate }: Props) => {
         <SelectDate date={date} onChange={setDate} />
       </Col>
       <Col span={8} className={classes.alignRight}>
-        <RadioGroupChangeHoursView onChange={(_option) => {}} />
+        <RadioGroupChangeHoursView tab={tab} onChange={setTab} />
       </Col>
     </Row>
   );

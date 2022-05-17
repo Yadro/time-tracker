@@ -29,7 +29,7 @@ type Props = {
   date: Date;
 };
 
-const EditableTimeItemsView: FC<Props> = ({ date }: Props) => {
+const GridWithTimeItemsView: FC<Props> = ({ date }: Props) => {
   const classes = useStyles();
 
   const [currentTaskTime, setCurrentTaskTime] = useState<
@@ -37,6 +37,7 @@ const EditableTimeItemsView: FC<Props> = ({ date }: Props) => {
   >();
 
   const timeItems = useMemo(() => {
+    // TODO Doesn't update
     const tasks = tasksStore.getTasksByDate(date);
     return getTimeItems(tasks, date);
   }, [tasksStore.tasks, date]);
@@ -65,12 +66,16 @@ const EditableTimeItemsView: FC<Props> = ({ date }: Props) => {
   );
 };
 
-export default observer(EditableTimeItemsView);
+export default observer(GridWithTimeItemsView);
 
 const useStyles = createUseStyles({
   cards: {
     display: 'flex',
     flexWrap: 'wrap',
+
+    '& .ant-card-body': {
+      padding: 8,
+    },
   },
   breakTime: {
     display: 'flex',
