@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Layout, Space } from 'antd';
 import { observer } from 'mobx-react';
 import { createUseStyles } from 'react-jss';
@@ -8,15 +8,28 @@ import { getTimeItems } from '../../helpers/TaskHelper';
 import TotalHours from './components/TotalHours/TotalHours';
 import Header from './components/Header';
 import GridWithTimeItemsView from './components/GridWithTimeItemsView';
-import { HoursTabView } from './types';
 import TimelineScreen from './components/TimelineScreen';
+import { HoursTabView } from './types';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import { LOCAL_STORAGE_KEY } from '../../consts';
 
 const { tasksStore } = rootStore;
 
+const parseDateFromString = (value: string) => new Date(value);
+
 export default observer(function HoursScreen() {
   const classes = useStyles();
-  const [date, setDate] = useState<Date>(new Date());
-  const [tab, setTab] = useState<HoursTabView>(HoursTabView.Edit);
+  const [date, setDate] = useLocalStorage<Date>(
+    LOCAL_STORAGE_KEY.HOURS_SELECTED_DATE,
+    new Date(),
+    true,
+    parseDateFromString
+  );
+  const [tab, setTab] = useLocalStorage<HoursTabView>(
+    LOCAL_STORAGE_KEY.HOURS_TAB,
+    HoursTabView.Edit,
+    true
+  );
 
   const tasks = useMemo(() => tasksStore.getTasksByDate(date), [
     tasksStore.tasks,
