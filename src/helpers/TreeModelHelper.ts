@@ -180,6 +180,15 @@ const TreeModelHelper = {
     });
   },
 
+  iterate<T extends ITreeItem>(items: T[], callback: (item: T) => void) {
+    for (const item of items) {
+      callback(item);
+      if (item.children?.length) {
+        callback(item);
+      }
+    }
+  },
+
   getItemRecursive<T extends ITreeItem>(
     items: T[],
     condition: (task: T) => boolean

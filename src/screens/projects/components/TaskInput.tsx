@@ -1,17 +1,23 @@
-import React, { KeyboardEvent, useCallback, useState } from 'react';
+import React, { KeyboardEvent, useCallback, useEffect, useRef } from 'react';
 import { Input } from 'antd';
 import { observer } from 'mobx-react';
 import { v4 as uuid } from 'uuid';
 
 import rootStore from '../../../modules/RootStore';
 import TaskModel from '../../../modules/tasks/models/TaskModel';
+import ObservableInput from './observable/ObservableInput';
 
 interface Props {
   className?: string;
+  input: ObservableInput;
 }
 
-export default observer(function TaskInput({ className }: Props) {
-  const [text, setText] = useState('');
+export default observer(function TaskInput({ className, input }: Props) {
+  const inputRef = useRef<Input>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [input.focusTrigger]);
 
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {
@@ -21,7 +27,7 @@ export default observer(function TaskInput({ className }: Props) {
         tasksStore.add(
           new TaskModel({
             key: uuid(),
-            title: text,
+            title: input.value,
             projectId: projectStore.activeProject,
             active: false,
             time: [],
@@ -33,20 +39,23 @@ export default observer(function TaskInput({ className }: Props) {
             expanded: true,
           })
         );
-        setText('');
+        input.clear();
       }
     },
-    [text]
+    [input]
   );
 
-  const handleChange = useCallback((e: any) => setText(e.target.value), []);
+  const handleChange = useCallback((e: any) => input.set(e.target.value), [
+    input,
+  ]);
 
   return (
     <Input
+      ref={inputRef}
       className={className}
       placeholder="Create task..."
       onKeyPress={handleKeyPress}
-      value={text}
+      value={input.value}
       onChange={handleChange}
     />
   );

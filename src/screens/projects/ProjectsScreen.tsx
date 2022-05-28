@@ -18,10 +18,16 @@ import DrawerTask from './components/DrawerTask/DrawerTask';
 import ProjectNode from './components/ProjectNode/ProjectNode';
 import EditProjectModal from './components/ProjectModals/EditProjectModal';
 import { first } from '../../helpers/ArrayHelper';
+import Suggestions from './components/Suggestions/Suggestions';
+import ObservableInput from './components/observable/ObservableInput';
 
 const { Sider } = Layout;
 
 const { tasksStore, projectStore } = rootStore;
+
+const observableInput = new ObservableInput();
+
+// const Suggestions = observer(() => <div>test</div>);
 
 const TaskList = TreeList(
   () => tasksStore.getTasks(projectStore.activeProject),
@@ -86,7 +92,7 @@ function clearEditableProject() {
   projectStore.setEditableProject(undefined);
 }
 
-function Projects() {
+function ProjectsScreen() {
   const style = useStyles();
   const [showProjectModal, setShowProjectModal] = useState<boolean>(false);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
@@ -128,7 +134,8 @@ function Projects() {
         <div className={style.root}>
           <TaskList onSelect={handleSelectTask} />
           <div className={style.stickyTaskInput}>
-            <TaskInput />
+            <Suggestions input={observableInput} />
+            <TaskInput input={observableInput} />
           </div>
         </div>
       </Layout>
@@ -146,7 +153,7 @@ function Projects() {
   );
 }
 
-export default observer(Projects);
+export default observer(ProjectsScreen);
 
 const useStyles = createUseStyles({
   sider: {

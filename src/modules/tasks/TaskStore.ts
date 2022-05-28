@@ -1,11 +1,8 @@
-import { autorun, makeAutoObservable } from 'mobx';
+import { autorun, computed, makeAutoObservable, toJS } from 'mobx';
 import { v4 as uuid } from 'uuid';
 import TaskService from './TaskService';
 import TaskModel, { ITimeRangeModel } from './models/TaskModel';
-import {
-  Task,
-  TasksByProject,
-} from '../../modules/tasks/models/TasksByProject';
+import { Task, TasksByProject } from './models/TasksByProject';
 import TreeModelHelper from '../../helpers/TreeModelHelper';
 import BadgeService from '../BadgeService';
 import rootStore, { RootStore } from '../RootStore';
@@ -18,9 +15,12 @@ import {
 import { DEFAULT_PROJECT_ID } from '../projects/models/ProjectModel';
 import throttle from '../../helpers/Throttle';
 import { THROTTLE_SAVE_JSON_MS } from '../../config';
+import { findSuggestionsByProject } from './utils';
+import { Suggestion, SuggestionsByProject } from './models/TasksTypes';
 
 export default class TaskStore {
   tasks: TasksByProject = {};
+  suggestions: SuggestionsByProject = {};
   activeTask: TaskModel | undefined;
   versionHash = uuid();
   private tasksService = new TaskService();
@@ -64,6 +64,14 @@ export default class TaskStore {
   getTasks(projectId: string): Task[] {
     return this.tasks[projectId] || [];
   }
+
+  suggestionsForProject = computed<Suggestion[]>(() => {
+    const { activeProject } = this.rootStore.projectStore;
+    if (activeProject in this.suggestions) {
+      return this.suggestions[activeProject] ?? [];
+    }
+    return [];
+  });
 
   getTaskByKey(taskKey: string): TaskModel | undefined {
     function condition(task: TaskModel): boolean {
@@ -163,6 +171,8 @@ export default class TaskStore {
 
   restore() {
     this.tasks = this.tasksService.getAll();
+    this.suggestions = findSuggestionsByProject(this.tasks);
+    console.log(toJS(this.suggestions));
     this.findAndSetActiveTask();
     this.setupReminder(this.activeTask);
   }
