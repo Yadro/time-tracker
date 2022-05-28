@@ -2,18 +2,17 @@ import React, { FC, useCallback } from 'react';
 import { Button } from 'antd';
 import { observer } from 'mobx-react';
 
-import ObservableInput from '../observable/ObservableInput';
+import { createTaskStore } from '../store/CreateTaskStore';
 
 type Props = {
   text: string;
-  input: ObservableInput;
 };
 
-const SuggestionComp: FC<Props> = ({ text, input }: Props) => {
-  const handleApplySuggestion = useCallback(() => input.setSuggestion(text), [
-    input,
-    text,
-  ]);
+const SuggestionComp: FC<Props> = ({ text }: Props) => {
+  const handleApplySuggestion = useCallback(
+    () => createTaskStore.applySuggestion(text),
+    [text]
+  );
 
   return (
     <Button

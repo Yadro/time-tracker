@@ -1,15 +1,10 @@
 import React, { FC, useMemo } from 'react';
 import { observer } from 'mobx-react';
 
+import rootStore from '../../../../../modules/RootStore';
 import Suggestion from './Suggestion';
-import ObservableInput from '../observable/ObservableInput';
-import rootStore from '../../../../modules/RootStore';
 
-type Props = {
-  input: ObservableInput;
-};
-
-const Suggestions: FC<Props> = ({ input }: Props) => {
+const Suggestions: FC = () => {
   const suggestions = useMemo(
     () => rootStore.tasksStore.suggestionsForProject,
     []
@@ -18,11 +13,7 @@ const Suggestions: FC<Props> = ({ input }: Props) => {
   return (
     <>
       {suggestions.map((suggestion) => (
-        <Suggestion
-          key={suggestion.text}
-          text={suggestion.text}
-          input={input}
-        />
+        <Suggestion key={suggestion.text} text={suggestion.text} />
       ))}
     </>
   );

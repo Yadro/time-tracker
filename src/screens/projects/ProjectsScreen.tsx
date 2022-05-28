@@ -5,7 +5,6 @@ import { Key } from 'rc-tree/lib/interface';
 import { createUseStyles } from 'react-jss';
 import { PlusOutlined } from '@ant-design/icons';
 
-import TaskInput from './components/TaskInput';
 import rootStore from '../../modules/RootStore';
 import TreeList from './components/TreeList';
 import TaskModel from '../../modules/tasks/models/TaskModel';
@@ -18,16 +17,11 @@ import DrawerTask from './components/DrawerTask/DrawerTask';
 import ProjectNode from './components/ProjectNode/ProjectNode';
 import EditProjectModal from './components/ProjectModals/EditProjectModal';
 import { first } from '../../helpers/ArrayHelper';
-import Suggestions from './components/Suggestions/Suggestions';
-import ObservableInput from './components/observable/ObservableInput';
+import CreateTask from './components/CreateTask';
 
 const { Sider } = Layout;
 
 const { tasksStore, projectStore } = rootStore;
-
-const observableInput = new ObservableInput();
-
-// const Suggestions = observer(() => <div>test</div>);
 
 const TaskList = TreeList(
   () => tasksStore.getTasks(projectStore.activeProject),
@@ -133,9 +127,8 @@ function ProjectsScreen() {
       <Layout className={style.taskList}>
         <div className={style.root}>
           <TaskList onSelect={handleSelectTask} />
-          <div className={style.stickyTaskInput}>
-            <Suggestions input={observableInput} />
-            <TaskInput input={observableInput} />
+          <div className={style.createTaskSticky}>
+            <CreateTask />
           </div>
         </div>
       </Layout>
@@ -173,7 +166,7 @@ const useStyles = createUseStyles({
     flex: 1,
     height: '100%',
   },
-  stickyTaskInput: {
+  createTaskSticky: {
     position: 'sticky',
     bottom: 0,
     padding: '12px 0',
