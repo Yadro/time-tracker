@@ -1,4 +1,4 @@
-import { autorun, computed, makeAutoObservable, toJS } from 'mobx';
+import { autorun, computed, makeAutoObservable } from 'mobx';
 import { v4 as uuid } from 'uuid';
 import TaskService from './TaskService';
 import TaskModel, { ITimeRangeModel } from './models/TaskModel';
@@ -172,7 +172,6 @@ export default class TaskStore {
   restore() {
     this.tasks = this.tasksService.getAll();
     this.suggestions = findSuggestionsByProject(this.tasks);
-    console.log(toJS(this.suggestions));
     this.findAndSetActiveTask();
     this.setupReminder(this.activeTask);
   }

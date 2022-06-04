@@ -1,6 +1,7 @@
 import React, { FC, useCallback } from 'react';
 import { Button } from 'antd';
 import { observer } from 'mobx-react';
+import { createUseStyles } from 'react-jss';
 
 import { createTaskStore } from '../store/CreateTaskStore';
 
@@ -9,6 +10,8 @@ type Props = {
 };
 
 const SuggestionComp: FC<Props> = ({ text }: Props) => {
+  const $ = useStyle();
+
   const handleApplySuggestion = useCallback(
     () => createTaskStore.applySuggestion(text),
     [text]
@@ -16,6 +19,7 @@ const SuggestionComp: FC<Props> = ({ text }: Props) => {
 
   return (
     <Button
+      className={$.suggestion}
       type="primary"
       shape="round"
       // icon={}
@@ -28,3 +32,13 @@ const SuggestionComp: FC<Props> = ({ text }: Props) => {
 };
 
 export default observer(SuggestionComp);
+
+const useStyle = createUseStyles({
+  suggestion: {
+    '& span': {
+      maxWidth: 200,
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    },
+  },
+});
