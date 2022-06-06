@@ -184,7 +184,7 @@ const TreeModelHelper = {
     for (const item of items) {
       callback(item);
       if (item.children?.length) {
-        callback(item);
+        this.iterate(item.children as T[], callback); // FIXME remove cast
       }
     }
   },

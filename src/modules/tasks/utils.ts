@@ -2,6 +2,10 @@ import { Task, TasksByProject } from './models/TasksByProject';
 import { Suggestion, SuggestionsByProject } from './models/TasksTypes';
 import TreeModelHelper from '../../helpers/TreeModelHelper';
 
+const MIN_FREQUENCY = 3;
+const MAX_TEXT_SIZE = 99;
+const MAX_COUNT = 10;
+
 export function findSuggestionsByProject(
   tasksByProject: TasksByProject
 ): SuggestionsByProject {
@@ -17,8 +21,9 @@ export function findSuggestionsByProject(
 
 function prepareSuggestions(suggestions: Suggestion[]) {
   return suggestions
-    .filter((item) => item.frequency > 1)
-    .sort((a, b) => a.frequency - b.frequency);
+    .filter((item) => item.frequency >= MIN_FREQUENCY)
+    .sort((a, b) => b.frequency - a.frequency)
+    .slice(0, MAX_COUNT);
 }
 
 function findSuggestions(tasks: Task[]) {
@@ -26,7 +31,10 @@ function findSuggestions(tasks: Task[]) {
 
   TreeModelHelper.iterate(tasks, (task) => {
     const text = task.title;
-    // TODO ignore long strings?
+    // ignore long strings
+    if (text.length > MAX_TEXT_SIZE) {
+      return;
+    }
     const hash = hashCode(text);
     if (hash in suggestions) {
       suggestions[hash].frequency++;
