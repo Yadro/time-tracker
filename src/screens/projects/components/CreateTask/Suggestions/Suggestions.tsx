@@ -4,6 +4,7 @@ import { createUseStyles } from 'react-jss';
 
 import rootStore from '../../../../../modules/RootStore';
 import Suggestion from './Suggestion';
+import { createTaskStore } from '../store/CreateTaskStore';
 
 const Suggestions: FC = () => {
   const $ = useStyle();
@@ -13,8 +14,16 @@ const Suggestions: FC = () => {
     []
   ).get();
 
+  const showSuggestions = useMemo(() => createTaskStore.isInputEmpty, []).get();
+
+  const isVisible =
+    showSuggestions && createTaskStore.inputFocus && !!suggestions.length;
+
   return (
-    <div className={$.suggestions}>
+    <div
+      className={$.suggestions}
+      style={{ display: isVisible ? undefined : 'none' }}
+    >
       {suggestions.map((suggestion) => (
         <Suggestion key={suggestion.text} text={suggestion.text} />
       ))}
