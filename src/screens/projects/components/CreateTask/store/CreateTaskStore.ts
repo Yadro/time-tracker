@@ -3,7 +3,8 @@ import { computed, makeAutoObservable } from 'mobx';
 class CreateTaskStore {
   input: string = '';
   inputFocus: boolean = false;
-  focusTrigger: boolean = false; // TODO better solution?
+
+  isInputEmpty = computed(() => this.input.length === 0);
 
   constructor() {
     makeAutoObservable(this);
@@ -13,16 +14,14 @@ class CreateTaskStore {
     return (this.input = value);
   }
 
-  applySuggestion(value: string) {
-    this.setInput(value);
-    this.focusTrigger = !this.focusTrigger;
+  afterApplySuggestion() {
+    this.clear();
+    createTaskStore.setFocus(false);
   }
 
   clear() {
     return (this.input = '');
   }
-
-  isInputEmpty = computed(() => this.input.length === 0);
 
   setFocus(isFocus: boolean) {
     this.inputFocus = isFocus;

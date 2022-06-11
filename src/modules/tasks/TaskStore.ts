@@ -292,3 +292,22 @@ export default class TaskStore {
     this.versionHash = uuid();
   }
 }
+
+export function createTask(title: string) {
+  const { tasksStore, projectStore } = rootStore;
+  tasksStore.add(
+    new TaskModel({
+      key: uuid(),
+      title,
+      projectId: projectStore.activeProject,
+      active: false,
+      time: [],
+      checked: false,
+      children: [],
+      datesInProgress: [],
+      details: [],
+      parent: undefined, // Add into root
+      expanded: true,
+    })
+  );
+}

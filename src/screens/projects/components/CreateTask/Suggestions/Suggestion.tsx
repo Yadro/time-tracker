@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { createUseStyles } from 'react-jss';
 
 import { createTaskStore } from '../store/CreateTaskStore';
+import { createTask } from '../../../../../modules/tasks/TaskStore';
 
 type Props = {
   text: string;
@@ -12,10 +13,10 @@ type Props = {
 const SuggestionComp: FC<Props> = ({ text }: Props) => {
   const $ = useStyle();
 
-  const handleApplySuggestion = useCallback(
-    () => createTaskStore.applySuggestion(text),
-    [text]
-  );
+  const handleApplySuggestion = useCallback(() => {
+    createTask(text);
+    createTaskStore.afterApplySuggestion();
+  }, [text]);
 
   return (
     <Button
