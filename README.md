@@ -29,7 +29,7 @@ Windows / Linux / MacOS
 **<a href="https://github.com/Yadro/time-tracker/releases/latest">Open latest release</a>**
 
 ## Support
-To support this app, please leave a feedback on [AlternativeTo](https://alternativeto.net/software/timetracker-by-yadro/about/) or [ProductHunt](https://www.producthunt.com/posts/timetracker)
+Please leave the feedback on [AlternativeTo](https://alternativeto.net/software/timetracker-by-yadro/about/) or [ProductHunt](https://www.producthunt.com/posts/timetracker) to support this app.
 
 <a href="https://www.producthunt.com/posts/timetracker?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-timetracker" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=305026&theme=light" alt="TimeTracker - time&#0032;tracker&#0044;&#0032;todo&#0032;list | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
 
