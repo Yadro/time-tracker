@@ -1,5 +1,11 @@
 declare module 'universal-analytics' {
-  const ua: (code: string) => any;
+  export interface Visitor {
+    pageview(path: string): Visitor;
+    event(category: string, action: string): Visitor;
+    send(): void;
+  }
+
+  const ua: (code: string, uid?: string) => Visitor;
 
   export default ua;
 }

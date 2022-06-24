@@ -1,16 +1,27 @@
-import ua from 'universal-analytics';
+import ua, { Visitor } from 'universal-analytics';
+import { v4 as uuid } from 'uuid';
 
-const isProd = process.env.NODE_ENV === 'production';
+const isEnabled =
+  process.env.NODE_ENV === 'production' ||
+  process.env.FORCE_ENABLE_ANALYTICS === 'true';
 
 const gaCode = process.env.GA_UACODE;
-let analytics: any | null = null;
 
-if (isProd && gaCode) {
-  analytics = ua(gaCode);
+let analytics: Visitor | null = null;
+
+if (isEnabled && gaCode) {
+  let uid = window.localStorage.getItem('uid');
+
+  if (!uid) {
+    uid = uuid();
+    window.localStorage.setItem('uid', uid);
+  }
+
+  analytics = ua(gaCode, uid);
 }
 
 const executeOnCondition = (fn: () => void) => {
-  if (isProd && analytics) {
+  if (isEnabled && analytics) {
     fn();
   }
 };
