@@ -43,6 +43,7 @@ dll
 main.js
 main.js.map
 
+.run
 .idea
 npm-debug.log.*
 *.css.d.ts
