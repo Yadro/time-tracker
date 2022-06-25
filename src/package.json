@@ -1,8 +1,8 @@
 {
   "name": "time-tracker",
   "productName": "TimeTracker",
-  "version": "1.0.9",
-  "description": "Start and stop time, jump between tasks, and add details on how time was spent.",
+  "version": "1.0.10",
+  "description": "Todo list with stopwatch on each task",
   "main": "./main.prod.js",
   "author": {
     "name": "Dmitry Yadrikhinsky",

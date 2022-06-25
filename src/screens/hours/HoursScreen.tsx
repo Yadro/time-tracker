@@ -1,39 +1,43 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Layout, Space } from 'antd';
 import { observer } from 'mobx-react';
+import { createUseStyles } from 'react-jss';
+import { isToday } from 'date-fns';
 
 import rootStore from '../../modules/RootStore';
-import HoursCard from './components/HoursCard/HoursCard';
 import { getTimeItems } from '../../helpers/TaskHelper';
-import SelectDate from '../../components/SelectDate';
-import TimeRangeModal from '../../components/TimeRangeModal/TimeRangeModal';
-import TaskTimeItemModel from '../../modules/tasks/models/TaskTimeItemModel';
-import { Undefined } from '../../types/CommonTypes';
 import TotalHours from './components/TotalHours/TotalHours';
-import { createUseStyles } from 'react-jss';
-import { mapCurrentNext } from '../../helpers/ArrayHelper';
-import { ITimeRangeModel } from '../../modules/tasks/models/TaskModel';
-import { msToTime } from '../../helpers/DateTime';
+import Header from './components/Header';
+import GridWithTimeItemsView from './components/GridWithTimeItemsView';
+import TimelineScreen from './components/TimelineScreen';
+import { HoursTabView } from './types';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import { LOCAL_STORAGE_KEY } from '../../consts';
+import BackOnToday from './components/BackOnToday';
 
 const { tasksStore } = rootStore;
 
-function getDiff(
-  prev: ITimeRangeModel | undefined,
-  next: ITimeRangeModel | undefined
-) {
-  if (prev?.end && next?.start) {
-    return msToTime(next.start.getTime() - prev.end.getTime());
-  }
+const parseDateFromString = (value: string) => new Date(value);
 
-  return '';
-}
-
-export default observer(function HoursView() {
+export default observer(function HoursScreen() {
   const classes = useStyles();
-  const [date, setDate] = useState<Date>(new Date());
-  const [currentTaskTime, setCurrentTaskTime] = useState<
-    Undefined<TaskTimeItemModel>
-  >();
+
+  const [date, setDate] = useLocalStorage<Date>(
+    LOCAL_STORAGE_KEY.HOURS_SELECTED_DATE,
+    new Date(),
+    true,
+    parseDateFromString
+  );
+
+  const goTodayDate = useCallback(() => {
+    setDate(new Date());
+  }, [setDate]);
+
+  const [tab, setTab] = useLocalStorage<HoursTabView>(
+    LOCAL_STORAGE_KEY.HOURS_TAB,
+    HoursTabView.Edit,
+    true
+  );
 
   const tasks = useMemo(() => tasksStore.getTasksByDate(date), [
     tasksStore.tasks,
@@ -42,55 +46,37 @@ export default observer(function HoursView() {
   const timeItems = getTimeItems(tasks, date);
 
   return (
-    <Layout className={classes.hours}>
-      <Space direction="vertical">
-        <SelectDate date={date} onChange={setDate} />
+    <Layout className={classes.hoursView}>
+      <Space direction="vertical" className={classes.space}>
+        <Header date={date} setDate={setDate} tab={tab} setTab={setTab} />
         <TotalHours timeItems={timeItems} />
-        <div className={classes.cards}>
-          {mapCurrentNext(timeItems, (item, next, index) => (
-            <div key={index}>
-              <HoursCard
-                taskTime={item}
-                onClick={(taskTime) => setCurrentTaskTime(taskTime)}
-              />
-              <div className={classes.breakTime}>
-                {getDiff(item.time, next?.time)}
-              </div>
-            </div>
-          ))}
-        </div>
+        {!timeItems.length && !isToday(date) ? (
+          <BackOnToday goToday={goTodayDate} />
+        ) : tab === HoursTabView.Edit ? (
+          <GridWithTimeItemsView date={date} />
+        ) : (
+          <TimelineScreen date={date} />
+        )}
       </Space>
-      <TimeRangeModal
-        visible={!!currentTaskTime}
-        onClose={() => setCurrentTaskTime(undefined)}
-        taskTime={currentTaskTime}
-      />
     </Layout>
   );
 });
 
 const useStyles = createUseStyles({
-  hours: {
+  hoursView: {
     overflowY: 'auto',
     padding: 12,
+  },
+  space: {
+    flex: 1,
 
     '& .ant-space-item': {
       display: 'flex',
       justifyContent: 'center',
     },
 
-    '& .ant-card-body': {
-      padding: 8,
+    '& .ant-space-item:last-child': {
+      flex: 1,
     },
-  },
-  cards: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  breakTime: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    margin: '0 13px',
-    fontSize: 11,
   },
 });

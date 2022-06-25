@@ -27,10 +27,8 @@ export default class MenuBuilder {
     }
 
     const template =
-      process.platform === 'darwin'
-        ? this.buildDarwinTemplate()
-        : [];
-        // : this.buildDefaultTemplate(); // Disable menu for Win and Linux
+      process.platform === 'darwin' ? this.buildDarwinTemplate() : [];
+    // : this.buildDefaultTemplate(); // Disable menu for Win and Linux
 
     const menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu);
@@ -54,6 +52,7 @@ export default class MenuBuilder {
   }
 
   buildDarwinTemplate(): MenuItemConstructorOptions[] {
+    // TODO
     const subMenuAbout: DarwinMenuItemConstructorOptions = {
       label: 'Electron',
       submenu: [

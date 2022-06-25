@@ -4,7 +4,7 @@ import { Layout } from 'antd';
 
 import ProjectsScreen from './projects/ProjectsScreen';
 import HoursScreen from './hours/HoursScreen';
-import Dashboard from './dashboard/Dashboard';
+import DashboardScreen from './dashboard/Dashboard';
 import GaService from '../services/gaService/GaService';
 import Header from '../components/Header';
 
@@ -25,7 +25,7 @@ const Main = () => {
       <Switch>
         <Route path="/hours" component={HoursScreen} />
         <Route path="/projects" component={ProjectsScreen} />
-        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/dashboard" component={DashboardScreen} />
         <Redirect from="*" to="/projects" />
       </Switch>
     </Layout>
