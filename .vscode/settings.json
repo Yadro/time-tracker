@@ -18,6 +18,8 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
+  "jest.autoRun": {},
+
   "search.exclude": {
     ".git": true,
     ".eslintcache": true,
@@ -34,5 +36,5 @@
     "*.{css,sass,scss}.d.ts": true
   },
 
-  "cSpell.words": ["Popconfirm", "Sider"]
+  "cSpell.words": ["autorun", "Popconfirm", "Sider", "Yadro"]
 }

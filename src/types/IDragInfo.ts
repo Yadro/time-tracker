@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { EventDataNode, Key } from 'rc-tree/lib/interface';
 
 export interface IDragInfo<T = HTMLDivElement> {

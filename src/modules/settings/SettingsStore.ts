@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-import SettingsModel, { DEFAULT_SETTINGS } from './models/SettingsModel';
+import SettingsModel from './models/SettingsModel';
 import SettingsService from './SettingsService';
 import { RootStore } from '../RootStore';
 import { ISettings } from './models/ISettings';

@@ -1,8 +1,10 @@
 import AbstractFileRepository from '../../base/repositories/AbstractFileRepository';
-import { IJsonProjectItem } from './models/ProjectModel';
+import { schemaMigrations } from './migrations';
+import { ProjectDataV1 } from './types';
 
 export default class ProjectRepository extends AbstractFileRepository<
-  IJsonProjectItem[]
+  ProjectDataV1
 > {
   fileName = 'projects.json';
+  schemaMigrations = schemaMigrations;
 }

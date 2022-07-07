@@ -12,8 +12,8 @@ export class TaskInMyDay extends TaskModel {
 }
 
 export const taskModelProxyHandler: ProxyHandler<TaskInMyDay> = {
-  get(target: TaskInMyDay, prop: string | symbol): any {
-    return target?.[prop as keyof TaskInMyDay];
+  get(target: TaskInMyDay, prop: keyof TaskInMyDay): any {
+    return target?.[prop];
   },
   set(target: TaskInMyDay, prop: string | symbol, value: any): boolean {
     if (prop === 'duration') {
