@@ -239,7 +239,7 @@
     "material-icons": "0.7.4",
     "mobx": "6.1.8",
     "mobx-react": "7.1.0",
-    "moment": "2.29.1",
+    "moment": "2.29.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-media-query": "^1.0.5",
